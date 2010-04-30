@@ -1,0 +1,8 @@
+<%- BlacklightAdvancedSearch.config[:advanced][:fields].each do |field| -%>
+  <div class="advanced_search_field">
+    <%- if BlacklightAdvancedSearch.config[:advanced][field].is_a?(Hash) -%>
+      <%= label_tag field, "#{field.to_s.capitalize.gsub('_',' ')}:" %>
+      <%= text_field_tag field %>
+    <%- end -%>
+  </div>
+<%- end -%>

@@ -1,0 +1,52 @@
+<div id="appliedParams">
+
+	<h3>You searched for:<%= image_tag "magnifying_glass.gif", :alt=>"search icon", :plugin=>'blacklight' %></h3>
+
+	<span id="appliedQueries">
+		<% if ! @advanced_query.user_friendly[:q].blank? %>
+		    <%- @advanced_query.user_friendly[:q].each do |query| -%>
+				<span class="appliedFilter">
+					<span class="first">
+						<span><%= h(query[0]) %></span>
+					</span>
+					<%= link_to('',
+						catalog_index_path(remove_advanced_query_params(query[1],localized_params)),
+						:class=>'btnRemove imgReplace',
+	          :alt=>'x'
+					) %>
+					<%= image_tag "checkmark.gif", :alt=>"checkmark", :plugin=>'blacklight' %>
+				</span>
+			<%- end -%>
+		<% else %>
+			<span class="appliedFilter"><span class="first"><span>No Keywords</span> </span></span>
+		<% end %>
+	</span>
+
+	<% if @advanced_query.user_friendly[:fq] %>
+		<span id="appliedFilters">
+			<span id = "appliedFiltersList">
+				<% @advanced_query.user_friendly[:fq].each do |facet_values| %>
+					<span class="appliedFilter">
+						<span class="first">
+							<span>
+								<span class="filterName"><%# = h facet_field_labels[facet] %></span>
+								<span class="filterValue"><%= facet_values %></span>
+							</span>
+						</span>
+						<%= image_tag "checkmark.gif", :alt=>"checkmark", :plugin=>'blacklight' %>
+					</span>
+				<% end %>
+			</span>
+		</span>
+	<% end %>
+	
+	<div>
+		<% if params[:action] == 'index' %>
+			<%= page_entries_info @response.docs, :entry_name=>'item' %>
+		<% else %>
+			Showing <%= session[:search][:counter].to_i %> of <%= format_num(session[:search][:total]) %> items from your search.
+		<% end %>
+		<%=link_to "Start&nbsp;over&thinsp;", catalog_index_path, :id=>"startOverLink" %>
+	</div>
+	
+</div>

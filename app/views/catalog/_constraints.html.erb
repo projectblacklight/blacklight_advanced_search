@@ -1,0 +1,5 @@
+<%- if @advanced_query.nil? -%>
+	<%= render "normal_constraints", :localized_params=>localized_params %>
+<%- else -%>
+	<%= render "advanced_constraints",:localized_params=>localized_params %>
+<%- end -%>

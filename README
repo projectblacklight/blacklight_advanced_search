@@ -1,0 +1,23 @@
+This is an advanced search plugin for Blacklight ( http://www.projectblacklight.org ).  It is meant to be installed alongside the Blacklight plugin in your application's vendor/plugins directory.
+This plugin is currently in an ALPHA release and is experimental.  Better installation instructions, more tests, and documentation will be coming soon.  There are also a few very minor changes that will be made in the Blacklight plugin which will be needed to make this work properly.
+
+
+== Installation:
+Clone the advanced search plugin from github into your application's vendor/plugins directory 
+-- cd into your application's vendor plugins directory
+-- git clone http://github.com/projectblacklight/blacklight_advanced_search.git
+
+Now run the template installer from your application.
+-- cd back to your application's root directory
+-- rake rails:template LOCATION=vendor/plugins/blacklight_advanced_search/template.rb
+
+
+== Configuration:
+This plugin will copy a configuration file in your application's config/initializers directory named blacklight_advanced_search_config.rb.
+This configuration has several important components:
+-- search_field needs to be the name of your advanced search request handler.
+-- fields is an array of the actual fields that we want in our form.  This is used in a couple of different places so that we can pass the appropriate parameters around as well as build the advanced search form.
+-- Then there should be an element in the hash for every key in fields.
+---- This contains the pf and/or qf in your request handler.
+Example:
+:author => {:qf => "qf_author",:pf => "pf_author"}
