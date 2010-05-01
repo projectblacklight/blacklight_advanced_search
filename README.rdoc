@@ -14,7 +14,9 @@ Clone the advanced search plugin from github into your application's vendor/plug
  git clone http://github.com/projectblacklight/blacklight_advanced_search.git
 
 Now run the template installer from your application.
-* cd back to your application's root directory then run the the following command:
+* cd back to your application's root directory
+ cd ../../
+* And then run the the following command:
  rake rails:template LOCATION=vendor/plugins/blacklight_advanced_search/template.rb
 
 == Configuration:

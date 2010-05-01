@@ -11,7 +11,7 @@ tag = nil
 
 # cp the blacklight_advanced_search initializer file from the plugin up to the new app
 puts "\n* Copying the Blacklight Advanced Search config to your config/initializers directory..."
-advanced_search_config = "config/initializers/blacklight_config.rb"
+advanced_search_config = "config/initializers/blacklight_advanced_search_config.rb"
 unless File.exists? advanced_search_config
   FileUtils.cp "vendor/plugins/#{plugin_dirname}/config/initializers/blacklight_advanced_search_config.rb", advanced_search_config
 else
