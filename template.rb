@@ -31,5 +31,14 @@ else
   puts "** It appears that your application helper is already requiring the blacklight_advanced_search application helper. Skipping....."
 end
 
+if yes?("Would you like to install the gem dependecies now?")
+  if yes? "Do you want to install gems using sudo?"
+    user = run("whoami").chomp
+    run "sudo gem install rubytree -v '=0.5.2' && sudo chown -R #{user} public/plugin_assets"
+  else
+    run "gem install rubytree -v '=0.5.2'"
+  end
+end
+
 puts "\n* Blacklight Advanced Search Successfully Installed..."
 puts "\n* You should now modify your app level blacklight_advanced_search_config.rb file located in your config/initializers directory to match your solr configuration"
