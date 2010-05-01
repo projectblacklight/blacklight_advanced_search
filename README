@@ -1,6 +1,11 @@
 This is an advanced search plugin for Blacklight ( http://www.projectblacklight.org ).  It is meant to be installed alongside the Blacklight plugin in your application's vendor/plugins directory.
 This plugin is currently in an ALPHA release and is experimental.  Better installation instructions, more tests, and documentation will be coming soon.  There are also a few very minor changes that will be made in the Blacklight plugin which will be needed to make this work properly.
 
+== Pre-requisites:
+The Blacklight plugin ( http://github.com/projectblacklight/blacklight )
+RubyTree gem ( http://rubytree.rubyforge.org/ )
+An appropriate solr request handler for advanced search.
+-- See advanced_search request handler in blacklight-jetty ( http://github.com/projectblacklight/blacklight-jetty ) for an example.
 
 == Installation:
 Clone the advanced search plugin from github into your application's vendor/plugins directory 
