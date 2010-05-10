@@ -1,14 +1,4 @@
 module ApplicationHelper
-  # Remove the next 2 methods after the head_items branch gets merged into master.
-  def render_stylesheet_includes_with_local
-    render_stylesheet_includes_without_local + stylesheet_link_tag("blacklight_advanced_search_styles", :plugin=>:blacklight_advanced_search)
-  end 
-  alias_method_chain :render_stylesheet_includes, :local if defined?(Blacklight)
-  
-  def render_js_includes_with_local
-    render_js_includes_without_local + javascript_include_tag("blacklight_advanced_search_javascript", :plugin=>:blacklight_advanced_search)
-  end
-  alias_method_chain :render_js_includes, :local if defined?(Blacklight)
 
   def facet_in_params?(field, value)
     (params[:f] and params[:f][field] and params[:f][field].include?(value)) or (params[:fq] and params[:fq][field] and params[:fq][field].keys.include?(value))

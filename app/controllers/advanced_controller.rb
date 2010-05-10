@@ -1,6 +1,6 @@
 class AdvancedController < ApplicationController
-  # Uncomment out this before filter when the head_items branch gets merged into master.
-  #before_filter :setup_advanced_search_css, :setup_advanced_search_js, :only => :index
+  before_filter :setup_advanced_search_css, :setup_advanced_search_js, :only => :index
+  
   def index
     unless request.method==:post
       @response = get_advanced_search_facets
