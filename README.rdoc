@@ -4,6 +4,7 @@ This plugin is currently in an ALPHA release and is experimental.  Better instal
 
 == Pre-requisites:
 * The Blacklight plugin ( http://github.com/projectblacklight/blacklight )
+  * NOTE: That Blacklight version 2.5 or greater is recommended in order to appropriately load the necessary JavaScript and CSS into the application level.  If you are running on an older version of Blacklight you will need to manually include the advanced search plugin's JavaScript and CSS files manually.
 * RubyTree gem ( http://rubytree.rubyforge.org/ )
 * An appropriate solr request handler for advanced search.
   * See advanced request handler in blacklight-jetty ( http://github.com/projectblacklight/blacklight-jetty ) for an example.
