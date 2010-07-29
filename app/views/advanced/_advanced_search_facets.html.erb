@@ -2,7 +2,7 @@
 <div class="facet_item">
   <% display_facet = @response.facets.detect {|f| f.name == solr_fname} -%>
   <% # if it's NOT a refinement facet -- they are handled in get_refine_facet -%>
-  <% if display_facet.items.length > 0 %>
+  <% if display_facet && display_facet.items.length > 0 %>
     <h3><%= facet_field_labels[solr_fname] -%> <span class="adv_facet_selections" style="display:none;">= (<span></span>)</span></h3>
 	<ul>
       <% display_facet.items.each do |item| -%>
