@@ -9,6 +9,7 @@ config.after_initialize do
   Blacklight.config[:search_fields] << {:display_label => 'Advanced', :qt => BlacklightAdvancedSearch.config[:advanced][:search_field], :include_in_simple_select => false} if defined? :Blacklight
 
   CatalogController.send(:include, BlacklightAdvancedSearch::ControllerOverride  )
+  CatalogController.helper( BlacklightAdvancedSearch::ViewHelperOverride )
 end
 
 unless File.exists? File.join(Rails.root, 'config', 'initializers', 'blacklight_advanced_search_config.rb')
