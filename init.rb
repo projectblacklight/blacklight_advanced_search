@@ -7,6 +7,8 @@ config.gem 'rubytree', :lib => 'tree', :version => '0.5.2'
 config.after_initialize do
   BlacklightAdvancedSearch.init
   Blacklight.config[:search_fields] << {:display_label => 'Advanced', :qt => BlacklightAdvancedSearch.config[:advanced][:search_field], :include_in_simple_select => false} if defined? :Blacklight
+
+  CatalogController.send(:include, BlacklightAdvancedSearch::ControllerOverride  )
 end
 
 unless File.exists? File.join(Rails.root, 'config', 'initializers', 'blacklight_advanced_search_config.rb')

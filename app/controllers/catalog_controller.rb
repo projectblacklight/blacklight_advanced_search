@@ -1,21 +1,4 @@
 class CatalogController < ApplicationController
-  include BlacklightAdvancedSearch::SolrHelper
-  
-  # get search results from the solr index
-  def index
-    # if this in an advanced search we want to instatiate a new QueryParser object
-    if params[:search_field] == BlacklightAdvancedSearch.config[:advanced][:search_field]
-      @advanced_query = BlacklightAdvancedSearch::QueryParser.new(params,BlacklightAdvancedSearch.config[:advanced])
-    end
-    
-    (@response, @document_list) = get_search_results(@advanced_query ? params.merge(@advanced_query.to_solr) : params)
-    @filters = params[:f] || []
-    respond_to do |format|
-      format.html { save_current_search_params }
-      format.rss  { render :layout => false }
-    end
-    
-  end
 
   protected
   
