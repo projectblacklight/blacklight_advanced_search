@@ -48,28 +48,27 @@ module ApplicationHelper
     p
   end
   
-  def remove_advanced_query_params(value, source_params=params)
-    p = source_params.dup.symbolize_keys!
-    # need to dup the facet values too,
-    # if the values aren't dup'd, then the values
-    # from the session will get removed in the show view...
-    p.delete :page
-    p.delete :id
-    p.delete :total
-    p.delete :counter
-    p.delete :commit
-    if p.has_key?(value.split("=").first.to_sym)
-      p.delete value.split("=").first.to_sym
-    end
-    p
-  end
-  
   # Search History and Saved Searches display
   def link_to_previous_search(params)
     if params[:search_field] == BlacklightAdvancedSearch.config[:advanced][:search_field]
-      query = BlacklightAdvancedSearch::QueryParser.new(params,BlacklightAdvancedSearch.config[:advanced]).user_friendly
-      query_part = query[:q].map{|q|q[0]}.join(" ")
-      facet_part = query[:fq].to_s.blank? ? "" : "{#{query[:fq].join(" ")}}"
+      q = BlacklightAdvancedSearch::QueryParser.new(params,BlacklightAdvancedSearch.config[:advanced])
+      query = q.user_friendly
+      query_parts = []
+      facet_parts = []
+      query.each do |key,value|
+        query_parts << value
+      end
+      query.facets.each do |facet|
+        tmp = "{"
+        tmp << "#{facet_field_labels[facet[:field]]} = "
+        tmp << "#{facet[:or].join(" OR ")}" unless facet[:or].empty?
+        tmp << " AND " unless (facet[:or].empty? or facet[:and].empty?)
+        tmp << "#{facet[:and].join(" AND ")}" unless facet[:and].empty?
+        tmp << "}"
+        facet_parts << tmp
+      end
+      query_part = query_parts.join(" #{q.op} ")
+      facet_part = facet_parts.join(" ")
     else
       query_part = case
                      when params[:q].blank?

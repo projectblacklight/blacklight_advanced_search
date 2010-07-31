@@ -19,19 +19,6 @@ class CatalogController < ApplicationController
 
   protected
   
-
-  # This method will remove certain params from the session[:search] hash
-  # if the values are blank? (nil or empty string)
-  # if the values aren't blank, they are saved to the session in the :search hash.
-  def delete_or_assign_search_session_params
-    # Adding in all possible fields from the advanced search configuration.  Also adding in fq param to the original Blacklight parameters.
-    # TODO: How will the modularization of controllers and helpers in the Blacklight plugin affect how we do this?
-    fields = [:q, :qt, :search_field, :f, :per_page, :page, :sort,:fq] << BlacklightAdvancedSearch.config[:advanced][:fields]
-    fields.flatten.each do |pname|
-      params[pname].blank? ? session[:search].delete(pname) : session[:search][pname] = params[pname]
-    end
-  end
-  
   # Saves the current search (if it does not already exist) as a models/search object
   # then adds the id of the serach object to session[:history]
   def save_current_search_params

@@ -8,6 +8,10 @@ def config
   BlacklightAdvancedSearch.config[:advanced]
 end
 
+def facet_field_labels
+  {"format_facet"=>"Format"}
+end
+
 describe ApplicationHelper do
   include ApplicationHelper
   describe "facet in params?" do
@@ -39,6 +43,7 @@ describe ApplicationHelper do
       @advanced_search_link = link_to_previous_search({:search_field=>config[:search_field],
                                                        :title=>"Record Title",
                                                        :author=>"Record Author",
+                                                       :op=>"AND",
                                                        :fq=>{"format_facet"=>{"Book"=>1,"Video"=>1}}})
     end
     describe "advanced search links" do
@@ -61,12 +66,6 @@ describe ApplicationHelper do
         @non_default_search_link.should match(/Author\:\(My Author Query String\)/)
       end
     end  
-  end
-  
-  describe "remove advanced query params" do
-    it "should remove the correct advanced search params" do
-      remove_advanced_query_params("title=Hello", {:title=>"Hello",:author=>"Somebody"}).should == {:author=>"Somebody"}
-    end
   end
   
   describe "remove facet params" do

@@ -3,34 +3,45 @@
 	<h3>You searched for:<%= image_tag "magnifying_glass.gif", :alt=>"search icon", :plugin=>'blacklight' %></h3>
 
 	<span id="appliedQueries">
-		<% if ! @advanced_query.user_friendly[:q].blank? %>
-		    <%- @advanced_query.user_friendly[:q].each do |query| -%>
+		<% unless @advanced_query.user_friendly.keyword_fields.empty? %>
+		  <%- @advanced_query.user_friendly.each do |key,field| -%>
 				<span class="appliedFilter">
 					<span class="first">
-						<span><%= h(query[0]) %></span>
+						<span><%= h(field) %></span>
 					</span>
 					<%= link_to('',
-						catalog_index_path(remove_advanced_query_params(query[1],localized_params)),
+						catalog_index_path(localized_params.merge(key=>nil,:action=>"index")),
 						:class=>'btnRemove imgReplace',
 	          :alt=>'x'
 					) %>
 					<%= image_tag "checkmark.gif", :alt=>"checkmark", :plugin=>'blacklight' %>
 				</span>
+				<%- unless key == @advanced_query.user_friendly.keyword_fields.last -%>
+  				<span class="appliedFilter">
+  					<span class="first">
+  						<span><%= h(@advanced_query.op) %></span>
+  					</span>
+  				</span>	
+				<%- end -%>
 			<%- end -%>
 		<% else %>
 			<span class="appliedFilter"><span class="first"><span>No Keywords</span> </span></span>
 		<% end %>
 	</span>
 
-	<% if @advanced_query.user_friendly[:fq] %>
+	<% if @advanced_query.user_friendly.facets %>
 		<span id="appliedFilters">
 			<span id = "appliedFiltersList">
-				<% @advanced_query.user_friendly[:fq].each do |facet_values| %>
+				<% @advanced_query.user_friendly.facets.each do |facet| %>
 					<span class="appliedFilter">
 						<span class="first">
 							<span>
-								<span class="filterName"><%# = h facet_field_labels[facet] %></span>
-								<span class="filterValue"><%= facet_values %></span>
+								<span class="filterName"><%= h(facet_field_labels[facet[:field]]) %></span>
+								<span class="filterValue">
+								  <%= facet[:or].join(" OR ") unless facet[:or].empty?  %>
+								  <%= " AND " unless (facet[:or].empty? or facet[:and].empty?) %>
+								  <%= facet[:and].join(" AND ") unless facet[:and].empty? %>
+								</span>
 							</span>
 						</span>
 						<%= image_tag "checkmark.gif", :alt=>"checkmark", :plugin=>'blacklight' %>
