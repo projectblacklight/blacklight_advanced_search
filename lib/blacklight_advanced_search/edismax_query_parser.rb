@@ -3,13 +3,13 @@ module BlacklightAdvancedSearch::EdismaxQueryParser
     text = []
     keyword_queries.each do |field,values|       
         temp_text = '_query_:"{!edismax'
-        config["#{field}".to_sym].each do |field_type,handler|
-          temp_text << " #{field_type.to_s}=$#{handler}"
-        end
+
+        temp_text << BlacklightAdvancedSearch.solr_local_params_for_search_field(key)
+        
         temp_text << "}#{values}\""
         text << temp_text      
     end
-    return text.join(" #{params[:op]} ")
+    return  text.length > 0 ? "{!lucene} " +  text.join(" #{params[:op]} ") : nil
   end
 
 end

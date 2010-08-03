@@ -1,7 +1,7 @@
 module BlacklightAdvancedSearch
   class QueryParser
-    include DismaxQueryParser if BlacklightAdvancedSearch.config[:advanced][:solr_type] == "dismax"
-    include EdismaxQueryParser if BlacklightAdvancedSearch.config[:advanced][:solr_type] == "edismax"
+    include DismaxQueryParser if BlacklightAdvancedSearch.config[:solr_type] == "dismax"
+    include EdismaxQueryParser if BlacklightAdvancedSearch.config[:solr_type] == "edismax"
     include FilterParser
     attr_reader :to_solr, :user_friendly
     def initialize(params,config)
@@ -20,11 +20,12 @@ module BlacklightAdvancedSearch
       unless(@keyword_queries)
         @keyword_queries = {}
 
-        return @keyword_queries unless @params[:search_field] == BlacklightAdvancedSearch.config[:advanced][:search_field]
+        return @keyword_queries unless @params[:search_field] == BlacklightAdvancedSearch.config[:search_field]
         
-        @config[:fields].each do |field|
-          if ! @params[field].blank?
-            @keyword_queries[field] = @params[field]
+        @config[:search_fields].each do | field_def |
+          key = field_def[:key]
+          if ! @params[ key.to_sym ].blank?
+            @keyword_queries[ key ] = @params[ key.to_sym ]
           end
         end
       end

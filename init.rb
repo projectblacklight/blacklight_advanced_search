@@ -1,3 +1,5 @@
+require 'blacklight_advanced_search'
+
 # Require the Blacklight plugin to be installed
 config.plugins = 'blacklight'
 
@@ -6,7 +8,8 @@ config.gem 'rubytree', :lib => 'tree', :version => '0.5.2'
 
 config.after_initialize do
   BlacklightAdvancedSearch.init
-  Blacklight.config[:search_fields] << {:display_label => 'Advanced', :qt => BlacklightAdvancedSearch.config[:advanced][:search_field], :include_in_simple_select => false} if defined? :Blacklight
+  
+  Blacklight.config[:search_fields] << {:display_label => 'Advanced', :key => BlacklightAdvancedSearch.config[:search_field], :include_in_simple_select => false} if defined? :Blacklight
 
   CatalogController.send(:include, BlacklightAdvancedSearch::ControllerOverride  )
   CatalogController.helper( BlacklightAdvancedSearch::ViewHelperOverride )
@@ -20,4 +23,3 @@ unless File.read(File.join(Rails.root,'app','helpers','application_helper.rb')).
   puts "WARNING: Your ApplicationHelper is not requiring the blacklight_advanced_search ApplicationHelper\nWARNING: Please add the line require 'vendor/plugins/blacklight_advanced_search/app/helpers/application_helper.rb' to your ApplicationHelper in order for the BlacklightAdvancedSearch plugin to work as intended"
 end
 
-require 'blacklight_advanced_search'

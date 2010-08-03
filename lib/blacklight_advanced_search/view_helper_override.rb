@@ -12,7 +12,7 @@ module BlacklightAdvancedSearch::ViewHelperOverride
     else
       content = ""
       @advanced_query.keyword_queries.each_pair do |field, query|
-        label = field.to_s.capitalize
+        label = BlacklightAdvancedSearch.search_field_def_for_key(field)[:display_label]
         content << render_constraint_element(
           label, query,
           :remove =>
@@ -45,7 +45,7 @@ module BlacklightAdvancedSearch::ViewHelperOverride
   def render_search_to_s_filters(my_params)
     content = super(my_params)
     
-    advanced_query = BlacklightAdvancedSearch::QueryParser.new(my_params, BlacklightAdvancedSearch.config[:advanced])
+    advanced_query = BlacklightAdvancedSearch::QueryParser.new(my_params, BlacklightAdvancedSearch.config )
     
     if (advanced_query.filters.length > 0)
       advanced_query.filters.each_pair do |field, values|
@@ -63,11 +63,11 @@ module BlacklightAdvancedSearch::ViewHelperOverride
   def render_search_to_s_q(my_params)    
     content = super(my_params)
 
-    advanced_query = BlacklightAdvancedSearch::QueryParser.new(my_params, BlacklightAdvancedSearch.config[:advanced])
+    advanced_query = BlacklightAdvancedSearch::QueryParser.new(my_params, BlacklightAdvancedSearch.config )
     
     if (advanced_query.keyword_queries.length > 0) 
       advanced_query.keyword_queries.each_pair do |field, query|
-        label = field.to_s.capitalize
+        label = BlacklightAdvancedSearch.search_field_def_for_key(field)[:display_label]
 
         content << render_search_to_s_element(label, query)
       end

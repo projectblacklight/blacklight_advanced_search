@@ -13,13 +13,17 @@ module BlacklightAdvancedSearch::ControllerOverride
     req_params = params.merge(extra_params)
     
     # Now do we need to do fancy advanced stuff?
-    if (req_params[:search_field] == BlacklightAdvancedSearch.config[:advanced][:search_field] ||
+    if (req_params[:search_field] == BlacklightAdvancedSearch.config[:search_field] ||
       req_params[:f_inclusive])
       # Set this as a controller instance variable, not sure if some views/helpers depend on it. Better to leave it as a local variable
       # if not, more investigation later.       
-      @advanced_query = BlacklightAdvancedSearch::QueryParser.new(req_params, BlacklightAdvancedSearch.config[:advanced])
+      @advanced_query = BlacklightAdvancedSearch::QueryParser.new(req_params, BlacklightAdvancedSearch.config )
       
       solr_params = deep_safe_merge(solr_params, @advanced_query.to_solr )
+      if @advanced_query.keyword_queries.length > 0
+        # force :qt if set
+        solr_params[:qt] = BlacklightAdvancedSearch.config[:qt]
+      end
       
     end
 

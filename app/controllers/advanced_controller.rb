@@ -10,7 +10,7 @@ class AdvancedController < ApplicationController
   protected
   def get_advanced_search_facets
     input = {
-      :qt=>Blacklight.config[:default_qt],
+      :qt=>BlacklightAdvancedSearch.config[:qt],
       :per_page=>0
     }
     Blacklight.solr.find(input)

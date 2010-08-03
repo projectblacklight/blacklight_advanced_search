@@ -1,13 +1,56 @@
 module BlacklightAdvancedSearch
-  autoload :Configurable, 'blacklight_advanced_search/configurable'
   autoload :QueryParser, 'blacklight_advanced_search/advanced_query_parser'
-  extend Configurable
+
+  extend Blacklight::SearchFields # for search field config, so we can use same format as BL, or use ones already set in BL even. 
+    
   def self.init
-    logger.info("BLACKLIGHT: initialized with BlacklightAdvancedSearch.config: #{BlacklightAdvancedSearch.config.inspect}")
+    apply_config_defaults!  
+    
+    logger.info("BLACKLIGHT: initialized with BlacklightAdvancedSearch.config: #{ config.inspect }")
   end
 
   def self.logger
     RAILS_DEFAULT_LOGGER
   end
+
+  # Hash of our config. The :search_fields key in hash is used by
+  # Blacklight::SearchFields module, must be an array of search field
+  # definitions compatible with that module, or if missing will
+  # inherit Blacklight.config[:search_fields]
+  def self.config
+    @config ||= {}
+  end
+
+  # Has to be called in an after_initialize, to make sure Blacklight.config
+  # is already defined. 
+  def self.apply_config_defaults!
+  
+   config[:solr_type] ||= "dismax"
+   config[:search_field] ||= "advanced"
+   config[:search_fields] ||= Blacklight.config[:search_fields].dup
+   config[:qt] ||= Blacklight.config[:default_qt]
+
+   config
+  end
+  
+
+  def self.solr_local_params_for_search_field(key)
+  
+    field_def = search_field_def_for_key(key)
+
+    solr_params = (field_def[:solr_parameters] || {}).merge(field_def[:solr_local_parameters] || {})
+
+    solr_params.collect do |key, val|
+      key.to_s + "=" + solr_param_quote(val)
+    end.join(" ")
+    
+    end
+
+    def self.solr_param_quote(val)
+      unless val =~ /^[a-zA-Z$_\-\^]+$/
+        val = "'" + val.gsub("'", "\\\'").gsub('"', "\\\"") + "'"
+      end
+      return val
+    end
 
 end

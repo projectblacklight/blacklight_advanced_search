@@ -8,9 +8,10 @@ module BlacklightAdvancedSearch::DismaxQueryParser
       else
         temp_text = '_query_:"{!dismax '
       end
-      config["#{field}".to_sym].each do |field_type,handler|
-        temp_text << "#{field_type.to_s}=$#{handler} "
-      end
+      
+      
+      temp_text << BlacklightAdvancedSearch.solr_local_params_for_search_field(field)
+      
       temp_text << "}#{build_tree(values)}\""
       text << temp_text      
     end
@@ -24,7 +25,10 @@ module BlacklightAdvancedSearch::DismaxQueryParser
         temp_arr << "#{trm} #{params[:op]}"
       end
     end
-    return  temp_arr.join(" ")
+
+    
+    
+    return  temp_arr.length > 0 ? "{!lucene} " + temp_arr.join(" ") : nil
   end
 
   protected
