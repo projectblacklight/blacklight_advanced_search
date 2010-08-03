@@ -2,19 +2,17 @@ module BlacklightAdvancedSearch::DismaxQueryParser
   require 'tree'
   def process_query(params,config)
     text = []
-    params.each do |field,values| 
-      if config.has_key?("#{field}".to_sym) and !params[field].blank? and field.to_s != "search_field"
-        if values.strip[0,3] == "NOT" and values.split.length < 3
-          temp_text = 'NOT _query_:"{!dismax '
-        else
-          temp_text = '_query_:"{!dismax '
-        end
-        config["#{field}".to_sym].each do |field_type,handler|
-          temp_text << "#{field_type.to_s}=$#{handler} "
-        end
-        temp_text << "}#{build_tree(values)}\""
-        text << temp_text
+    keyword_queries.each do |field,values| 
+      if values.strip[0,3] == "NOT" and values.split.length < 3
+        temp_text = 'NOT _query_:"{!dismax '
+      else
+        temp_text = '_query_:"{!dismax '
       end
+      config["#{field}".to_sym].each do |field_type,handler|
+        temp_text << "#{field_type.to_s}=$#{handler} "
+      end
+      temp_text << "}#{build_tree(values)}\""
+      text << temp_text      
     end
     temp_arr = []
     text.each do |trm|
