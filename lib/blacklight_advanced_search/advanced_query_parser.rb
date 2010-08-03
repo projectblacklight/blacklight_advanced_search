@@ -7,7 +7,8 @@ module BlacklightAdvancedSearch
     def initialize(params,config)
       @params = params
       @config = config
-      @to_solr = {:q => process_query(params,config), :fq => process_filters(params)}
+      @to_solr = {:q => process_query(params,config), 
+                  :fq => generate_solr_fq() }
     end
 
     # Returns "AND" or "OR", how #keyword_queries will be combined
@@ -33,10 +34,8 @@ module BlacklightAdvancedSearch
         return @filters unless @params[:fq]
         @params[:fq].each_pair do |field, value_hash|
           value_hash.each_pair do |value, type|
-            if type == "1"
-              @filters[field] ||= []
-              @filters[field] << value
-            end
+            @filters[field] ||= []
+            @filters[field] << value
           end
         end        
       end

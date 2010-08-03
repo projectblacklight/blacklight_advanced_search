@@ -3,27 +3,7 @@ module ApplicationHelper
   def facet_in_params?(field, value)
     (params[:f] and params[:f][field] and params[:f][field].include?(value)) or (params[:fq] and params[:fq][field] and params[:fq][field].keys.include?(value))
   end
-  
-  
-  # adds the value and/or field to params[:f]
-  # Does NOT remove request keys and otherwise ensure that the hash
-  # is suitable for a redirect. See
-  # add_facet_params_and_redirect
-  def add_facet_params(field, value)
-    p = params.dup
-    # Need to merge into fq param if there is an fq param.
-    if p[:fq]
-      p[:fq]||={}
-      p[:fq][field]||={}
-      # we use a value of 2 to denote that this facet will be ANDed.
-      p[:fq][field].merge!({value => 2})
-    else
-      p[:f]||={}
-      p[:f][field] ||= []
-      p[:f][field].push(value)
-    end
-    p
-  end
+
   
   # copies the current params (or whatever is passed in as the 3rd arg)
   # removes the field value from params[:f] and params[:fq]

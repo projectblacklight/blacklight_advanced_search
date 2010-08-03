@@ -18,12 +18,29 @@ module BlacklightAdvancedSearch::ControllerOverride
       # if not, more investigation later.       
       @advanced_query = BlacklightAdvancedSearch::QueryParser.new(req_params, BlacklightAdvancedSearch.config[:advanced])
       
-      solr_params.merge!( @advanced_query.to_solr )
+      solr_params = deep_merge(solr_params, @advanced_query.to_solr )
       
     end
 
     return solr_params
   end
+
+  protected
+
+  # Merges new_hash into source_hash, without modifying arguments, but
+  # will merge nested arrays and hashes too
+  def deep_merge(source_hash, new_hash)
+    source_hash.merge(new_hash) do |key, old, new|
+      if (old.kind_of?(Hash) and new.kind_of?(Hash))
+        deep_merge(old, new)
+      elsif (old.kind_of?(Array) and new.kind_of?(Array))
+        old.concat(new).uniq
+      else
+        new
+      end
+    end
+  end
+  
 
   
 end
