@@ -22,7 +22,6 @@ module ApplicationHelper
       p[:f][field] ||= []
       p[:f][field].push(value)
     end
-    debugger
     p
   end
   
@@ -49,25 +48,8 @@ module ApplicationHelper
     p
   end
   
-  def remove_advanced_query_params(value, source_params=params)
-    p = source_params.dup.symbolize_keys!
-    # need to dup the facet values too,
-    # if the values aren't dup'd, then the values
-    # from the session will get removed in the show view...
-    p.delete :page
-    p.delete :id
-    p.delete :total
-    p.delete :counter
-    p.delete :commit
-    if p.has_key?(value.split("=").first.to_sym)
-      p.delete value.split("=").first.to_sym
-    end
-    p
-  end
-  
   
   def remove_advanced_keyword_query(field, my_params = params)
-    my_params = my_params.dup
     my_params.delete(field)
     return my_params
   end
