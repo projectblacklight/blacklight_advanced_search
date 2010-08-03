@@ -18,7 +18,5 @@ config.after_initialize do
   SearchHistoryController.helper( BlacklightAdvancedSearch::RenderConstraintsOverride )
 end
 
-unless File.exists? File.join(Rails.root, 'config', 'initializers', 'blacklight_advanced_search_config.rb')
-  raise "The Blacklight Advanced Search plugin requires a config/initializers/blacklight_advanced_search_config.rb file. You may need to run the rake task to install the plugin from your app. rake rails:template LOCATION=vendor/plugins/blacklight_advanced_search/template.rb "
-end
+
 
