@@ -21,7 +21,4 @@ end
 unless File.exists? File.join(Rails.root, 'config', 'initializers', 'blacklight_advanced_search_config.rb')
   raise "The Blacklight Advanced Search plugin requires a config/initializers/blacklight_advanced_search_config.rb file. You may need to run the rake task to install the plugin from your app. rake rails:template LOCATION=vendor/plugins/blacklight_advanced_search/template.rb "
 end
-unless File.read(File.join(Rails.root,'app','helpers','application_helper.rb')).scan("require 'vendor/plugins/blacklight_advanced_search/app/helpers/application_helper.rb'")
-  puts "WARNING: Your ApplicationHelper is not requiring the blacklight_advanced_search ApplicationHelper\nWARNING: Please add the line require 'vendor/plugins/blacklight_advanced_search/app/helpers/application_helper.rb' to your ApplicationHelper in order for the BlacklightAdvancedSearch plugin to work as intended"
-end
 
