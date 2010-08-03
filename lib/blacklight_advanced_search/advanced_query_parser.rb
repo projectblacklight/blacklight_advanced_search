@@ -8,7 +8,6 @@ module BlacklightAdvancedSearch
     def initialize(params,config)
       @params = params
       @config = config
-      @user_friendly = process_friendly(params,config)
       @to_solr = {:q => process_query(params,config), :fq => process_filters(params)}
     end
 
