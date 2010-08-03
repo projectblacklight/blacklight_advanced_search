@@ -11,14 +11,12 @@ module BlacklightAdvancedSearch::ViewHelperOverride
       return super(my_params)
     else
       content = ""
-      @advanced_query.user_friendly[:q].each do |query|
-        # if the query parser returned data more reasonably granular, we
-        # could call this method with label and value, but it doesn't (yet),
-        # so we just stuff it all into value. TODO.       
+      @advanced_query.keyword_queries.each_pair do |field, query|
+        label = field.to_s.capitalize
         content << render_constraint_element(
-          nil, query[0],
+          label, query,
           :remove =>
-            catalog_index_path(remove_advanced_query_params(query[1],my_params))
+            catalog_index_path(remove_advanced_keyword_query(field,my_params))
         )
       end
       return content
@@ -29,21 +27,18 @@ module BlacklightAdvancedSearch::ViewHelperOverride
   # otherwise call super. Existence of an @advanced_query instance variable
   # is our trigger that we're in advanced mode. 
   def render_constraints_filters(my_params = params)
-    if (@advanced_query.nil?)
-      return super(my_params)
-    else
-      content = ""
-      @advanced_query.user_friendly[:fq].each do |facet_display|
-        # if the query parser returned data more reasonably granular, we
-        # could call this method with label and value, but it doesn't (yet),
-        # so we just stuff it all into value. TODO.
-        # Also if query_parser API were different, we could possibly have
-        # a :remove link here, but we can't with the data available to us now.
-        content << render_constraint_element(nil, facet_display)        
+    content = super(my_params)
+
+    if (@advanced_query)
+      @advanced_query.filters.each_pair do |field, value_list|
+        label = Blacklight.config[:facet][:labels][field] or field.to_s.capitalize
+        content << render_constraint_element(label, value_list.join(" OR "))
       end
-      return content      
     end
+    
+    return content
   end
-      
+
+
   
 end
