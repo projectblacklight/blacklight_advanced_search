@@ -93,5 +93,9 @@ module ApplicationHelper
     end
     link_to("#{query_part} #{facet_part}", catalog_index_path(params))
   end
-  
+
+  def remove_advanced_keyword_query(field, my_params = params)
+    my_params.delete(field)
+    return my_params
+  end
 end
