@@ -32,7 +32,10 @@ module BlacklightAdvancedSearch::ViewHelperOverride
     if (@advanced_query)
       @advanced_query.filters.each_pair do |field, value_list|
         label = Blacklight.config[:facet][:labels][field] or field.to_s.capitalize
-        content << render_constraint_element(label, value_list.join(" OR "))
+        content << render_constraint_element(label, 
+          value_list.join(" OR "),
+          :remove => catalog_index_path( remove_advanced_filter_group(field, my_params) )
+          )
       end
     end
     

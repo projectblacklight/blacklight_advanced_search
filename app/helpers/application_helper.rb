@@ -30,7 +30,17 @@ module ApplicationHelper
   
   
   def remove_advanced_keyword_query(field, my_params = params)
+    my_params = my_params.dup
     my_params.delete(field)
     return my_params
+  end
+
+  def remove_advanced_filter_group(field, my_params = params)
+    if (my_params[:f_inclusive])
+      my_params = my_params.dup
+      my_params[:f_inclusive] = my_params[:f_inclusive].dup
+      my_params[:f_inclusive].delete(field)
+    end
+    my_params
   end
 end
