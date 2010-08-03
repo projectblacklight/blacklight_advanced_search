@@ -41,6 +41,10 @@ module BlacklightAdvancedSearch
       end
       return @filters
     end
+
+    def empty?
+      filters.empty? && keyword_queries.empty?
+    end
     
   end
 end
