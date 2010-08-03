@@ -24,8 +24,7 @@ module BlacklightAdvancedSearch::DismaxQueryParser
         temp_arr << "#{trm} #{params[:op]}"
       end
     end
-    return "*:*" if temp_arr.empty?
-    temp_arr.join(" ")
+    return  temp_arr.join(" ")
   end
 
   protected

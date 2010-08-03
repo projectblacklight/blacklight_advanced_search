@@ -9,8 +9,7 @@ module BlacklightAdvancedSearch::EdismaxQueryParser
         temp_text << "}#{values}\""
         text << temp_text      
     end
-    return "*:*" if text.empty?
-    text.join(" #{params[:op]} ")
+    return text.join(" #{params[:op]} ")
   end
 
 end

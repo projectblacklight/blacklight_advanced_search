@@ -7,7 +7,7 @@ module BlacklightAdvancedSearch::ViewHelperOverride
   # otherwise call super. Existence of an @advanced_query instance variable
   # is our trigger that we're in advanced mode. 
   def render_constraints_query(my_params = params)
-    if (@advanced_query.nil?)
+    if (@advanced_query.nil? || @advanced_query.keyword_queries.empty? )
       return super(my_params)
     else
       content = ""
