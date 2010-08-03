@@ -1,7 +1,7 @@
 # Meant to be applied on top of Blacklight view helpers, to over-ride
 # certain methods from RenderConstraintsHelper (newish in BL), 
 # to effect constraints rendering and search history rendering, 
-module BlacklightAdvancedSearch::ViewHelperOverride
+module BlacklightAdvancedSearch::RenderConstraintsOverride
 
   #Over-ride of Blacklight method, provide advanced constraints if needed,
   # otherwise call super. Existence of an @advanced_query instance variable
