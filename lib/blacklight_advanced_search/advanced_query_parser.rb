@@ -2,7 +2,6 @@ module BlacklightAdvancedSearch
   class QueryParser
     include DismaxQueryParser if BlacklightAdvancedSearch.config[:advanced][:solr_type] == "dismax"
     include EdismaxQueryParser if BlacklightAdvancedSearch.config[:advanced][:solr_type] == "edismax"
-    include UserFriendlyQueryParser
     include FilterParser
     attr_reader :to_solr, :user_friendly
     def initialize(params,config)
