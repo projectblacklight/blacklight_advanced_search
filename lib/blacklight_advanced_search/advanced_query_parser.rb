@@ -19,6 +19,9 @@ module BlacklightAdvancedSearch
     def keyword_queries
       unless(@keyword_queries)
         @keyword_queries = {}
+
+        return @keyword_queries unless @params[:search_field] == BlacklightAdvancedSearch.config[:advanced][:search_field]
+        
         @config[:fields].each do |field|
           if ! @params[field].blank?
             @keyword_queries[field] = @params[field]
