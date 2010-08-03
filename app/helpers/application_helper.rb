@@ -1,7 +1,7 @@
 module ApplicationHelper
 
   def facet_in_params?(field, value)
-    (params[:f] and params[:f][field] and params[:f][field].include?(value)) or (params[:fq] and params[:fq][field] and params[:fq][field].keys.include?(value))
+    (params[:f] and params[:f][field] and params[:f][field].include?(value)) or (params[:f_inclusive] and params[:f_inclusive][field] and params[:f_inclusive][field].keys.include?(value))
   end
 
   
@@ -16,13 +16,13 @@ module ApplicationHelper
     # if the values aren't dup'd, then the values
     # from the session will get remove in the show view...
     p[:f] = p[:f].dup.symbolize_keys! if p[:f]
-    p[:fq] = p[:fq].dup.symbolize_keys! if p[:fq]
+    p[:f_inclusive] = p[:f_inclusive].dup.symbolize_keys! if p[:fq]
     p.delete :page
     p.delete :id
     p.delete :counter
     p.delete :commit
-    p[:fq][field] = p[:fq][field].delete_if{|k,v| k == value} if p[:fq] and p[:fq][field] and p[:fq][field][value]
-    p[:fq].delete(field) if p[:fq] and p[:fq][field] and  p[:fq][field].size == 0
+    p[:f_inclusive][field] = p[:f_inclusive][field].delete_if{|k,v| k == value} if p[:f_inclusive] and p[:f_inclusive][field] and p[:f_inclusive][field][value]
+    p[:f_inclusive].delete(field) if p[:f_inclusive] and p[:f_inclusive][field] and  p[:f_inclusive][field].size == 0
     p[:f][field] = p[:f][field] - [value] if p[:f] and p[:f][field]
     p[:f].delete(field) if p[:f][field].size == 0 if p[:f] and p[:f][field]
     p

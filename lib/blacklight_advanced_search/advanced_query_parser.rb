@@ -31,8 +31,8 @@ module BlacklightAdvancedSearch
     def filters
       unless (@filters)
         @filters = {}
-        return @filters unless @params[:fq]
-        @params[:fq].each_pair do |field, value_hash|
+        return @filters unless @params[:f_inclusive]
+        @params[:f_inclusive].each_pair do |field, value_hash|
           value_hash.each_pair do |value, type|
             @filters[field] ||= []
             @filters[field] << value
