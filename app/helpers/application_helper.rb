@@ -22,6 +22,7 @@ module ApplicationHelper
       p[:f][field] ||= []
       p[:f][field].push(value)
     end
+    debugger
     p
   end
   
@@ -66,6 +67,7 @@ module ApplicationHelper
   
   
   def remove_advanced_keyword_query(field, my_params = params)
+    my_params = my_params.dup
     my_params.delete(field)
     return my_params
   end
