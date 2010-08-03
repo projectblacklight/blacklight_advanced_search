@@ -35,7 +35,7 @@ module BlacklightAdvancedSearch
         return @filters unless @params[:fq]
         @params[:fq].each_pair do |field, value_hash|
           value_hash.each_pair do |value, type|
-            if type == "2"
+            if type == "1"
               @filters[field] ||= []
               @filters[field] << value
             end
