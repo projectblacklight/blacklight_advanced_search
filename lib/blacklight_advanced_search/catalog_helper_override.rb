@@ -1,4 +1,4 @@
-module ApplicationHelper
+module BlacklightAdvancedSearch::CatalogHelperOverride
 
   def facet_in_params?(field, value)
     (params[:f] and params[:f][field] and params[:f][field].include?(value)) or (params[:f_inclusive] and params[:f_inclusive][field] and params[:f_inclusive][field].keys.include?(value))

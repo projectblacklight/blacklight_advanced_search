@@ -13,6 +13,8 @@ config.after_initialize do
 
   CatalogController.send(:include, BlacklightAdvancedSearch::ControllerOverride  )
   CatalogController.helper( BlacklightAdvancedSearch::RenderConstraintsOverride )
+  CatalogController.helper( BlacklightAdvancedSearch::CatalogHelperOverride )
+  
   SearchHistoryController.helper( BlacklightAdvancedSearch::RenderConstraintsOverride )
 end
 
