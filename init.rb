@@ -10,6 +10,7 @@ config.after_initialize do
 
   CatalogController.send(:include, BlacklightAdvancedSearch::ControllerOverride  )
   CatalogController.helper( BlacklightAdvancedSearch::ViewHelperOverride )
+  SearchHistoryController.helper( BlacklightAdvancedSearch::ViewHelperOverride )
 end
 
 unless File.exists? File.join(Rails.root, 'config', 'initializers', 'blacklight_advanced_search_config.rb')

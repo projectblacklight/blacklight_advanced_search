@@ -64,36 +64,7 @@ module ApplicationHelper
     p
   end
   
-  # Search History and Saved Searches display
-  def link_to_previous_search(params)
-    if params[:search_field] == BlacklightAdvancedSearch.config[:advanced][:search_field]
-      query = BlacklightAdvancedSearch::QueryParser.new(params,BlacklightAdvancedSearch.config[:advanced]).user_friendly
-      query_part = query[:q].map{|q|q[0]}.join(" ")
-      facet_part = query[:fq].to_s.blank? ? "" : "{#{query[:fq].join(" ")}}"
-    else
-      query_part = case
-                     when params[:q].blank?
-                       ""
-                     when (params[:search_field] == Blacklight.default_search_field[:key])
-                       params[:q]
-                     else
-                       "#{Blacklight.label_for_search_field(params[:search_field])}:(#{params[:q]})"
-                   end      
-    
-      facet_part = 
-      if params[:f]
-        tmp = 
-        params[:f].collect do |pair|
-          "#{Blacklight.config[:facet][:labels][pair.first]}:#{pair.last}"
-        end.join(" AND ")
-        "{#{tmp}}"
-      else
-        ""
-      end
-    end
-    link_to("#{query_part} #{facet_part}", catalog_index_path(params))
-  end
-
+  
   def remove_advanced_keyword_query(field, my_params = params)
     my_params.delete(field)
     return my_params

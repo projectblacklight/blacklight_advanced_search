@@ -39,6 +39,37 @@ module BlacklightAdvancedSearch::ViewHelperOverride
     return content
   end
 
+  def render_search_to_s_filters(my_params)
+    content = super(my_params)
+    
+    advanced_query = BlacklightAdvancedSearch::QueryParser.new(my_params, BlacklightAdvancedSearch.config[:advanced])
+    
+    if (advanced_query.filters.length > 0)
+      advanced_query.filters.each_pair do |field, values|
+        label = Blacklight.config[:facet][:labels][field] or field.to_s.capitalize
+      
+        content << render_search_to_s_element( 
+          label,
+          values.join(" OR ")
+        )
+      end      
+    end
+    return content
+  end
 
+  def render_search_to_s_q(my_params)    
+    content = super(my_params)
+
+    advanced_query = BlacklightAdvancedSearch::QueryParser.new(my_params, BlacklightAdvancedSearch.config[:advanced])
+    
+    if (advanced_query.keyword_queries.length > 0) 
+      advanced_query.keyword_queries.each_pair do |field, query|
+        label = field.to_s.capitalize
+
+        content << render_search_to_s_element(label, query)
+      end
+    end
+    return content
+  end
   
 end
