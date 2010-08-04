@@ -5,7 +5,7 @@ module BlacklightAdvancedSearch
     include FilterParser
     attr_reader :to_solr, :user_friendly
     def initialize(params,config)
-      @params = params
+      @params = HashWithIndifferentAccess.new(params)
       @config = config
       @to_solr = {:q => process_query(params,config), 
                   :fq => generate_solr_fq() }
