@@ -56,7 +56,7 @@ config.after_initialize do
       # Insert our stylesheet.  
       CatalogController.before_filter do |controller|
         
-        controller.stylesheet_links << ["advanced_results", {:plugin =>:blacklight_advanced_search}]
+        controller.stylesheet_links << ["advanced_results", {:plugin =>:blacklight_advanced_search}] unless controller.stylesheet_links.include?(["advanced_results", {:plugin =>:blacklight_advanced_search}])
       end
 
       
