@@ -6,6 +6,8 @@ config.plugins = 'blacklight'
 # Require the RubyTree gem which is needed for query parsing
 config.gem 'rubytree', :lib => 'tree', :version => '0.5.2'
 
+
+
 config.after_initialize do
   BlacklightAdvancedSearch.init
   
@@ -51,6 +53,13 @@ config.after_initialize do
         BlacklightAdvancedSearch::RenderConstraintsOverride 
       )
 
+      # Insert our stylesheet.  
+      CatalogController.before_filter do |controller|
+        
+        controller.stylesheet_links << ["advanced_results", {:plugin =>:blacklight_advanced_search}]
+      end
+
+      
   end
 end
 

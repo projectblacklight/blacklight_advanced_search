@@ -19,6 +19,11 @@ module BlacklightAdvancedSearch::RenderConstraintsOverride
             catalog_index_path(remove_advanced_keyword_query(field,my_params))
         )
       end
+      if (@advanced_query.keyword_op == "OR" &&   
+          @advanced_query.keyword_queries.length > 1)
+        content = '<span class="inclusive_or">' + render_constraint_element(nil, "Any of:", :classes=>["operator"]) + content + '</span>'
+      end
+      
       return content
     end
   end
