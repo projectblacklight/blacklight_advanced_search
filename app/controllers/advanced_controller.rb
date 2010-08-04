@@ -12,7 +12,7 @@ class AdvancedController < ApplicationController
     input = {
       :qt=>BlacklightAdvancedSearch.config[:qt],
       :per_page=>0
-    }
+    }.merge( BlacklightAdvancedSearch.config[:form_solr_parameters] )
     Blacklight.solr.find(input)
   end
   def setup_advanced_search_css

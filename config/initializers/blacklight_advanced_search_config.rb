@@ -7,6 +7,13 @@ BlacklightAdvancedSearch.config.merge!(
 )
 
 
+  # You don't need to specify search_fields, if you leave :qt unspecified
+  # above, and have search field config in Blacklight already using that
+  # same qt, the plugin will simply use them. But if you'd like to use a
+  # different solr qt request handler, or have another reason for wanting
+  # to manually specify search fields, you can. Uses the hash format
+  # specified in Blacklight::SearchFields
+
   BlacklightAdvancedSearch.config[:search_fields] = search_fields = []
   search_fields << {
     :key =>  'author',
@@ -47,5 +54,20 @@ BlacklightAdvancedSearch.config.merge!(
       :qf => "$qf_number"
     }
   }
-    
-    
+
+##
+# The advanced search form displays facets as a limit option.
+# By default it will use whatever facets, if any, are returned
+# by the Solr qt request handler in use. However, you can use
+# this config option to have it request other facet params than
+# default in the Solr request handler, in desired.
+
+# BlacklightAdvancedSearch.config[:form_solr_parameters] = {
+  # "facet.field" => [
+    # "format",
+    # "lc_1letter_facet",
+    # "language_facet"    
+  # ],
+  # "facet.limit" => -1,  # all facet values
+  # "facet.sort" => "index"  # sort by index value (alphabetically, more or less)
+# }
