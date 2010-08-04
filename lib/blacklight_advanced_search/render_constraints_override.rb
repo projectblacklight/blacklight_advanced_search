@@ -69,14 +69,27 @@ module BlacklightAdvancedSearch::RenderConstraintsOverride
     content = super(my_params)
 
     advanced_query = BlacklightAdvancedSearch::QueryParser.new(my_params, BlacklightAdvancedSearch.config )
-    
-    if (advanced_query.keyword_queries.length > 0) 
+
+    if (advanced_query.keyword_queries.length > 1 &&
+        advanced_query.keyword_op == "OR")
+        # Need to do something to make the inclusive-or search clear
+
+        display_as = advanced_query.keyword_queries.collect do |field, query|
+          h( BlacklightAdvancedSearch.search_field_def_for_key(field)[:display_label] + ": " + query )
+        end.join(" ; ")
+        
+        content << render_search_to_s_element("Any of",
+          display_as,
+          :escape_value => false
+        )
+    elsif (advanced_query.keyword_queries.length > 0) 
       advanced_query.keyword_queries.each_pair do |field, query|
         label = BlacklightAdvancedSearch.search_field_def_for_key(field)[:display_label]
 
         content << render_search_to_s_element(label, query)
-      end
+      end    
     end
+    
     return content
   end
   
