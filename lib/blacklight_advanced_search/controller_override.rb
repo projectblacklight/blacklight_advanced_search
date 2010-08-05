@@ -13,7 +13,7 @@ module BlacklightAdvancedSearch::ControllerOverride
     req_params = params.merge(extra_params)
     
     # Now do we need to do fancy advanced stuff?
-    if (req_params[:search_field] == BlacklightAdvancedSearch.config[:search_field] ||
+    if (req_params[:search_field] == BlacklightAdvancedSearch.config[:url_key] ||
       req_params[:f_inclusive])
       # Set this as a controller instance variable, not sure if some views/helpers depend on it. Better to leave it as a local variable
       # if not, more investigation later.       

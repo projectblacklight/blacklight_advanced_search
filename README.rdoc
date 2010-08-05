@@ -85,8 +85,8 @@ By default, the advanced search form will show as limits whatever facets are con
   "dismax" or "edismax". "dismax" is default. "edismax" may work with the edismax query parser, this function may be a work in progress?
 [config[:qt]] 
    Solr request handler to use for any search that includes advanced search criteria. Defaults to what the application has set as Blacklight.config[:default_qt]
-[config[:search_field]]
-   Key to use in application URLs to indicate advanced search is included in a query, defaults to "advanced".
+[config[:url_key]]
+   Key to use in application URLs to indicate advanced search is included in a query, defaults to "advanced". URLs will have "&search_field=[url key]".
 [config[:search_fields]]
   Array of search field definitions to be used for advanced search. Each element in the array is a hash of the form required by Blacklight::SearchFields. If left blank, the plugin will use definitions from your main app Blacklight.config[:search_fields] -- only those which have no :qt set, and do not have :include_in_advanced_search => false. 
 [config[:form_solr_paramters]]

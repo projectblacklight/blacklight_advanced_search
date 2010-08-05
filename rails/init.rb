@@ -11,7 +11,7 @@ config.gem 'rubytree', :lib => 'tree', :version => '0.5.2'
 config.after_initialize do
   BlacklightAdvancedSearch.init
   
-  Blacklight.config[:search_fields] << {:display_label => 'Advanced', :key => BlacklightAdvancedSearch.config[:search_field], :include_in_simple_select => false} if defined? :Blacklight
+  Blacklight.config[:search_fields] << {:display_label => 'Advanced', :key => BlacklightAdvancedSearch.config[:url_key], :include_in_simple_select => false, :include_in_advanced_search => false} if defined? :Blacklight
 
 
   # Do these things in a to_prepare block, to try and make them work

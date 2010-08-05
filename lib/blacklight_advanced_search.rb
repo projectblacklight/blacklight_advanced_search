@@ -26,7 +26,7 @@ module BlacklightAdvancedSearch
   def self.apply_config_defaults!
   
    config[:solr_type] ||= "dismax"
-   config[:search_field] ||= "advanced"
+   config[:url_key] ||= "advanced"
    config[:qt] ||= Blacklight.config[:default_qt]
    config[:form_solr_parameters] ||= {}
    

@@ -20,7 +20,7 @@ module BlacklightAdvancedSearch
       unless(@keyword_queries)
         @keyword_queries = {}
 
-        return @keyword_queries unless @params[:search_field] == BlacklightAdvancedSearch.config[:search_field]
+        return @keyword_queries unless @params[:search_field] == BlacklightAdvancedSearch.config[:url_key]
         
         @config[:search_fields].each do | field_def |
           key = field_def[:key]
