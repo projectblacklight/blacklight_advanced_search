@@ -1,9 +1,18 @@
+## 
+# This example config file is set up to work using the Solr request handler
+# called "advanced" in the example Blacklight solrconfig.xml:
+# http://github.com/projectblacklight/blacklight-jetty/blob/master/solr/conf/solrconfig.xml
+#
+# Using a seperate request handler is just one option, in many cases it's
+# simpler to use your default solr request handler set in Blacklight itself,
+# and you may not need any of this configuration. See README. 
+
 BlacklightAdvancedSearch.config.merge!(
   # This will be used later when edismax is returning the expected results
   #:solr_type => "edismax",
   :solr_type => "dismax",
-  :search_field => "advanced", # name of key in Blacklight URL
-  :qt => "advanced" # name of Solr request handler  
+  # :search_field => "advanced", # name of key in Blacklight URL, no reason to change usually. 
+  :qt => "advanced" # name of Solr request handler, leave unset to use the same one as your Blacklight.config[:default_qt]  
 )
 
 
