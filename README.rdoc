@@ -68,7 +68,7 @@ to the name of the solr request handler.
 
 Note you can set custom :search_fields while keeping the default :qt, but setting a new :qt requires you to set :search_fields too.  
 
-=== Facets ===
+=== Facets
 
 By default, the advanced search form will show as limits whatever facets are configured as default in your Solr request handler.  To have the advanced search form request specific facets and/or specific facet parameters, you can set config[:form_solr_parameters]. 
 
@@ -79,7 +79,7 @@ By default, the advanced search form will show as limits whatever facets are con
   }
  
 
-=== All Config Options ===
+=== All Config Options
 
 [config[:solr_type]]
   "dismax" or "edismax". "dismax" is default. "edismax" may work with the edismax query parser, this function may be a work in progress?
