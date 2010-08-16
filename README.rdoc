@@ -32,7 +32,21 @@ You can also now optionally run the installer script to install some optional ex
 * And then run the the following command:
  rake rails:template LOCATION=vendor/plugins/blacklight_advanced_search/template.rb
  
+== Accessing
+ 
+ 
+The advanced search form will be available in your app at /advanced
 
+  url_for(:controller => "advanced", :action => "index")
+  
+You can also send the advanced search form url parameters representing a search, to have the form add on additional 'advanced' criteria to the search. Eg:
+
+  url_for( params.merge(:controller => "advanced", :action => "index")
+  
+By default there won't be any links in your application to the search form, if you've heavily customized your app you can put them wherever you want as above. 
+
+However, especially if your app isn't much customized, the optional installer can write a localized Blacklight search form into your application with a 'more options' link to advanced. You may need to adjust your styles to make room for the new link, depending on what you've done with your app. 
+ 
 
 == Configuration:
 
@@ -95,9 +109,6 @@ By default, the advanced search form will show as limits whatever facets are con
 == To Do
 
 * Fix rspec tests (do not currently pass, have not been updated to new code)
-* Provide instructions (and maybe a template?) for adding advanced search link to search form. 
-* Improve CSS (and maybe some HTML) on advanced search form
-* Have advanced search form take existing search parameters to let you add on to an existing set of limits. 
 * Alphabetical sorting of facet values returned by solr in count order (perhaps with limit). 
-
+* Advanced search within existing search should possibly constrain facet choices and/or give you a 'remove' button for existing criteria?
 
