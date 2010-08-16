@@ -8,7 +8,9 @@
   position: absolute;
   top: 0;
   bottom: 0;
-  overflow-y: hidden;
+  right: 0;
+  width: 49.1%;
+  overflow-y: hidden; 
 }
 
 .limit_input {
