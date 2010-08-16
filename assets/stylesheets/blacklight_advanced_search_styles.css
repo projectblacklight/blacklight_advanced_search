@@ -1,112 +1,76 @@
-form.advanced label, #advanced_search_facets h3 {
+/* Kind of wacky stuff to make scrolling on limit column work right. */
+
+.input_columns {
+  position: relative;
+}
+
+.limit_column {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  overflow-y: hidden;
+}
+
+.limit_input {
+  position: absolute;
+  top: 6em;
+  bottom: 0;
+  overflow-y: auto;
+}
+
+/* Random styles */
+
+.advanced_search_field label {
+  display:block; 
+}
+
+.advanced_search_field input {
+  margin-bottom: 0.666em;
+  width: 80%;
+}
+
+form.advanced label {
   font-weight:normal;
 }
-h1.advanced {
+
+form.advanced h2 {
   font-weight: normal;
-  margin: 5px 0 10px 15px;
+  background-color: #EEEEEE;
+  height: 3em;
 }
-#advanced_form {
-  position:relative;
-  border-bottom:1px solid #756E5E;
-  border-top:1px solid #756E5E;
+
+form.advanced .limit_column ul {
+  margin: 1em; 
 }
-div#advanced_search {
-  padding:5px 20px 20px 20px;
-  margin-right:25em;
-  border-right:1px solid #756E5E;
+
+form.advanced .limit_column li {
+  list-style: none;  
+  padding: 0.1em 0.4em;
+  font-size: 80%;
 }
-#advanced_search input {
-  width:90%;
-  margin-bottom:5px;
-}
-#advanced_search #pub_year_from, #advanced_search #pub_year_to {
-  width:30px;
-}
-#advanced_search .checkbox {
-  float:right;
-  margin-right:2.5em;
-}
-#advanced_search .checkbox input, #advanced_search input#author_title {
-  width: 12px;
-}
-#advanced_search .advanced_search_field {
-  position:relative;
-}
-#advanced_search .advanced_search_field label {
-  display:block;
-}
-#advanced_search .advanced_search_field .checkbox label {
-  display:inline;
-}
-div.advanced_header {
-  border-bottom:1px solid #756E5E;
-}
-#adv_search_parent div.advanced_header h2, #adv_search_facets_parent div.advanced_header h2 {
-  font-weight:normal;
-  font-size:1.1em;
-  display:inline;
-}
-#adv_search_parent div.advanced_header {
-  margin-right:25em;
-  padding:3px 15px;
-}
-#adv_search_facets_parent div.advanced_header {
-  padding:5px 15px 5px 5px;
-}
-#adv_search_facets_parent {
-  position:absolute;
-  top:0;
-  bottom:0;
-  right:0;
-  width:24.99em;
-}
-#advanced_search_facets {
-  position:absolute;
-  bottom:0;
-  right:0;
-  top:28px;
-  width:24.99em; 
-  overflow-y:scroll;
-  padding-top:5px;
-  background-color: #FCF9F4;
-}
-#advanced_search_facets li {
-  font-size:0.9em;
-  padding: 1px 4px;
-}
-#advanced_search_facets h3 {
-  cursor:pointer;
-}
-#advanced_search_facets .adv_facet_selections {
+  
+form.advanced .adv_facet_selections {
   color:green;
-  margin-left:5px; 
-  font-weight:normal;
-  font-size:12px;
+  font-size: 80%;
+  display: block;
+  margin-top: 0.25em;
 }
-#advanced_search_facets div.facet_item {
-  padding-left:5px;
+
+
+.advanced_help li {
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
 }
-form.advanced #sort_submit_button {
-  padding:5px 20px;
-  border-bottom: 1px solid #756E5E;
+
+form.advanced .sort_submit_buttons {
+ background-color: #EEEEEE;
+ padding: 1em; 
 }
-form.advanced #sort_submit_button label  {
-  font-size:1.2em;
+
+form.advanced .column > h2 {
+  padding: 0.33em;
 }
-form.advanced .advanced_button {
-  margin-left:9em;
-}
-#advancedLink {
-  margin-left:5px;
-}
-div.advanced_results, div.advanced_results a, div.advanced_results h2, div.advanced_results h3 {
-  color:#888888 !important;
-}
-ul.advanced_help {
-  margin-left:0;
-}
-ul.advanced_help li {
-  list-style-type:none;
-  padding:5px;
-  border-bottom:1px solid #756E5E;
+form.advanced .column > div {
+  padding-left: 0.33em;
+  padding-right: 0.33em
 }
