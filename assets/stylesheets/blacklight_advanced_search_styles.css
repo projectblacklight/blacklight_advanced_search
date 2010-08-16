@@ -67,6 +67,14 @@ form.advanced .adv_facet_selections {
 form.advanced .sort_submit_buttons {
  background-color: #EEEEEE;
  padding: 1em; 
+ margin-top: 1em;
+}
+
+form.advanced .constraints {
+  padding: 1em;
+  margin-top: 1em;
+  background-color: #E2EDFE;
+  border: 1px solid #C4DAFE;
 }
 
 form.advanced .column > h2 {

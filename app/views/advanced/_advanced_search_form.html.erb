@@ -30,6 +30,13 @@
     
   </div>
   
+  <% unless (search_context_str = render_search_to_s( advanced_search_context)).blank? %>
+    <div class="constraints">
+      <h4>Within search:</h4>
+      <%= search_context_str %>
+    </div>
+  <% end %>
+  
   
   <div class="sort_submit_buttons">
 	<%= label_tag(:sort, "Sort results by") %> 
