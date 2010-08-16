@@ -61,7 +61,8 @@ $(document).ready(function() {
   
   /* reset button */
   $('form.advanced .reset').click(function() {
-    $(this).closest("form")[0].reset();
+    $(this).closest("form").find("input:text").val("");
+    $(this).closest("form").find("input:checkbox").removeAttr("checked");
     $(this).closest("form").find(".facet_item").each(function() {
        updateSelectedDisplay( $(this)); 
     });
