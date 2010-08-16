@@ -1,6 +1,6 @@
 <%- BlacklightAdvancedSearch.search_field_list.each do |field_def| -%>
   <div class="advanced_search_field">
       <%= label_tag field_def[:key], "#{field_def[:display_label] }:" %>
-      <%= text_field_tag field_def[:key] %>
+      <%= text_field_tag field_def[:key], label_tag_default_for(field_def[:key]) %>
   </div>
 <%- end -%>
