@@ -18,4 +18,12 @@ if yes?("Install all application gem dependencies using 'sudo', including new on
   rake "gems:install", :sudo=>true
 end
 
+if yes?("Install local search form with advanced link?")
+  destination = "app/views/catalog/_search_form.html.erb"
+  if (! File.exists?(destination) or yes?("Over-write existing #{destination}?"))
+    FileUtils.cp( File.join(plugin_root, "example/_search_form.html.erb"), destination )
+    puts "\n* Copied search form to #{destination}"
+  end
+end
+
 
