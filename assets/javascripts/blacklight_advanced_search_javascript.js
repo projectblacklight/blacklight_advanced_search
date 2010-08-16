@@ -1,5 +1,5 @@
 $(document).ready(function() {
-  $('#advanced_search_facets ul').each(function(){
+  $('.limit_column ul').each(function(){
     var ul = $(this);
     // find all ul's that don't have any span descendants with a class of "selected"
     if($('span.selected', ul).length == 0){
