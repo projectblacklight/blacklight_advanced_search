@@ -43,6 +43,6 @@
     <%= select_tag(:sort, options_for_select(Blacklight.config[:sort_fields],'')) %>
 	<%= hidden_field_tag(:search_field, BlacklightAdvancedSearch.config[:url_key]) %>
     <%= submit_tag 'search', :class=>'advanced_button', :id=>'advanced_search' %>
-	<a href="#"  class="reset" style="float:right;">clear form</a>
+	<a href="#"  class="reset">clear form</a>
   </div>
 <% end %>

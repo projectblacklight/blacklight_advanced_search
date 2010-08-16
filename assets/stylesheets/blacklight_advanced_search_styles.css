@@ -60,6 +60,10 @@ form.advanced .adv_facet_selections {
   margin-top: 0.25em;
 }
 
+form.advanced .reset {
+  float: right;
+}
+
 
 .advanced_help li {
   margin-top: 0.5em;
