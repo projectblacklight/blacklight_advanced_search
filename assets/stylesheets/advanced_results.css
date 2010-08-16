@@ -49,3 +49,8 @@
   margin-left: 1em;
 }
 
+/* optional search form */
+.search .advanced_search {
+  font-size: 83.33%; 
+}
+
