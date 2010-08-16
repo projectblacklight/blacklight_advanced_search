@@ -1,3 +1,4 @@
+
 /* Kind of wacky stuff to make scrolling on limit column work right. */
 
 .input_columns {
@@ -88,5 +89,7 @@ form.advanced .column > h2 {
 }
 form.advanced .column > div {
   padding-left: 0.33em;
-  padding-right: 0.33em
+  padding-right: 0.33em;
 }
+
+
