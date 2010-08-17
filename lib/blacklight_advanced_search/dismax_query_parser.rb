@@ -28,7 +28,7 @@ module BlacklightAdvancedSearch::DismaxQueryParser
 
     
     
-    return  temp_arr.length > 0 ? "{!lucene} " + temp_arr.join(" ") : nil
+    return  temp_arr.length > 0 ? temp_arr.join(" ") : nil
   end
 
   protected

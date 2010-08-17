@@ -23,6 +23,7 @@ module BlacklightAdvancedSearch::ControllerOverride
       if @advanced_query.keyword_queries.length > 0
         # force :qt if set
         solr_params[:qt] = BlacklightAdvancedSearch.config[:qt]
+        solr_params[:defType] = "lucene"
       end
       
     end
