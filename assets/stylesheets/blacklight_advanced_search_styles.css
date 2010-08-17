@@ -63,6 +63,14 @@ form.advanced .adv_facet_selections {
 
 form.advanced .reset {
   float: right;
+  display:block;  
+  padding:0 0.5em 0.1em 0.5em; 
+  line-height:22px; 
+  text-decoration:none; 
+  color:#fff; 
+  background:url(../../blacklight/images/start_over.gif) no-repeat center center;
+  border-bottom: none;
+}
 }
 
 
