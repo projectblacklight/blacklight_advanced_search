@@ -22,7 +22,7 @@ module BlacklightAdvancedSearch::DismaxQueryParser
       elsif trm == text.last
         temp_arr << "#{trm}"
       else
-        temp_arr << "#{trm} #{params[:op]}"
+        temp_arr << "#{trm} #{keyword_op}"
       end
     end
 
