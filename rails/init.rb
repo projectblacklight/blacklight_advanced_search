@@ -1,5 +1,11 @@
 require 'blacklight_advanced_search'
 
+# Don't run any init code in testing environment. rspec sometimes uses
+# "in-memory" for testing environment. All the init code tries to patch
+# and use files that just aren't there in the testing environment. This
+# stuff is a work in progress, figuring out how to properly test plugins.
+# will be MUCH better in Rails3, when everything including Blacklight is
+# a gem. 
 unless Rails.env == "test" || Rails.env == "in_memory"
   
   # Require the Blacklight plugin to be installed. But not in testing
