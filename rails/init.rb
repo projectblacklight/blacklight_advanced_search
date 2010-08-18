@@ -1,7 +1,5 @@
 require 'blacklight_advanced_search'
 
-require 'ruby-debug'
-debugger
 unless Rails.env == "test" || Rails.env == "in_memory"
   
   # Require the Blacklight plugin to be installed. But not in testing
