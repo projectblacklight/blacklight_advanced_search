@@ -1,9 +1,9 @@
-<% @page_title = "Advanced Search - #{application_name}" %>
+<% @page_title = "More Search Options - #{application_name}" %>
 <script type="text/javascript">
   $(document).ready(function(){$("form.advanced input:first").focus();});
 </script>
 
-<h1 class="advanced">Advanced Search</h1>
+<h1 class="advanced">More Search Options</h1>
 <%= render 'advanced_search_form' %>
 <%- sidebar_items << capture do -%>
   <%= render "advanced_search_help" %>
