@@ -14,11 +14,17 @@ class AdvancedController < CatalogController
   protected
   def get_advanced_search_facets
     
-    search_context_params = {}    
+    search_context_params = {}
     if (advanced_search_context.length > 0 )
       # We have a search context, need to fetch facets from within
       # that context.
       search_context_params = solr_search_params
+      # Don't want to include the 'q' from basic search in our search
+      # context. Kind of hacky becuase solr_search_params insists on
+      # using controller.params, not letting us over-ride. 
+      search_context_params.delete(:q)
+      search_context_params.delete("q")
+      
       # But need to delete any facet-related params, or anything else
       # we want to set ourselves or inherit from Solr request handler
       # defaults. 

@@ -3,9 +3,16 @@
 
 module BlacklightAdvancedSearch::ControllerOverride
 
-  def solr_search_params(extra_params = {})
+  def solr_search_params(extra_params = {})    
     # Call superclass implementation, ordinary solr_params
     solr_params = super(extra_params)
+
+    # When we're in advanced controller, we're fetching the search
+    # context, and don't want to include any of our own stuff.
+    # This is a hacky hard-coded way to do it, but needed
+    # because solr_search_params is hard-coded to use current req params,
+    # not just passed in arg override.
+    return solr_params if self.class == AdvancedController
 
     #Annoying thing where default behavior is to mix together
     #params from request and extra_params argument, so we
