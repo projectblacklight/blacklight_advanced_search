@@ -24,7 +24,7 @@ module AdvancedHelper
   # or other fields we don't want. 
   def advanced_search_context
     my_params = params.dup
-    [:page, :commit, :f_inclusive, :q, :search_field].each do |bad_key|
+    [:page, :commit, :f_inclusive, :q, :search_field, :op, :action, :index, :sort, :controller].each do |bad_key|
       my_params.delete(bad_key)
     end
     BlacklightAdvancedSearch.config[:search_fields].each do |field_def|
