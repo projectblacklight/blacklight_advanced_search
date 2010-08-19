@@ -27,8 +27,10 @@ module BlacklightAdvancedSearch
   
    config[:solr_type] ||= "dismax"
    config[:url_key] ||= "advanced"
-   config[:qt] ||= Blacklight.config[:default_qt]
+   config[:qt] ||= Blacklight.config[:default_qt] ||  
+      (Blacklight.config[:default_solr_params] && Blacklight.config[:default_solr_params][:qt])
    config[:form_solr_parameters] ||= {}
+
    
    config[:search_fields] ||= Blacklight.config[:search_fields].find_all do |field_def|
      (field_def[:qt].nil? || field_def[:qt] == config[:qt]) &&
