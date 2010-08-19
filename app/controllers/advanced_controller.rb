@@ -30,11 +30,12 @@ class AdvancedController < CatalogController
         )        
       end
     end
+
+    input = HashWithIndifferentAccess.new
+    input.merge!( search_context_params )
+    input.merge!( :qt => BlacklightAdvancedSearch.config[:qt] , :per_page => 0)
+    input.merge!( BlacklightAdvancedSearch.config[:form_solr_parameters] )
     
-    input = search_context_params.merge(
-      :qt=>BlacklightAdvancedSearch.config[:qt],
-      :per_page=>0
-    ).merge( BlacklightAdvancedSearch.config[:form_solr_parameters] )
     
     Blacklight.solr.find(input)
   end
