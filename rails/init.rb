@@ -62,7 +62,16 @@ unless Rails.env == "test" || Rails.env == "in_memory"
         SearchHistoryController.master_helper_module.include?( 
           BlacklightAdvancedSearch::RenderConstraintsOverride 
         )
-  
+
+     # Weird hack to make sure our AdvancedController gets all the
+     # helper methods from CatalogController. AdvancedController sub-classes
+     # CatalogController, but since it's decleration is loaded before other
+     # plugins get the chance to add helpers to CatalogController, they
+     # may not take, we need to add em in now.
+     CatalogController.master_helper_module.ancestors.each do |helper_module|
+       AdvancedController.add_template_helper( helper_module ) unless AdvancedController.master_helper_module.include?( helper_module )
+     end
+        
         # Insert our stylesheet.  
         CatalogController.before_filter do |controller|
           
