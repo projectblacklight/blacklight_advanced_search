@@ -43,7 +43,7 @@ class AdvancedController < CatalogController
     input.merge!( BlacklightAdvancedSearch.config[:form_solr_parameters] )
     
     
-    Blacklight.solr.find(input)
+    Blacklight.solr.find(input.to_hash)
   end
   def setup_advanced_search_css
     stylesheet_links << ["blacklight_advanced_search_styles", {:plugin=>:blacklight_advanced_search}]
