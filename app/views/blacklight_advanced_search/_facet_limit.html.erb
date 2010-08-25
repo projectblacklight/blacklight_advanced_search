@@ -15,7 +15,7 @@
     <h4>Any of:</h4>
     <ul>
     <% @advanced_query.filters[solr_field].each do |value| %>
-        <li><span class="selected"><%= h(value) %></span> [<%= link_to "remove", remove_advanced_facet_param(solr_field, value), :class=>"remove" %>]</li>
+        <li><span class="selected"><%= h(value) %></span> <%= link_to "[remove]", remove_advanced_facet_param(solr_field, value), :class=>"remove" %></li>
     <% end %>
     </ul>
   </div>
