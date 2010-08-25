@@ -53,6 +53,10 @@ form.advanced .limit_column li {
   padding: 0.1em 0.4em;
   font-size: 80%;
 }
+
+form.advanced .facet_item h3 {
+  cursor: pointer;
+}
   
 form.advanced .adv_facet_selections {
   color:green;
