@@ -65,6 +65,12 @@ form.advanced .adv_facet_selections {
   margin-top: 0.25em;
 }
 
+form.advanced .advanced_button {
+  float: right;
+  clear: right;
+  margin-bottom: 0.5em;
+}
+
 form.advanced .reset {
   float: right;
   display:block;  
@@ -87,6 +93,7 @@ form.advanced .sort_submit_buttons {
  background-color: #EEEEEE;
  padding: 1em; 
  margin-top: 1em;
+ overflow: hidden; /* trick into containing floats please */
 }
 
 form.advanced .constraints {
