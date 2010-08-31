@@ -51,6 +51,11 @@ module BlacklightAdvancedSearch::ControllerOverride
         deep_merge(old, new)
       elsif (old.kind_of?(Array) and new.kind_of?(Array))
         old.concat(new).uniq
+      elsif new.nil?
+        # Allowing nil values to over-write on merge messes things up.
+        # don't set a nil value if you really want to force blank, set
+        # empty string. 
+        old
       else
         new
       end
