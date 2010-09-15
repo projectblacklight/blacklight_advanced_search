@@ -2,22 +2,12 @@
 
 /* constraints */
 
-#appliedParams .inclusive_or {
-  margin-bottom: 3px;
-  display: block;
-  border: 1px solid #C4DAFE;
+.inclusive_or .operator {
+  margin-right: 1em;
 }
 
-#appliedParams .inclusive_or  .appliedFilter {
-  border-bottom: 1px dotted #D0DAEA;
-  border-top: none;
-  border-left: none;
-  border-right: none;
-  margin-bottom: 0;
-  
-}
-#appliedParams .inclusive_or  .appliedFilter:not(.operator)  img {
-  display: none;
+.inclusive_or .appliedFilter {
+  background-color: #F0F0F0; 
 }
 
 /* making it match an h3 */
@@ -35,11 +25,6 @@
   padding-bottom: 0;
 }
 
-.facet_limit .inclusive_or {
-  margin-top: 0.5em;
-  margin-bottom: 1.5em;
-  margin-left: 1.5em;
-}
 
 .facet_limit .inclusive_or h4 {
   margin-bottom: 0.5em;
@@ -49,7 +34,7 @@
   margin-left: 1em;
 }
 
-/* optional search form */
+/* optional link to search form */
 .search .advanced_search {
   font-size: 83.33%; 
 }

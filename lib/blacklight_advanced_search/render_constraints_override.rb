@@ -21,7 +21,7 @@ module BlacklightAdvancedSearch::RenderConstraintsOverride
       end
       if (@advanced_query.keyword_op == "OR" &&   
           @advanced_query.keyword_queries.length > 1)
-        content = '<span class="inclusive_or">' + render_constraint_element(nil, "Any of:", :classes=>["operator"]) + content + '</span>'
+        content = '<span class="inclusive_or appliedFilter">' + '<span class="operator">Any of:</span>' + content + '</span>'
       end
       
       return content
