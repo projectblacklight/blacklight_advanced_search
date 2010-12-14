@@ -43,6 +43,10 @@ You can also send the advanced search form url parameters representing a search,
 
   url_for( params.merge(:controller => "advanced", :action => "index")
   
+If you do not have the default default :controller/:action route enabled for your application, you may need to add a custom route to config/routes.rb.  Eg:
+
+    map.advanced 'advanced', :controller => 'advanced', :action => 'index'
+  
 By default there won't be any links in your application to the search form, if you've heavily customized your app you can put them wherever you want as above. 
 
 However, especially if your app isn't much customized, the optional installer can write a localized Blacklight search form into your application with a 'more options' link to advanced. You may need to adjust your styles to make room for the new link, depending on what you've done with your app. 
