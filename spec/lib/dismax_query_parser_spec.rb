@@ -148,7 +148,21 @@ describe "BlacklightAdvancedSearch::DismaxQueryParser" do
     it "should generate a valid Solr query as per the specification" do
       setQuery "(apple OR orange) AND bobbing"
       
-      process_query(nil,config).should match(/^_query_:\"\{\!dismax (qf=\$qf_title|pf=\$pf_title) (pf=\$pf_title|qf=\$qf_title)\}\+\(apple OR orange\) \+bobbing\" AND _query_:\"\{\!dismax (qf=\$qf_author|pf=\$pf_author) (pf=\$pf_author|qf=\$qf_author)\}\+\(apple OR orange\) \+bobbing\"/)
+      # Kind of hacky stuff to semi sort of parse the solr query to test it,
+      # instead of assuming an exact string. Since order can be different on
+      # different systems, and does not matter for meaning. 
+      solr_query = process_query(nil,config)
+      
+      clauses = solr_query.split( / +AND +/ )
+      
+      clauses.find do |clause|
+        clause =~ /^_query_:\"\{\!dismax mm=1 (qf=\$qf_title|pf=\$pf_title) (pf=\$pf_title|qf=\$qf_title)\}\+\(apple OR orange\) \+bobbing\"/
+      end.should_not be_nil
+      
+      clauses.find do |clause|
+        clause =~ /^_query_:\"\{\!dismax mm=1 (qf=\$qf_author|pf=\$pf_author) (pf=\$pf_author|qf=\$qf_author)\}\+\(apple OR orange\) \+bobbing\"/
+      end.should_not be_nil
+                  
     end
   end
   

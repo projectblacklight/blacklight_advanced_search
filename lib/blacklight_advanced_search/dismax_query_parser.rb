@@ -2,11 +2,15 @@ module BlacklightAdvancedSearch::DismaxQueryParser
   require 'tree'
   def process_query(params,config)
     text = []
+    # NB: mm=1 is required on nested dismax queries, becuase that's how
+    # we handle "OR" in the user entry, we just list seperate tokens in
+    # a single dismax, and count on mm=1 so they'll be treated mostly like
+    # a boolean 'OR'. 
     keyword_queries.each do |field,values| 
       if values.strip[0,3] == "NOT" and values.split.length < 3
-        temp_text = 'NOT _query_:"{!dismax '
+        temp_text = 'NOT _query_:"{!dismax mm=1 '
       else
-        temp_text = '_query_:"{!dismax '
+        temp_text = '_query_:"{!dismax mm=1 '
       end
       
       
