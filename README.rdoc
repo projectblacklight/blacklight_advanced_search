@@ -3,7 +3,7 @@ This is an advanced search plugin for Blacklight ( http://www.projectblacklight.
 
 == Pre-requisites:
 * The Blacklight plugin ( http://github.com/projectblacklight/blacklight )
-  * NOTE: post-2.5 is required for current version of Advanced Search plugin, that is trunk/master. 
+  * NOTE: post-2.5 is required for current version of Advanced Search plugin.
 * RubyTree gem ( http://rubytree.rubyforge.org/ )
 
 == Installation:
@@ -39,22 +39,22 @@ The advanced search form will be available in your app at /advanced
 
   url_for(:controller => "advanced", :action => "index")
   
-You can also send the advanced search form url parameters representing a search, to have the form add on additional 'advanced' criteria to the search. Eg:
+You can also send the advanced search form url parameters representing a search, to have the form add on additional 'advanced' criteria to the search.  For example:
 
   url_for( params.merge(:controller => "advanced", :action => "index")
   
-If you do not have the default :controller/:action route enabled for your application, you may need to add a custom route to config/routes.rb.  Eg:
+If you do not have the default :controller/:action route enabled for your application, you may need to add a custom route to config/routes.rb.  For example:
 
     map.advanced 'advanced', :controller => 'advanced', :action => 'index'
   
-By default there won't be any links in your application to the search form, if you've heavily customized your app you can put them wherever you want as above. 
+By default there won't be any links in your application to the search form. If you've heavily customized your app, you can put them wherever you want as above. 
 
 However, especially if your app isn't much customized, the optional installer can write a localized Blacklight search form into your application with a 'more options' link to advanced. You may need to adjust your styles to make room for the new link, depending on what you've done with your app. 
  
 
 == Configuration:
 
-If your application has it's search fields set up to all use the same Solr qt request handler, then the search plugin may work well with no configuration. However, configuration is available to change or improve behavior. 
+If your application has its search fields set up to all use the same Solr qt request handler, then the search plugin may work well with no configuration. However, configuration is available to change or improve behavior. 
 
 All plugin configuration mentioned below can be in any initializer in your app (any ruby file in config/initializers), although using the convention config/initializers/blacklight_advanced_search.rb may keep things clear. 
 
@@ -62,13 +62,13 @@ The optional installer script can install a sample blacklight_advanced_search.rb
 
 === Search fields ===
 
-Your main blacklight search fields are generally defined in config/blacklight_config.rb, under "config[:search_fields]". A default Blacklight install may give them each a seperate ":qt" parameter, for the Solr request handler they use.  If set up like this, they can not be re-used by the advanced search plugin. You can either define fields seperately for the advanced search plugin, or modify your main config[:search_fields] so all 'search fields' use the default :qt or share the same :qt. 
+Your main blacklight search fields are generally defined in config/blacklight_config.rb, under "config[:search_fields]". A default Blacklight install may give them each a separate ":qt" parameter, for the Solr request handler they use.  If set up like this, they can not be re-used by the advanced search plugin. You can either define fields separately for the advanced search plugin, or modify your main config[:search_fields] so all 'search fields' use the default :qt or share the same :qt. 
 
 Additionally, to make your advanced search solr requests more concise, you may want to take advantage of the :local_solr_parameters option in your search field definition to use a solr parameter substitution with $variables. 
 
 If there are particular search fields in your main blacklight config you want excluded from the advanced search form, you can set ":include_in_advanced_search => false"
 
-Or, to supply a completely seperate list of search fields for the advanced search form, you can set them yourself, each field is defined by a hash who's format is specified in Blacklight::SearchFields. 
+Or, to supply a completely separate list of search fields for the advanced search form, you can set them yourself. Each field is defined by a hash whose format is specified in Blacklight::SearchFields. 
   
   BlacklightAdvancedSearch.config[:search_fields] = []
   BlacklightAdvancedSearch.config[:search_fields] << {
