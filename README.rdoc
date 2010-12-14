@@ -43,7 +43,7 @@ You can also send the advanced search form url parameters representing a search,
 
   url_for( params.merge(:controller => "advanced", :action => "index")
   
-If you do not have the default default :controller/:action route enabled for your application, you may need to add a custom route to config/routes.rb.  Eg:
+If you do not have the default :controller/:action route enabled for your application, you may need to add a custom route to config/routes.rb.  Eg:
 
     map.advanced 'advanced', :controller => 'advanced', :action => 'index'
   
