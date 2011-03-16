@@ -42,7 +42,7 @@
 	<%= label_tag(:sort, "Sort results by") %> 
     <%= select_tag(:sort, options_for_select(Blacklight.config[:sort_fields],'')) %>
 	<%= hidden_field_tag(:search_field, BlacklightAdvancedSearch.config[:url_key]) %>
-    <%= submit_tag 'search', :class=>'advanced_button', :id=>'advanced_search' %>
+    <%= submit_tag 'Search', :class=>'advanced_button', :id=>'advanced_search' %>
 	<%= link_to "Start over", {:controller => "advanced", :action => "index"}, :class =>"reset advanced_button" %>
   </div>
 <% end %>

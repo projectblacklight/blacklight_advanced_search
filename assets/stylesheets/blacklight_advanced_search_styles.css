@@ -66,22 +66,22 @@ form.advanced .adv_facet_selections {
 }
 
 form.advanced .advanced_button {
-  float: right;
-  clear: right;
-  margin-bottom: 0.5em;
+    -moz-border-radius: 4px 4px 4px 4px;
+    -webkit-border-radius: 4px 4px 4px 4px;
+    border-radius: 4px 4px 4px 4px;
+    background-color: #F6F6F6;
+    border: 1px solid #CCCCCC;
+    color: #2E4F81;
+    display: inline-block;
+    float: right;
+    margin-right: 1em;
+    padding: 0.4em 1em;
+    text-decoration: none;
 }
 
-form.advanced .reset {
-  float: right;
-  display:block;  
-  padding:0 0.5em 0.1em 0.5em; 
-  line-height:22px; 
-  text-decoration:none; 
-  color:#fff; 
-  background:url(../../blacklight/images/start_over.gif) no-repeat center center;
-  border-bottom: none;
+form.advanced .reset {  
 }
-}
+
 
 
 .advanced_help li {
