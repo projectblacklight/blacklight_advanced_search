@@ -95,7 +95,52 @@
 #    ==>
 # NOT _query_:"{!dismax mm=1}red blue" AND NOT _query_:"{!dismax mm=100%}foo bar" AND ( _query_:\"{!dismax }big" OR (*:* AND NOT _query_:"{!dismax }small") )
 #
+# = Why not use e-dismax? =
 #
+# That would be a potentially reasonable choice. Why didn't I? 
+#
+# One, at the time of this writing, edismax is not available in a tagged stable
+# Solr release, and I write code for Blacklight that works with tagged stable
+# releases. 
+#
+# Two, edismax doesn't neccesarily entirely support the semantics I want,
+# especially for features I would like to add in the future. I am not sure
+# exactly what edismax does with complicated deeply nested expressions. 
+# For fielded searches, dismax supports actual individual solr fields, but not
+# the "fields" as dismax qf aggregates that we need. These things could
+# be added to dismax, but with my lack of Java chops and familiarity with
+# Solr code, it would have taken me much longer to do (and been much less
+# enjoyable). 
+#
+# I think it may be a reasonable choice to seperate concerns between Solr
+# and the app layer like this, let Solr handle basic search expressions,
+# but let the app layer handle more complicated query parsing, translating
+# to those simple expressions. 
+#
+# On the other hand, there are definite downsides to this approach. Including
+# having to deal with idiosyncracies of built-in query parsers ("pure
+# negative" behavior), depend upon other idiosyncracies (dismax does not
+# apply mm to -excluded terms), etc. And not being able to share the code
+# at the Solr/Java level. 
+#
+# In the future, a different approach that might be best of all could be
+# using the not-yet-finished XML query parser, to do initial parsing in
+# ruby at the app level, but translate to specified lucene primitives using
+# XML query parser, instead of having to translate to lucene/dismax query
+# parsers. 
+#
+# = Future Enhancement Ideas =
+# Just ideas. 
+# 
+# 1. Allow expert "fielded" searches. title:foo
+#    which would correspond not to actual solr index field "title", but
+#    to a Blacklight-configured "search field" qf/pf. 
+# 2. Insert this app-level parser even in "simple" search, so users
+#    can use boolean operators even in a single-fielded simple search. 
+# 3. Allow a different set of qf to be used for any "phrase term", so
+#    phrases would search only on non-stemming fields. This would be cool,
+#    but kind of do weird things with dismax mm effects, since it would
+#    mean all phrases would be extracted into seperate nested queries. 
 module ParsingNesting::Tree
   
   # Get parslet output for string (parslet output is json-y objects), and
