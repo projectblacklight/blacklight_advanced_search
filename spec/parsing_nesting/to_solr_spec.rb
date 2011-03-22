@@ -180,8 +180,19 @@ describe "NestingParser" do
         
         query_template_matcher(query, "( *$QUERY +AND +( *$QUERY +OR +($ALL AND NOT $QUERY *) *) +AND NOT $QUERY *)") do |red_q, dawn_q, night_q, moscow_q|
         
+          local_param_match(red_q) { |params, query| query.should == "red" }            
         
-        
+          local_param_match(dawn_q) { |params, query| query.should == "dawn"}
+          
+          local_param_match(night_q) do |params, query|
+            params.should include("mm=1")
+            query.should == "night afternoon"
+          end
+          
+          local_param_match(moscow_q) do |params, query|
+            params.should include("mm=1")
+            query.should == "moscow beach"
+          end
         
         end
                 
