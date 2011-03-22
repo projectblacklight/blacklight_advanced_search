@@ -28,14 +28,16 @@ module SolrQuerySpecHelper
   # a nested _query_: will be. Any parens in your passed in regexp will
   # be paren literals, don't escape em yourself -- you can't do your
   # own captures, because if the regexp passes, it'll yield to a block
-  # with a list, in order, of nested queries. 
+  # with a list, in order, of nested queries.
+  #
+  # Can include $ALL to represent literal "*:*"
   #
   # Yes, the regexp matching isn't as robust as it could be, hard
   # to deal with like escaped end-quotes and stuff in a regexp, but
   # should mostly work.   
   def query_template_matcher(top_query, regexp_str)
     nested_re = '(_query_:".+")'
-    regexp_str = regexp_str.gsub("(", '\(').gsub(')', '\)').gsub("$QUERY", nested_re)
+    regexp_str = regexp_str.gsub("(", '\(').gsub(')', '\)').gsub("$QUERY", nested_re).gsub("$ALL", "\\*\\:\\*")
     regexp = Regexp.new('^ *' + regexp_str + ' *$')
 
     top_query.should match( regexp )
@@ -171,7 +173,12 @@ describe "NestingParser" do
       end
       
       it "for crazy complicated query" do
-        query = parse("mark +twain AND huck OR fun OR ((jim AND river) AND (red -dogs))").to_query(:qf => "$qf", :pf =>"$pf", :mm=>"50%")
+        query = parse("red AND dawn OR (-night -afternoon) AND NOT moscow OR beach ").to_query(:qf => "$qf", :pf =>"$pf", :mm=>"50%")
+        
+        #query_template_matcher(query, "( *$QUERY +AND +( *$QUERY +OR +($ALL    )")
+        
+        #debugger
+        #1+1
       end
       
       
@@ -216,6 +223,51 @@ describe "NestingParser" do
       end
       
     end
+    
+    describe "for pure negative" do
+      it "should convert simple pure negative" do
+        query = parse('-one -two -"a phrase"').to_query(:qf => "$qf", :mm => "100%")
+        
+        query_template_matcher(query, " *NOT $QUERY") do |query|
+          local_param_match(query) do |params, query|
+            params.should include("mm=1")
+            query.should == 'one two \\"a phrase\\"'
+          end
+        end
+        
+      end
+      
+      it "should convert pure negative AND" do
+        query = parse("-one AND -two AND -three").to_query(:qf => "$qf", :mm => "100%")
+        
+        query_template_matcher(query, "NOT $QUERY") do |query|
+          local_param_match(query) do |params, query|
+            params.should =~ /mm=1 |$/
+            query.should == 'one two three'
+          end
+        end
+      end
+      
+      it "should convert pure negative OR" do
+        query = parse("-one OR -two OR -three").to_query        
+        
+        query_template_matcher(query, "NOT $QUERY") do |query|
+          local_param_match(query) do |params, query|
+            params.should include("mm=100%")
+            query.should == "one two three"
+          end
+        end
+
+      end
+      
+      it "should convert crazy pure negative combo" do        
+        query = parse("(-one -two) OR -three OR (-five AND -six)").to_query
+        
+        query_template_matcher(query, "( *(\\*\\:\\* +AND +NOT +$QUERY) +OR +( *\\*\\:\\* +AND +NOT +$QUERY *) +OR +( *\\*\\:\\* +AND +NOT +$QUERY *) *)")                
+      end
+    end
+    
+
     
   end
   

@@ -1,12 +1,32 @@
 
 module ParsingNesting::Tree
-
+  
+  # Get parslet output for string (parslet output is json-y objects), and
+  # transform to an actual abstract syntax tree made up of more semantic
+  # ruby objects, Node's. The top one will always be a List. 
+  # 
+  # Call #to_query on resulting Node in order to transform to Solr query,
+  # optionally passing in Solr params to be used as LocalParams in nested
+  # dismax queries. 
+  #
+  # Our approach here works, but as we have to put in special cases
+  # it starts getting messy. Ideally we might want to actually transform
+  # the Object graph (abstract syntax tree) instead of trying to handle
+  # special cases in #to_query. 
+  # For instance, transform object graph for a problematic pure-negative
+  # clause to the corresponding object graph without that (-a AND -b) ==>
+  # (NOT (a OR b).  Transform (NOT NOT a) to (a). That would probably be
+  # more robust. But instead we handle special cases in to_query, which
+  # means the special cases tend to multiply and need to be handled at
+  # multiple levels. But it's working for now.
+  #
+  # the #negate method was an experiment in transforming parse tree in
+  # place, but isn't being used. But it's left as a sign post. 
   def self.parse(string)
     to_node_tree(ParsingNesting::Grammar.new.parse(string))
   end
   
-  # pass in Parlset parsed node tree, get back
-  # an Array of actual ruby objects representing different kinds of nodes
+
   # theoretically Parslet's Transform could be used for this, but I think the
   # manner in which I'm parsing to Parslet labelled hash isn't exactly what
   # Parslet Transform is set up to work with, I couldn't figure it out. But
@@ -39,18 +59,31 @@ module ParsingNesting::Tree
   end
   
   class Node
-    # this default to_query works well for anything that is embeddable.
+    # this default to_query works well for anything that is embeddable in
+    # a standard way. 
     # non-embeddable nodes will have to override and do it different. 
     def to_query(solr_params)
-      build_nested_query(to_embed, solr_params)
+      build_nested_query([self], solr_params)
     end
     
     protected # some utility methods
     
     # build_nested_query, in addition to conveniently turning your params and query
     # into a nested query handling escaping
-    def build_nested_query(query_literal, solr_params={})
-      '_query_:"' + bs_escape(build_local_params(solr_params) + query_literal) + '"'
+    def build_nested_query(embeddables, solr_params={})
+      # if it's pure negative, we need to transform
+      if embeddables.find_all{|n| n.kind_of?(ExcludedClause)}.length == embeddables.length
+        negated = NotExpression.new( List.new(embeddables.collect {|n| n.operand}))
+        solr_params = solr_params.merge(:mm => "1")        
+        negated.to_query(solr_params)              
+      else
+            
+      '_query_:"' + 
+        bs_escape(build_local_params(solr_params) + 
+        embeddables.collect {|n| n.to_embed}.join(" ")) + 
+        '"'
+
+      end      
     end
     
     
@@ -60,7 +93,7 @@ module ParsingNesting::Tree
       hash = hash.dup
       hash.delete("defType") ; hash.delete(:defType)
       
-      "{!dismax " +  hash.collect {|k,v| "#{k}=#{  v.include?(" ") ? "'"+v+"'" : v }"}.join(" ") + "}"      
+      "{!dismax " +  hash.collect {|k,v| "#{k}=#{  v.to_s.include?(" ") ? "'"+v+"'" : v }"}.join(" ") + "}"      
     end
     
     def bs_escape(val, char='"')
@@ -80,7 +113,9 @@ module ParsingNesting::Tree
       false
     end
     
-      
+    def simple_pure_negative?      
+      (list.find_all {|i|  i.kind_of? ExcludedClause }.length) == list.length      
+    end  
     
     def to_query(solr_params={})
       queries = []
@@ -88,7 +123,7 @@ module ParsingNesting::Tree
       (embeddable, gen_full_query) = list.partition {|i| i.respond_to?(:can_embed?) && i.can_embed?}
        
       unless embeddable.empty?
-        queries << build_nested_query(embeddable.collect {|n| n.to_embed}.join(" "), solr_params)
+        queries << build_nested_query(embeddable, solr_params)
       end
       
       gen_full_query.each do |node|
@@ -108,15 +143,20 @@ module ParsingNesting::Tree
     
     # We make an and-list embeddable only if all it's elements
     # are embeddable, then no problem we just embed them all
-    # as Solr '+' mandatory, and achieve the AND
+    # as Solr '+' mandatory, and achieve the AND.
+    # For now, pure negative is considered not embeddable, although
+    # theoretically it could sometimes be embedded if transformed
+    # properly. 
     def can_embed?
-      ! list.collect {|i| i.can_embed?}.include?(false)
+      (! simple_pure_negative?) && ! list.collect {|i| i.can_embed?}.include?(false)
     end
-            
+                    
     # Only if all operands are embeddable.
     # Trick is if they were bare terms/phrases, we add a '+' on
     # front, but if they already were +/-, then we don't need to,
     # and leaving them along will have desired semantics. 
+    # This works even on "-", because dismax mm seems to not consider "-"
+    # clauses, they are always required regardless of mm. 
     def to_embed
       list.collect do |operand|
         s = operand.to_embed
@@ -128,13 +168,21 @@ module ParsingNesting::Tree
       end.join(" ")
     end
     
-    # for those that aren't embeddable
+    # for those that aren't embeddable, or pure negative
     def to_query(local_params)
+      if simple_pure_negative?
+        # Can do it in one single nested dismax, if we're simple arguments
+        # that are pure negative. 
+        # build_nested_query will handle negating the pure negative for
+        # us. 
+        build_nested_query(list, local_params)
+      else      
             "( " + 
         list.collect do |i|
           i.to_query(local_params)
         end.join(" AND ") +
-       " )"  
+       " )"
+      end
     end
     
     # convent logical property here, not(a AND b) === not(a) OR not(b) 
@@ -166,24 +214,42 @@ module ParsingNesting::Tree
       not_flattenable = list.find {|i| ! (i.can_embed? && ! i.kind_of?(AndList) )}
       
       if not_flattenable
-        to_two_queries(local_params)
+        to_multi_queries(local_params)
+      elsif simple_pure_negative?
+        to_simple_pure_negative_query(local_params)
       else
         to_one_dismax_query(local_params)
       end
     end
     
-    # all our arguments are 'simple' (terms and phrases with +/-), 
-    # put am all in one single dismax with mm forced to 1. 
-    def to_one_dismax_query(local_params)
-      query = list.collect {|n| n.to_embed }.join(" ")
+    # build_nested_query isn't smart enough to handle refactoring
+    # a simple pure negative "OR", that needs an mm of 100%. 
+    # Let's just do it ourselves. What we're doing makes more sense
+    # if you remember that:
+    # -a OR -b   ===   NOT (a AND b)
+    def to_simple_pure_negative_query(local_params)
+      # take em out of their ExcludedClauses
+      embeddables = list.collect {|n| n.operand}
+      # and insist on mm 100%
+      solr_params = local_params.merge(:mm => "100%")
       
-      build_nested_query(query, local_params.merge(:mm => "1"))
+      # and put the NOT in front to preserve semantics. 
+      return 'NOT _query_:"' + 
+          bs_escape(build_local_params(solr_params) + 
+          embeddables.collect {|n| n.to_embed}.join(" ")) + 
+        '"'
     end
     
-    def to_two_queries(local_params)      
+    # all our arguments are 'simple' (terms and phrases with +/-), 
+    # put am all in one single dismax with mm forced to 1. 
+    def to_one_dismax_query(local_params)            
+      build_nested_query(list, local_params.merge(:mm => "1"))
+    end
+    
+    def to_multi_queries(local_params)      
       "( " + 
         list.collect do |i|
-          if i.kind_of? NotExpression
+        if i.kind_of?(NotExpression)  || (i.respond_to?(:simple_pure_negative?) && i.simple_pure_negative?)
             # need special handling to work around Solr 1.4.1's lack of handling
             # of pure negative in an OR
             "(*:* AND #{i.to_query(local_params)})"
@@ -214,7 +280,7 @@ module ParsingNesting::Tree
     # "x OR (*:* AND NOT y)", which should mean the same thing.
     def to_query(solr_params)
       # rescue double-nots to not treat them crazy-like and make the query
-      # more work for Solr than it needs to be with a double-negative. 
+      # more work for Solr than it needs to be with a double-negative.       
       if operand.kind_of?(NotExpression)
         operand.operand.to_query(solr_params)
       else
@@ -277,6 +343,10 @@ module ParsingNesting::Tree
       MandatoryClause.new( operand )
     end
     
+    def simple_pure_negative?
+      true
+    end
+    
   end
   
   
@@ -321,19 +391,4 @@ module ParsingNesting::Tree
   end
 end
 
-# tests
-# foo
-# "foo"
-# "foo bar"
-# " foo bar "
-# "foo bar" baz
-# baz "foo bar" baz bam
-# +foo
-# -foo
-# +"foo"
-# foo AND bar
-# foo AND bar AND baz
-# blue OR white AND big  # operator precedence, OR takes precedence
-# breaking on the double space, why. p.parse("A AND  B OR C AND D AND E")
-# A AND B AND C
 
