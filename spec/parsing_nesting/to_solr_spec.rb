@@ -25,12 +25,15 @@ module SolrQuerySpecHelper
   # Convenience for matching a lucene query combining nested queries,
   # and getting out the nested queries as matches. 
   # pass in a string representing a regexp that uses $QUERY as placeholder where
-  # a nested _query_: will be. Any parens in your passed in regexp will
+  # a nested _query_: will be. 
+  #
+  # * Any parens in your passed in regexp will
   # be paren literals, don't escape em yourself -- you can't do your
   # own captures, because if the regexp passes, it'll yield to a block
   # with a list, in order, of nested queries.
+  #  
   #
-  # Can include $ALL to represent literal "*:*"
+  # * Can include $ALL to represent literal "*:*"
   #
   # Yes, the regexp matching isn't as robust as it could be, hard
   # to deal with like escaped end-quotes and stuff in a regexp, but
@@ -173,12 +176,15 @@ describe "NestingParser" do
       end
       
       it "for crazy complicated query" do
-        query = parse("red AND dawn OR (-night -afternoon) AND NOT moscow OR beach ").to_query(:qf => "$qf", :pf =>"$pf", :mm=>"50%")
+        query = parse("red AND dawn OR (-night -afternoon) AND NOT (moscow OR beach) ").to_query(:qf => "$qf", :pf =>"$pf", :mm=>"50%")
         
-        #query_template_matcher(query, "( *$QUERY +AND +( *$QUERY +OR +($ALL    )")
+        query_template_matcher(query, "( *$QUERY +AND +( *$QUERY +OR +($ALL AND NOT $QUERY *) *) +AND NOT $QUERY *)") do |red_q, dawn_q, night_q, moscow_q|
         
-        #debugger
-        #1+1
+        
+        
+        
+        end
+                
       end
       
       
@@ -219,7 +225,7 @@ describe "NestingParser" do
       
       it "uses workaround on NOT as operand to OR" do
         query = parse("two OR (NOT (three))").to_query
-        query_template_matcher(query, "( *$QUERY +OR +(\\*\\:\\* +AND +NOT +$QUERY) *)")        
+        query_template_matcher(query, "( *$QUERY +OR +($ALL +AND +NOT +$QUERY) *)")        
       end
       
     end
@@ -263,7 +269,7 @@ describe "NestingParser" do
       it "should convert crazy pure negative combo" do        
         query = parse("(-one -two) OR -three OR (-five AND -six)").to_query
         
-        query_template_matcher(query, "( *(\\*\\:\\* +AND +NOT +$QUERY) +OR +( *\\*\\:\\* +AND +NOT +$QUERY *) +OR +( *\\*\\:\\* +AND +NOT +$QUERY *) *)")                
+        query_template_matcher(query, "( *($ALL +AND +NOT +$QUERY) +OR +( *$ALL +AND +NOT +$QUERY *) +OR +( *$ALL +AND +NOT +$QUERY *) *)")                
       end
     end
     
