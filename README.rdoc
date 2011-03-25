@@ -62,29 +62,57 @@ The optional installer script can install a sample blacklight_advanced_search.rb
 
 === Search fields ===
 
-Your main blacklight search fields are generally defined in config/blacklight_config.rb, under "config[:search_fields]". A default Blacklight install may give them each a separate ":qt" parameter, for the Solr request handler they use.  If set up like this, they can not be re-used by the advanced search plugin. You can either define fields separately for the advanced search plugin, or modify your main config[:search_fields] so all 'search fields' use the default :qt or share the same :qt. 
+Your main blacklight search fields are generally defined in config/blacklight_config.rb, under "config[:search_fields]" ( https://github.com/projectblacklight/blacklight/blob/master/config/initializers/blacklight_config.rb#L194 ). If there are particular search fields in your main blacklight config you want excluded from the advanced search form, you can set ":include_in_advanced_search => false"
 
-Additionally, to make your advanced search solr requests more concise, you may want to take advantage of the :local_solr_parameters option in your search field definition to use a solr parameter substitution with $variables. 
-
-If there are particular search fields in your main blacklight config you want excluded from the advanced search form, you can set ":include_in_advanced_search => false"
-
-Or, to supply a completely separate list of search fields for the advanced search form, you can set them yourself. Each field is defined by a hash whose format is specified in Blacklight::SearchFields. 
-  
-  BlacklightAdvancedSearch.config[:search_fields] = []
-  BlacklightAdvancedSearch.config[:search_fields] << {
-    :key => :author
-    :solr_local_parameters => {
-      :qf=>"$qf_author"
-    }
-  }
-
-Note that you can't set :qt for search fields for advanced search, they all must share the same Solr request handler (qt). 
-
-If you would like the advanced search to use a different Solr request handler than your app's default, set:
+All advanced search fields must share the same Solr request handler (":qt"). As such, search fields that use a custom ":qt" parameter may not be re-used by the advanced search plugin. However, you may use a separate Solr request handler than the Blacklight default. If you would like the advanced search to use a different Solr request handler than your app's default, set:
   BlacklightAdvancedSearch.config[:qt]
 to the name of the solr request handler. 
 
-Note you can set custom :search_fields while keeping the default :qt, but setting a new :qt requires you to set :search_fields too.  
+If you use an alternative Solr request handler, you must supply a completely separate list of search fields for the advanced search form. Each field is defined by a hash whose format is specified in Blacklight::SearchFields ( https://github.com/projectblacklight/blacklight/blob/master/lib/blacklight/search_fields.rb#L7 ). 
+
+  BlacklightAdvancedSearch.config[:search_fields] = []
+  BlacklightAdvancedSearch.config[:search_fields] << {
+    :key => 'title',
+    :solr_local_parameters => {
+      :qf => "title_t subtitle_t addl_titles_t title_unstem_search^1000" # see ( http://wiki.apache.org/solr/DisMaxQParserPlugin#qf_.28Query_Fields.29 )
+      :pf => "title_t subtitle_t addl_titles_t title_unstem_search^1000" # see ( http://wiki.apache.org/solr/DisMaxQParserPlugin#pf_.28Phrase_Fields.29 )
+    }
+  }
+
+Additionally, to make your advanced search solr requests more concise, you are strongly encouraged to take advantage of the :local_solr_parameters option in your search field definition to use a solr parameter substitution with $variables. 
+
+  BlacklightAdvancedSearch.config[:search_fields] << {
+    :key => 'author'
+    :solr_local_parameters => {
+      :qf=>"$qf_author",
+      :pf=>"$pf_author"
+    }
+  }
+
+Within your solrconfig.xml you may then provide the appropriate custom configuration.
+
+  <requestHandler name="advanced" class="solr.SearchHandler" >
+    <lst name="defaults">
+      <!-- ... -->
+      <str name="qf_author">
+        author_1xx_unstem_search^200
+        author_7xx_unstem_search^50
+        author_8xx_unstem_search^10
+        author_1xx_search^20       vern_author_1xx_search^20
+        author_7xx_search^5        vern_author_7xx_search^5
+        author_8xx_search          vern_author_8xx_search
+      </str>
+      <str name="pf_author">
+        author_1xx_unstem_search^5000
+        author_7xx_unstem_search^3000
+        author_1xx_search^500        vern_author_1xx_search^500
+        author_7xx_search^300        vern_author_7xx_search^300
+        author_8xx_unstem_search^250
+        author_8xx_search^200        vern_author_8xx_search^200
+      </str>
+    </lst>
+  </requestHandler>
+
 
 === Facets
 
