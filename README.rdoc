@@ -54,21 +54,21 @@ However, especially if your app isn't much customized, the optional installer ca
 
 == Configuration:
 
-If your application has its search fields set up to all use the same Solr qt request handler, then the search plugin may work well with no configuration. However, configuration is available to change or improve behavior. 
+If your application uses a single Solr qt request handler for all its search fields, then this plugin may work well with no configuration.  Nonetheless, configuration is available to change or improve behavior, or to use a separate Solr request handler for the advanced search plugin.
 
 All plugin configuration mentioned below can be in any initializer in your app (any ruby file in config/initializers), although using the convention config/initializers/blacklight_advanced_search.rb may keep things clear. 
 
-The optional installer script can install a sample blacklight_advanced_search.rb for you demonstrating various options.  
+The optional installer script can install a sample blacklight_advanced_search.rb for you which demonstrates various options.
 
-=== Search fields ===
+=== Search fields
 
 Your main blacklight search fields are generally defined in config/blacklight_config.rb, under "config[:search_fields]" ( https://github.com/projectblacklight/blacklight/blob/master/config/initializers/blacklight_config.rb#L194 ). If there are particular search fields in your main blacklight config you want excluded from the advanced search form, you can set ":include_in_advanced_search => false"
 
 All advanced search fields must share the same Solr request handler (":qt"). As such, search fields that use a custom ":qt" parameter may not be re-used by the advanced search plugin. However, you may use a separate Solr request handler than the Blacklight default. If you would like the advanced search to use a different Solr request handler than your app's default, set:
   BlacklightAdvancedSearch.config[:qt]
-to the name of the solr request handler. 
+to the name of the Solr request handler. 
 
-If you use an alternative Solr request handler, you must supply a completely separate list of search fields for the advanced search form. Each field is defined by a hash whose format is specified in Blacklight::SearchFields ( https://github.com/projectblacklight/blacklight/blob/master/lib/blacklight/search_fields.rb#L7 ). 
+If you use a separate Solr request handler for advanced search, you must supply a completely separate list of search fields for the advanced search form. Each field is defined by a hash whose format is specified in Blacklight::SearchFields ( https://github.com/projectblacklight/blacklight/blob/master/lib/blacklight/search_fields.rb#L7 ). 
 
   BlacklightAdvancedSearch.config[:search_fields] = []
   BlacklightAdvancedSearch.config[:search_fields] << {
