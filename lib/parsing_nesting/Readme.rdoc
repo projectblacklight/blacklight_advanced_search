@@ -152,4 +152,9 @@ Just ideas.
    phrases would search only on non-stemming fields. This would be cool,
    but kind of do weird things with dismax mm effects, since it would
    mean all phrases would be extracted into seperate nested queries. 
+4. Better error handling of syntax errors in query entry. Both in the 
+   plugin as a whole, error messages should be displayed on the input
+   screen, so the entry can be fixed. But also using Parslet for parsing,
+   we can potentially deliver better error messages guessing what they
+   got wrong where in their entry. 
 
