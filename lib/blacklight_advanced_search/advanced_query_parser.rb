@@ -2,6 +2,7 @@ module BlacklightAdvancedSearch
   class QueryParser
     include DismaxQueryParser if BlacklightAdvancedSearch.config[:solr_type] == "dismax"
     include EdismaxQueryParser if BlacklightAdvancedSearch.config[:solr_type] == "edismax"
+    include ParsingNestingParser if BlacklightAdvancedSearch.config[:solr_type] == "parsing_nesting"
     include FilterParser
     attr_reader :to_solr
     def initialize(params,config)
@@ -13,7 +14,7 @@ module BlacklightAdvancedSearch
 
     # Returns "AND" or "OR", how #keyword_queries will be combined
     def keyword_op
-      @params["op"]
+      @params["op"] || "AND"
     end
     # returns advanced-type keyword queries, see also keyword_op
     def keyword_queries
