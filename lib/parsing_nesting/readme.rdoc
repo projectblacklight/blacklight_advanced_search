@@ -25,12 +25,18 @@
   * (one two three) AND (big small medium)
   * NOT(one two) three ((four OR -five) AND (blue green red))
     * Note that some of these latter ones can have confusing semantics
-      if your dismax mm isn't 100%.  For instance (one two three) will be
+      if your dismax mm isn't 100%.  
+      
+      For instance (one two three) will be
       a dismax query, let's say mm=1, then the result set would actually
-      be the equivalent of (one OR two OR three). NOT(one two three) will
-      be an actual complementary NOT, the complementary/inverted set --
-      so NOT(one two three) (if you had dismax mm=1) will essentially 
-      have the same semantics as NOT(one OR two OR three), which isn't
+      be the equivalent of: 
+        (one OR two OR three). 
+      NOT(one two three) will be an actual complementary NOT, the 
+      complementary/inverted set -- so NOT(one two three) 
+      (if you had dismax mm=1) will essentially 
+      have the same semantics as:
+        NOT(one OR two OR three)
+      which isn't
       neccesarily what the user is expecting. But if the user always uses
       explicit boolean connectors, they can exert complete control over
       the semantics, and not get the 'fuzziness'. Alternately, the local
@@ -97,8 +103,8 @@ would be just a sub-clause or sub-query. Sometimes the result is not
 the most concise query possible, but it should hold to it's semantics. 
 
 * -red -blue (-foo OR -bar) (big OR NOT small)
-  ==>
-  NOT _query_:"{!dismax mm=1}red blue" AND NOT _query_:"{!dismax mm=100%}foo bar" AND ( _query_:\"{!dismax }big" OR (*:* AND NOT _query_:"{!dismax }small") )
+    turns into ==>
+    NOT _query_:"{!dismax mm=1}red blue" AND NOT _query_:"{!dismax mm=100%}foo bar" AND ( _query_:\"{!dismax }big" OR (*:* AND NOT _query_:"{!dismax }small") )
 
 == Why not use e-dismax?
 
