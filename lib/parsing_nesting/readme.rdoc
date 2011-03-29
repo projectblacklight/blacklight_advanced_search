@@ -16,31 +16,31 @@
   than 'AND'
   * big OR small AND blue OR green === (big OR small) AND (blue OR green)
   * one AND two OR three AND four   ===    one AND (two OR three) AND four
-  ** alternative, with different meaning:  (one AND two) OR (three AND four)
+    * alternative, with different meaning:  (one AND two) OR (three AND four)
   * NOT one two three ===  (NOT one) two three === -one two three
-  ** alternative, with different meaning: NOT(one two three)
+    * alternative, with different meaning: NOT(one two three)
   
 * lists of terms can be combined with AND/OR/NOT in a variety of ways
-** one two three OR four  === one two (three OR four)
-** (one two three) AND (big small medium)
-** NOT(one two) three ((four OR -five) AND (blue green red))
-*** Note that some of these latter ones can have confusing semantics
-    if your dismax mm isn't 100%.  For instance (one two three) will be
-    a dismax query, let's say mm=1, then the result set would actually
-    be the equivalent of (one OR two OR three). NOT(one two three) will
-    be an actual complementary NOT, the complementary/inverted set --
-    so NOT(one two three) (if you had dismax mm=1) will essentially 
-    have the same semantics as NOT(one OR two OR three), which isn't
-    neccesarily what the user is expecting. But if the user always uses
-    explicit boolean connectors, they can exert complete control over
-    the semantics, and not get the 'fuzziness'. Alternately, the local
-    implementer could use only mm=100%, in which case everything is much
-    less fuzzy/hard-to-predict
+  * one two three OR four  === one two (three OR four)
+  * (one two three) AND (big small medium)
+  * NOT(one two) three ((four OR -five) AND (blue green red))
+    * Note that some of these latter ones can have confusing semantics
+      if your dismax mm isn't 100%.  For instance (one two three) will be
+      a dismax query, let's say mm=1, then the result set would actually
+      be the equivalent of (one OR two OR three). NOT(one two three) will
+      be an actual complementary NOT, the complementary/inverted set --
+      so NOT(one two three) (if you had dismax mm=1) will essentially 
+      have the same semantics as NOT(one OR two OR three), which isn't
+      neccesarily what the user is expecting. But if the user always uses
+      explicit boolean connectors, they can exert complete control over
+      the semantics, and not get the 'fuzziness'. Alternately, the local
+      implementer could use only mm=100%, in which case everything is much
+      less fuzzy/hard-to-predict
 
 == Conversion to Solr
 
 As mentioned, a straight list of terms such as (in the most complicated)
-case: << one -two +"three four" >> is translated directly to a dismax
+case:  one -two +"three four" >> is translated directly to a dismax
 query for those entered terms. Using the qf/pf/mm/etc you have configured
 for the Blacklight search_field in question. (While by default the advanced
 search plugin uses exactly the same field configurations you already have
@@ -50,18 +50,18 @@ advanced search, perhaps setting mm to 100% if desired for adv search)
 There are a few motivations for doing things this way:
 
 * To be consistent with simple search, so moving to advanced is less of a 
- conceptual break for the user. If you take a legal simple search, and
- enter it in a given field in advanced search, it will work exactly the
- same as it did in simple (even if mm is not 100% in simple), rather than
- having entirely different semantics.
+  conceptual break for the user. If you take a legal simple search, and
+  enter it in a given field in advanced search, it will work exactly the
+  same as it did in simple (even if mm is not 100% in simple), rather than
+  having entirely different semantics.
 * Taking advantage of that, one might eventually want to actually use this
- parser in simple search, so user can enter single-field boolean expressions
- even in simple/basic search.
+  parser in simple search, so user can enter single-field boolean expressions
+  even in simple/basic search.
 * In the future, we might want to provide actual fielded searches in an
- 'expert' mode. +title: foo AND author:bar+ or 
- +(title:(one two) AND author:(three four)) OR isbn:X+
- For explicit fielded searching, it is convenient if you can combine
- dismax searches. 
+  'expert' mode. +title: foo AND author:bar+ or 
+  +(title:(one two) AND author:(three four)) OR isbn:X+
+  For explicit fielded searching, it is convenient if you can combine
+  dismax searches. 
 
 Once you start putting boolean operators AND, OR, NOT in, the query will
 no longer neccesarily be converted to a _single_ nested dismax query, a single
@@ -70,16 +70,16 @@ common cases, multiple clauses will still be collapsed into fewer dismax
 queries than the 'naive' translation. Examples:
 
 * one two three (blue AND green AND -purple)
-   => +_query_:"{!dismax}one two three +four +five -purple"+
+    _query_:"{!dismax}one two three +four +five -purple"
 * one two three (blue OR green OR purple)
-   => +_query_:"{!dismax}one two three" AND _query_:"{!dismax mm=1}blue green purple"+
+    _query_:"{!dismax}one two three" AND _query_:"{!dismax mm=1}blue green purple"
 
 However, if you use complicated crazy nesting, you can get a lot of nested
 queries generated:
-* +((one two) AND (three OR four)) OR (blue AND NOT (green OR purple))+
-  => +( ( _query_:"{!dismax }one two" AND _query_:"{!dismax mm=1}three four" ) OR ( _query_:"{!dismax }blue" AND NOT _query_:"{!dismax mm=1}green purple" ) )+
+* ((one two) AND (three OR four)) OR (blue AND NOT (green OR purple))
+    ( ( _query_:"{!dismax }one two" AND _query_:"{!dismax mm=1}three four" ) OR ( _query_:"{!dismax }blue" AND NOT _query_:"{!dismax mm=1}green purple" ) )
 
-= Note on pure negative queries =
+= Note on pure negative queries
 
 In Solr 1.4.1, the dismax query parser can't handle queries with only "-"
 excluded terms. And while the lucene query parser can handle certain types
@@ -89,16 +89,16 @@ and transforms to semantically equivalent query that can be handled by
 Solr properly. At least it tries, this is the least clean part of the code.
 But there are specs showing it works for some fairly complicated queries. 
 
-+-one -two+  =>is transformed to=>  +NOT _query_:"{!dismax mm=1}one two"+
-+$x OR NOT $y+ =>is transformed to=> +$x OR (*:* AND NOT $y)+
+* -one -two  =>is transformed to=>  NOT _query_:"{!dismax mm=1}one two"
+* $x OR NOT $y =>is transformed to=> $x OR (*:* AND NOT $y)
 
 This works with very complicated queries when the bad pure negative part
 would be just a sub-clause or sub-query. Sometimes the result is not
 the most concise query possible, but it should hold to it's semantics. 
 
- -red -blue (-foo OR -bar) (big OR NOT small)
-    ==>
- NOT _query_:"{!dismax mm=1}red blue" AND NOT _query_:"{!dismax mm=100%}foo bar" AND ( _query_:\"{!dismax }big" OR (*:* AND NOT _query_:"{!dismax }small") )
+* -red -blue (-foo OR -bar) (big OR NOT small)
+  ==>
+  NOT _query_:"{!dismax mm=1}red blue" AND NOT _query_:"{!dismax mm=100%}foo bar" AND ( _query_:\"{!dismax }big" OR (*:* AND NOT _query_:"{!dismax }small") )
 
 == Why not use e-dismax?
 
@@ -138,12 +138,12 @@ parsers.
 Just ideas. 
  
 1. Allow expert "fielded" searches. title:foo
-  which would correspond not to actual solr index field "title", but
-  to a Blacklight-configured "search field" qf/pf. 
+   which would correspond not to actual solr index field "title", but
+   to a Blacklight-configured "search field" qf/pf. 
 2. Insert this app-level parser even in "simple" search, so users
-  can use boolean operators even in a single-fielded simple search. 
+   can use boolean operators even in a single-fielded simple search. 
 3. Allow a different set of qf to be used for any "phrase term", so
-  phrases would search only on non-stemming fields. This would be cool,
-  but kind of do weird things with dismax mm effects, since it would
-  mean all phrases would be extracted into seperate nested queries. 
+   phrases would search only on non-stemming fields. This would be cool,
+   but kind of do weird things with dismax mm effects, since it would
+   mean all phrases would be extracted into seperate nested queries. 
 
