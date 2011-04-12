@@ -3,9 +3,9 @@
 
 module BlacklightAdvancedSearch::ControllerOverride
 
-  def solr_search_params(extra_params = {})    
+  def solr_search_params(req_params = params)    
     # Call superclass implementation, ordinary solr_params
-    solr_params = super(extra_params)
+    solr_params = super(req_params)
 
     # When we're in advanced controller, we're fetching the search
     # context, and don't want to include any of our own stuff.
@@ -14,10 +14,6 @@ module BlacklightAdvancedSearch::ControllerOverride
     # not just passed in arg override.
     return solr_params if self.class == AdvancedController
 
-    #Annoying thing where default behavior is to mix together
-    #params from request and extra_params argument, so we
-    #must do that too.
-    req_params = params.merge(extra_params)
     
     # Now do we need to do fancy advanced stuff?
     if (req_params[:search_field] == BlacklightAdvancedSearch.config[:url_key] ||
@@ -29,7 +25,7 @@ module BlacklightAdvancedSearch::ControllerOverride
       solr_params = deep_safe_merge(solr_params, @advanced_query.to_solr )
       if @advanced_query.keyword_queries.length > 0
         # force :qt if set
-        solr_params[:qt] = BlacklightAdvancedSearch.config[:qt]
+        solr_params[:qt] = BlacklightAdvancedSearch.config[:qt] if BlacklightAdvancedSearch.config[:qt]
         solr_params[:defType] = "lucene"
       end
       
