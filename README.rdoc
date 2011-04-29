@@ -128,7 +128,7 @@ By default, the advanced search form will show as limits whatever facets are con
 === All Config Options
 
 [config[:solr_type]]
-  The internal strategy for mapping from user-entered query to Solr. Defaults to "nesting_parsing". Other options (not recommended) are "dismax" (original dismax strategy with known problems, may go away soon) or "edismax" (may work with the edismax query parser, this function may be a work in progress?)
+  The internal strategy for mapping from user-entered query to Solr. Defaults to "parsing_nesting". Other options (not recommended) are "dismax" (original dismax strategy with known problems, may go away soon) or "edismax" (may work with the edismax query parser, this function may be a work in progress?)
 [config[:qt]] 
    Solr request handler to use for any search that includes advanced search criteria. Defaults to what the application has set as Blacklight.config[:default_qt]
 [config[:url_key]]
