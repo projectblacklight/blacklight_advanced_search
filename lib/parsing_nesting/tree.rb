@@ -67,32 +67,61 @@ module ParsingNesting::Tree
     
     protected # some utility methods
     
-    # build_nested_query, in addition to conveniently turning your params and query
-    # into a nested query handling escaping
-    def build_nested_query(embeddables, solr_params={})
+    # Builds a query from a list of Node's that have #to_embed, and some
+    # solr params to embed as LocalParams.
+    #
+    # By default will create a nested _query_, handling escaping appropriately.
+    # but pass in :always_nested=>false, and it will sometimes be an ordinary 
+    # query where possible. (possibly still with LocalParams).  
+    #
+    # LocalParams will be default have "!dismax" added to them, but set
+    # :force_deftype to something else (or nil) if you want.
+    #
+    # Also takes care of simple "pure negative" queries like "-one -two",
+    # converting them to a nested NOT query that will be handled appropriately.
+    # those simple negatives can't be handled right by dismax otherwise. 
+    def build_nested_query(embeddables, solr_params={}, options = {})
+      options = {:always_nested => true, 
+      :force_deftype => "dismax"}.merge(options)
+      
       # if it's pure negative, we need to transform
       if embeddables.find_all{|n| n.kind_of?(ExcludedClause)}.length == embeddables.length
         negated = NotExpression.new( List.new(embeddables.collect {|n| n.operand}))
         solr_params = solr_params.merge(:mm => "1")        
-        negated.to_query(solr_params)              
+        return negated.to_query(solr_params)              
       else
-            
-      '_query_:"' + 
-        bs_escape(build_local_params(solr_params) + 
-        embeddables.collect {|n| n.to_embed}.join(" ")) + 
-        '"'
+      
+        inner_query = build_local_params(solr_params, options[:force_deftype]) + 
+          embeddables.collect {|n| n.to_embed}.join(" ")
+        
+        if options[:always_nested]       
+          return '_query_:"' + bs_escape(inner_query) + '"'
+        else
+          return inner_query
+        end
 
       end      
     end
+            
     
-    
-    
-    def build_local_params(hash = {})
-      # we insist on dismax for our embedded queries. 
+    # Pass in nil 2nd argument if you DON'T want to embed
+    # "!dismax" in your local params. Used by #to_single_query_params
+    def build_local_params(hash = {}, force_deftype = "dismax")
+      # we insist on dismax for our embedded queries, or whatever
+      # other defType supplied in 2nd argument. 
       hash = hash.dup
-      hash.delete("defType") ; hash.delete(:defType)
-      
-      "{!dismax " +  hash.collect {|k,v| "#{k}=#{  v.to_s.include?(" ") ? "'"+v+"'" : v }"}.join(" ") + "}"      
+      if force_deftype
+        hash[:defType] = force_deftype
+        hash.delete("defType") # avoid weird colision with hard to debug results
+      end      
+            
+      if (hash.size > 0)
+        defType = hash.delete(:defType) || hash.delete("defType")
+        "{" + (defType ? "!#{defType} " : "") +  hash.collect {|k,v| "#{k}=#{  v.to_s.include?(" ") ? "'"+v+"'" : v }"}.join(" ") + "}"
+      else
+        #no local params!
+        ""
+      end
     end
     
     def bs_escape(val, char='"')
@@ -130,6 +159,40 @@ module ParsingNesting::Tree
       end
       
       queries.join(" AND ")
+    end
+
+    # Returns a Hash, assumes this will be the ONLY :q, used for
+    # parsing 'simple search' to Solr. Pass in params that need to
+    # be LOCAL solr params (using "{foo=bar}" embedded in query). 
+    # Params that should be sent to Solr seperately are caller's responsibility,
+    # merge em into the returned hash. 
+    #
+    # For very simple queries, this will produce an ordinary Solr q
+    # much like would be produced ordinarily. But for AND/OR/NOT, will
+    # sometimes include multiple nested queries instead. 
+    #
+    # This method will still sometimes return a single nested _query_, that
+    # could theoretically really be ordinary query possibly with localparams.
+    # It still works, but isn't optimizing for a simpler query, because
+    # it's using much of the same code used for combining multiple fields
+    # that need nested queries. Maybe we'll optimize later, but the code
+    # gets tricky. 
+    def to_single_query_params(solr_local_params)
+      # Can it be expressed in a single dismax?
+      
+      if list.find_all {|i| i.respond_to?(:can_embed?) && i.can_embed? }.length == list.length        
+        { 
+          #build_local_params(solr_local_params, nil) + list.collect {|n| n.to_embed}.join(" "),
+          :q => build_nested_query(list, solr_local_params, :always_nested => false, :force_deftype => nil), 
+          :defType => "dismax"
+        }        
+      else
+        # Can't be expressed in a single dismax, do it the normal way
+        { 
+          :q => self.to_query(solr_local_params),
+          :defType => "lucene" 
+        }
+      end
     end
     
     def negate

@@ -1,15 +1,16 @@
-# This module gets added on to CatalogController, mainly to override
-# Blacklight::SolrHelper methods like #solr_search_params
+# This module gets included into CatalogController, or another SolrHelper
+# includer, to add behavior into solr_search_params_logic. 
 module BlacklightAdvancedSearch::ControllerOverride
   def self.included(klass)
-    klass.solr_search_params_logic << :add_advanced_q_to_solr
+    klass.solr_search_params_logic << :add_advanced_search_to_solr 
   end
   
   
   # this method should get added into the solr_search_params_logic
   # list, in a position AFTER normal query handling (:add_query_to_solr),
-  # so it'll overwrite that if and only if it's an advanced search. 
-  def add_advanced_q_to_solr(solr_parameters, req_params = params)
+  # so it'll overwrite that if and only if it's an advanced search.
+  # adds a 'q' and 'fq's based on advanced search form input. 
+  def add_advanced_search_to_solr(solr_parameters, req_params = params)
     # If we've got the hint that we're doing an 'advanced' search, then
     # map that to solr #q, over-riding whatever some other logic may have set, yeah.
     # the hint right now is :search_field request param is set to a magic
@@ -27,6 +28,26 @@ module BlacklightAdvancedSearch::ControllerOverride
       end
       
     end
+  end
+  
+  # This method can be included in solr_search_params_logic to have us
+  # parse an ordinary entered :q for AND/OR/NOT and produce appropriate
+  # Solr query. Note that it is NOT included in solr_search_params_logic
+  # by default when this module is included, because it is optional behavior.
+  # BlacklightAdvancedSearch init code will add it to CatalogController
+  # if it's configured to do so. You can of course add it yourself
+  # manually too. 
+  def add_advanced_parse_q_to_solr(solr_parameters, req_params = params)        
+    field_def = Blacklight.search_field_def_for_key( req_params[:search_field])
+    solr_direct_params = field_def[:solr_parameters] || {}
+    solr_local_params = field_def[:solr_local_parameters] || {}
+    
+    deep_merge!(solr_parameters, solr_direct_params)
+    
+    deep_merge!(
+      solr_parameters, 
+      ParsingNesting::Tree.parse(req_params[:q]).to_single_query_params( solr_local_params )  
+     )
   end
 
   

@@ -37,7 +37,15 @@ unless Rails.env == "test" || Rails.env == "in_memory"
         CatalogController.include?(   
           BlacklightAdvancedSearch::ControllerOverride 
         )
-  
+        
+        
+      # And add in parsing of ordinary :q if requested
+      if BlacklightAdvancedSearch.config[:advanced_parse_q] &&
+         (! CatalogController.solr_search_params_logic.include?(:add_advanced_parse_q_to_solr))         
+      CatalogController.solr_search_params_logic << 
+        :add_advanced_parse_q_to_solr 
+      end
+      
       # Add helpers to CatalogController and SearchHistoryController. Use
       # some tricks to only add our helper once, may need to be done differently
       # in Rails3. 
@@ -73,8 +81,7 @@ unless Rails.env == "test" || Rails.env == "in_memory"
      end
         
         # Insert our stylesheet.  
-        CatalogController.before_filter do |controller|
-          
+        CatalogController.before_filter do |controller|          
           controller.stylesheet_links << ["advanced_results", {:plugin =>:blacklight_advanced_search}] unless controller.stylesheet_links.include?(["advanced_results", {:plugin =>:blacklight_advanced_search}])
         end
   
