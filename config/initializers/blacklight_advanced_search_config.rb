@@ -12,8 +12,14 @@ BlacklightAdvancedSearch.config.merge!(
   # This will be used later when edismax is returning the expected results
   #:solr_type => "edismax",
   #:solr_type => "dismax", # this is default, so no need to specify it. 
-  # :search_field => "advanced", # name of key in Blacklight URL, no reason to change usually. 
-  :qt => "advanced" # name of Solr request handler, leave unset to use the same one as your Blacklight.config[:default_qt]  
+  # :search_field => "advanced", # name of key in Blacklight URL, no reason to change usually.
+  
+  # Set advanced_parse_q to true to allow AND/OR/NOT in your basic/simple
+  # Blacklight search, parsed by Advanced Search Plugin. 
+  #:advanced_parse_q => true, 
+  
+  :qt => "advanced" # name of Solr request handler, leave unset to use the same one as your Blacklight.config[:default_qt]
+  
 )
 
 
