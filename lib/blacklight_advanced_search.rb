@@ -25,7 +25,6 @@ module BlacklightAdvancedSearch
   # is already defined. 
   def self.apply_config_defaults!
   
-   config[:solr_type] ||= "parsing_nesting"
    config[:url_key] ||= "advanced"
    config[:qt] ||= Blacklight.config[:default_qt] ||  
       (Blacklight.config[:default_solr_params] && Blacklight.config[:default_solr_params][:qt])

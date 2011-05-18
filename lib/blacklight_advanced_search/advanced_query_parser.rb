@@ -1,8 +1,6 @@
 module BlacklightAdvancedSearch
   class QueryParser
-    include DismaxQueryParser if BlacklightAdvancedSearch.config[:solr_type] == "dismax"
-    include EdismaxQueryParser if BlacklightAdvancedSearch.config[:solr_type] == "edismax"
-    include ParsingNestingParser if BlacklightAdvancedSearch.config[:solr_type] == "parsing_nesting"
+    include ParsingNestingParser # only one strategy currently supported. if BlacklightAdvancedSearch.config[:solr_type] == "parsing_nesting"
     include FilterParser
     attr_reader :to_solr
     def initialize(params,config)
