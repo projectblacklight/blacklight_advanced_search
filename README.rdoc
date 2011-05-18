@@ -26,11 +26,13 @@ You will now need to add a parslet gem dependency to your app, since blacklight_
 
   sudo rake gems:install
  
-You can also now optionally run the installer script to install some optional example configuration files. In many cases, no configuration is needed for advanced search plugin to work. 
+You can also now *optionally* run the installer script to install some optional example configuration files. In many cases, no configuration is needed for advanced search plugin to work. 
 * cd back to your application's root directory
  cd ../../
 * And then run the the following command:
  rake rails:template LOCATION=vendor/plugins/blacklight_advanced_search/template.rb
+
+You may want to set BlacklightAdvancedSearch.config[:advanced_parse_q] = true to enable AND/OR/NOT parsing even in ordinary search, this is not on by default.  
  
 == Accessing
  
@@ -50,7 +52,8 @@ If you do not have the default :controller/:action route enabled for your applic
 By default there won't be any links in your application to the search form. If you've heavily customized your app, you can put them wherever you want as above. 
 
 However, especially if your app isn't much customized, the optional installer can write a localized Blacklight search form into your application with a 'more options' link to advanced. You may need to adjust your styles to make room for the new link, depending on what you've done with your app. 
- 
+
+
 
 == Configuration:
 
@@ -59,6 +62,14 @@ If your application uses a single Solr qt request handler for all its search fie
 All plugin configuration mentioned below can be in any initializer in your app (any ruby file in config/initializers), although using the convention config/initializers/blacklight_advanced_search.rb may keep things clear. 
 
 The optional installer script can install a sample blacklight_advanced_search.rb for you which demonstrates various options.
+
+=== Expression parsing in ordinary search
+
+If you turn on this feature with `BlacklightAdvancedSearch.config[:advanced_parse_q] = true`, then the plugin will intercept queries entered in ordinary Blacklight search interface, and parse them for AND/OR/NOT (and parens), producing appropriate Solr query. This allows single-field boolean expressions to be entered in ordinary search, providing a consistent experience with advanced search. 
+
+When this feature is turned on, queries that don't have any special operators (eg: AND, OR, NOT, parens) will still be passed to Solr much the same as they were before. But queries with special operators will have appropriate Solr queries generated for them, usually including nested "_query_" elements, to have the same meaning they would in advanced search. 
+
+Due to limitations of the logic, sometimes these generated Solr queries may not really be as simple as they could be, they may include a *single* nested _query_, which really doens't need to be a nested query at all, although it will still work fine. 
 
 === Search fields
 
@@ -137,6 +148,8 @@ By default, the advanced search form will show as limits whatever facets are con
   Array of search field definitions to be used for advanced search. Each element in the array is a hash of the form required by Blacklight::SearchFields. If left blank, the plugin will use definitions from your main app Blacklight.config[:search_fields] -- only those which have no :qt set, and do not have :include_in_advanced_search => false. 
 [config[:form_solr_paramters]]
   A hash of solr parameters which will be included in Solr request sent before display of advanced search form. Can be used to set facet parameters for advanced search form display.  
+[config[:advanced_parse_q]]
+  Set to 'true' to have AND/OR/NOT parsed even in ordinary 'simple' blacklight search, and converted to appropriate Solr query for that single field. 
 
 == Translation to Solr Query, technical details
 
