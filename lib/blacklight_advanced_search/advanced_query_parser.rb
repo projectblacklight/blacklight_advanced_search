@@ -2,14 +2,22 @@ module BlacklightAdvancedSearch
   class QueryParser
     include ParsingNestingParser # only one strategy currently supported. if BlacklightAdvancedSearch.config[:solr_type] == "parsing_nesting"
     include FilterParser
-    attr_reader :to_solr
+    attr_reader :config, :params
+    
     def initialize(params,config)
       @params = HashWithIndifferentAccess.new(params)
-      @config = config
-      @to_solr = {:q => process_query(params,config), 
-                  :fq => generate_solr_fq() }
+      @config = config    
     end
 
+    def to_solr
+      @to_solr ||= begin
+        {
+          :q => process_query(params,config), 
+          :fq => generate_solr_fq() 
+        }
+      end
+    end
+    
     # Returns "AND" or "OR", how #keyword_queries will be combined
     def keyword_op
       @params["op"] || "AND"
