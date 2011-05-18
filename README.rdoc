@@ -161,6 +161,11 @@ You may also find the rspecs for parsing a user-entered query and converting it 
 1. Converting user-entered query to Solr: [https://github.com/projectblacklight/blacklight_advanced_search/blob/master/spec/parsing_nesting/to_solr_spec.rb]
 2. Parsing user-entered query to internal syntax tree: [https://github.com/projectblacklight/blacklight_advanced_search/blob/master/spec/parsing_nesting/build_tree_spec.rb]
  
+== Running tests
+
+Test coverage is provided with rspec, run all tests by running:
+   spec ./spec 
+
   
 == To Do
 
