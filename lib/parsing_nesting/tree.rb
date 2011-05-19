@@ -117,7 +117,7 @@ module ParsingNesting::Tree
             
       if (hash.size > 0)
         defType = hash.delete(:defType) || hash.delete("defType")
-        "{" + (defType ? "!#{defType} " : "") +  hash.collect {|k,v| "#{k}=#{  v.to_s.include?(" ") ? "'"+v+"'" : v }"}.join(" ") + "}"
+        "{!" + (defType ? "#{defType} " : "") +  hash.collect {|k,v| "#{k}=#{  v.to_s.include?(" ") ? "'"+v+"'" : v }"}.join(" ") + "}"
       else
         #no local params!
         ""
