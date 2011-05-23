@@ -27,10 +27,14 @@ module AdvancedHelper
     [:page, :commit, :f_inclusive, :q, :search_field, :op, :action, :index, :sort, :controller].each do |bad_key|
       my_params.delete(bad_key)
     end
-    BlacklightAdvancedSearch.config[:search_fields].each do |field_def|
+    search_fields_for_advanced_search.each do |field_def|
       my_params.delete( field_def[:key] )
     end
     my_params
+  end
+
+  def search_fields_for_advanced_search
+    BlacklightAdvancedSearch.config[:search_fields] || []
   end
   
 end

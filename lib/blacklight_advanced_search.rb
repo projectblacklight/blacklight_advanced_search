@@ -1,11 +1,17 @@
 module BlacklightAdvancedSearch
+  autoload :Controller, 'blacklight_advanced_search/controller'
+  autoload :RenderConstraintsOverride, 'blacklight_advanced_search/render_constraints_override'
+  autoload :CatalogHelperOverride, 'blacklight_advanced_search/catalog_helper_override'
   autoload :QueryParser, 'blacklight_advanced_search/advanced_query_parser'
+  autoload :ParsingNestingParser, 'blacklight_advanced_search/parsing_nesting_parser'
+  autoload :FilterParser, 'blacklight_advanced_search/filter_parser'
+
+  require 'blacklight_advanced_search/version'
+  require 'blacklight_advanced_search/engine'
 
   extend Blacklight::SearchFields # for search field config, so we can use same format as BL, or use ones already set in BL even. 
     
   def self.init
-    apply_config_defaults!  
-    
     logger.info("BLACKLIGHT: initialized with BlacklightAdvancedSearch.config: #{ config.inspect }")
   end
 
@@ -18,13 +24,15 @@ module BlacklightAdvancedSearch
   # definitions compatible with that module, or if missing will
   # inherit Blacklight.config[:search_fields]
   def self.config
-    @config ||= {}
+    @config ||= begin
+                   self.config_defaults
+                end
   end
 
   # Has to be called in an after_initialize, to make sure Blacklight.config
   # is already defined. 
-  def self.apply_config_defaults!
-  
+  def self.config_defaults
+   config = {}
    config[:url_key] ||= "advanced"
    config[:qt] ||= Blacklight.config[:default_qt] ||  
       (Blacklight.config[:default_solr_params] && Blacklight.config[:default_solr_params][:qt])
@@ -36,7 +44,6 @@ module BlacklightAdvancedSearch
      field_def[:include_in_advanced_search] != false
    end
    
-
    config
   end
   

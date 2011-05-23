@@ -1,8 +1,17 @@
 # This module gets included into CatalogController, or another SolrHelper
 # includer, to add behavior into solr_search_params_logic. 
-module BlacklightAdvancedSearch::ControllerOverride
-  def self.included(klass)
-    klass.solr_search_params_logic << :add_advanced_search_to_solr 
+module BlacklightAdvancedSearch::Controller
+  extend ActiveSupport::Concern
+
+  included do
+    if BlacklightAdvancedSearch.config[:advanced_parse_q]
+      solr_search_params_logic << :add_advanced_parse_q_to_solr
+    else
+      solr_search_params_logic << :add_advanced_search_to_solr
+    end
+
+    helper BlacklightAdvancedSearch::RenderConstraintsOverride
+    helper BlacklightAdvancedSearch::CatalogHelperOverride
   end
   
   

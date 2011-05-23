@@ -1,3 +1,4 @@
+require 'parsing_nesting/grammar'
 module ParsingNesting::Tree
   
   # Get parslet output for string (parslet output is json-y objects), and

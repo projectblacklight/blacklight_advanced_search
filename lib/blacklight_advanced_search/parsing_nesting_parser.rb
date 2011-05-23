@@ -1,3 +1,4 @@
+require 'parsing_nesting/tree'
 module BlacklightAdvancedSearch::ParsingNestingParser
   
   def process_query(params,config)
