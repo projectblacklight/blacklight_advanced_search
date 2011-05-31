@@ -13,6 +13,7 @@ module BlacklightAdvancedSearch
     
   def self.init
     logger.info("BLACKLIGHT: initialized with BlacklightAdvancedSearch.config: #{ config.inspect }")
+    Blacklight.config[:search_fields] << {:display_label => 'Advanced', :key => BlacklightAdvancedSearch.config[:url_key], :include_in_simple_select => false, :include_in_advanced_search => false} unless Blacklight.config[:search_fields].map { |x| x[:key] }.include?  BlacklightAdvancedSearch.config[:url_key]
   end
 
   def self.logger

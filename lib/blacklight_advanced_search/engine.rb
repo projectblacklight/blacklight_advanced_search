@@ -5,12 +5,6 @@ require 'rails'
 module BlacklightAdvancedSearch
   class Engine < Rails::Engine
     initializer 'blacklight_advanced_search.init', :after => 'blacklight.init' do |app|
-      if defined? ActionController::Dispatcher
-        ActionController::Dispatcher.to_prepare do
-          BlacklightAdvancedSearch.init
-          Blacklight.config[:search_fields] << {:display_label => 'Advanced', :key => BlacklightAdvancedSearch.config[:url_key], :include_in_simple_select => false, :include_in_advanced_search => false} if defined? :Blacklight
-        end
-      end
     end
   
     # Do these things in a to_prepare block, to try and make them work
@@ -33,6 +27,7 @@ module BlacklightAdvancedSearch
         SearchHistoryController.helpers.is_a?( 
           BlacklightAdvancedSearch::RenderConstraintsOverride 
         )
+          BlacklightAdvancedSearch.init
     end
   end
 end
