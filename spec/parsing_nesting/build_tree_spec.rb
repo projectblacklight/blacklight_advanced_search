@@ -1,11 +1,8 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
-#require 'rubygems'
-#require 'parslet'
-#require 'spec'
-#require 'spec/autorun'
 
-#load '../../nesting_parser/grammar.rb'
-#load '../../nesting_parser/tree.rb'
+require 'parsing_nesting/grammar'
+require 'parsing_nesting/tree'
+
 
 module ParseTreeSpecHelper
   include ParsingNesting::Tree
