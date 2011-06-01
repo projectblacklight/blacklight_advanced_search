@@ -59,7 +59,7 @@ module ParsingNesting
     end
     
     rule :token do
-      match['^ ":)('].repeat(1).as(:token)
+      match['^ ")('].repeat(1).as(:token)
     end
     rule :phrase do
       match('"') >> match['^"'].repeat(1).as(:phrase)  >> match('"')  
