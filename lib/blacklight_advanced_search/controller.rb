@@ -5,10 +5,13 @@ module BlacklightAdvancedSearch::Controller
 
   included do
     if BlacklightAdvancedSearch.config[:advanced_parse_q]
+      # Only to parse AND/OR in ordinary 'q'
       solr_search_params_logic << :add_advanced_parse_q_to_solr
-    else
-      solr_search_params_logic << :add_advanced_search_to_solr
     end
+    
+    # Always, to parse adv search form params. 
+    solr_search_params_logic << :add_advanced_search_to_solr
+    
 
     helper BlacklightAdvancedSearch::RenderConstraintsOverride
     helper BlacklightAdvancedSearch::CatalogHelperOverride
@@ -33,7 +36,7 @@ module BlacklightAdvancedSearch::Controller
       if @advanced_query.keyword_queries.length > 0
         # force :qt if set
         solr_parameters[:qt] = BlacklightAdvancedSearch.config[:qt] if BlacklightAdvancedSearch.config[:qt]
-        solr_parameters[:defType] = "lucene"
+        solr_parameters[:defType] = "lucene"        
       end
       
     end
