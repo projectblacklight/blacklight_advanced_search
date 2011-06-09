@@ -34,12 +34,13 @@ module BlacklightAdvancedSearch::CatalogHelperOverride
         my_params[:f_inclusive][field] &&
         my_params[:f_inclusive][field].include?(value))
         
+      my_params[:f_inclusive] = my_params[:f_inclusive].dup
       my_params[:f_inclusive][field] = my_params[:f_inclusive][field].dup
       my_params[:f_inclusive][field].delete(value)
       
       my_params[:f_inclusive].delete(field) if my_params[:f_inclusive][field].length == 0
       
-      my_params.delete(:f_inclusive) if my_params[:f_inclusive].length == 0
+      my_params.delete(:f_inclusive) if my_params[:f_inclusive].length == 0      
     end
 
     my_params.delete_if do |key, value| 
