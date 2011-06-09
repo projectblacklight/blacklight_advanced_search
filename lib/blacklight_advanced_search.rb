@@ -11,8 +11,13 @@ module BlacklightAdvancedSearch
 
   extend Blacklight::SearchFields # for search field config, so we can use same format as BL, or use ones already set in BL even. 
     
+  # Has to be called in an after_initialize block, to have access
+  # to Blacklight.config already configured, to look at it for defaults. 
   def self.init
-    logger.info("BLACKLIGHT: initialized with BlacklightAdvancedSearch.config: #{ config.inspect }")
+    # apply defaults to anything not set. 
+    BlacklightAdvancedSearch.config.reverse_merge!( BlacklightAdvancedSearch.config_defaults )
+    
+    logger.info("BlacklightAdvancedSearch.config: initialized with: #{ config.inspect }")
     Blacklight.config[:search_fields] << {:display_label => 'Advanced', :key => BlacklightAdvancedSearch.config[:url_key], :include_in_simple_select => false, :include_in_advanced_search => false} unless Blacklight.config[:search_fields].map { |x| x[:key] }.include?  BlacklightAdvancedSearch.config[:url_key]
   end
 
@@ -25,10 +30,8 @@ module BlacklightAdvancedSearch
   # definitions compatible with that module, or if missing will
   # inherit Blacklight.config[:search_fields]
   def self.config
-    @config ||= begin
-                   self.config_defaults
-                end
-  end
+    @config ||= {}
+  end  
 
   # Has to be called in an after_initialize, to make sure Blacklight.config
   # is already defined. 

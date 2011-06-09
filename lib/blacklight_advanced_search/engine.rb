@@ -7,6 +7,13 @@ module BlacklightAdvancedSearch
     initializer 'blacklight_advanced_search.init', :after => 'blacklight.init' do |app|
     end
   
+    config.after_initialize do
+      # After local app initializers that may set some config, we
+      # finish it off with defaults and normalization. 
+      BlacklightAdvancedSearch.init
+    end
+
+    
     # Do these things in a to_prepare block, to try and make them work
     # in development mode with class-reloading. The trick is we can't
     # be sure if the controllers we're modifying are being reloaded in
@@ -27,7 +34,6 @@ module BlacklightAdvancedSearch
         SearchHistoryController.helpers.is_a?( 
           BlacklightAdvancedSearch::RenderConstraintsOverride 
         )
-          BlacklightAdvancedSearch.init
     end
   end
 end
