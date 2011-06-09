@@ -1,3 +1,5 @@
+require 'blacklight_advanced_search/parsing_nesting_parser'
+
 # This module gets included into CatalogController, or another SolrHelper
 # includer, to add behavior into solr_search_params_logic. 
 module BlacklightAdvancedSearch::Controller
