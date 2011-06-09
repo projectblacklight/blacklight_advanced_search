@@ -4,8 +4,6 @@ require 'rails'
 
 module BlacklightAdvancedSearch
   class Engine < Rails::Engine
-    initializer 'blacklight_advanced_search.init', :after => 'blacklight.init' do |app|
-    end
   
     config.after_initialize do
       # After local app initializers that may set some config, we
