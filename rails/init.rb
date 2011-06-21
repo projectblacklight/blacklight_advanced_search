@@ -70,6 +70,13 @@ unless Rails.env == "test" || Rails.env == "in_memory"
         SearchHistoryController.master_helper_module.include?( 
           BlacklightAdvancedSearch::RenderConstraintsOverride 
         )
+        
+      SavedSearchesController.add_template_helper(
+        BlacklightAdvancedSearch::RenderConstraintsOverride 
+      ) unless
+        SavedSearchesController.master_helper_module.include?( 
+          BlacklightAdvancedSearch::RenderConstraintsOverride 
+        )
 
      # Weird hack to make sure our AdvancedController gets all the
      # helper methods from CatalogController. AdvancedController sub-classes
