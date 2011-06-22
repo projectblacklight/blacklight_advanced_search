@@ -25,13 +25,23 @@ module BlacklightAdvancedSearch
       CatalogController.include?(   
           BlacklightAdvancedSearch::Controller 
         )
-        
+      
+      
+      
       SearchHistoryController.send(:helper,
         BlacklightAdvancedSearch::RenderConstraintsOverride 
       ) unless
         SearchHistoryController.helpers.is_a?( 
           BlacklightAdvancedSearch::RenderConstraintsOverride 
         )
+        
+      SavedSearchesController.send(:helper,
+        BlacklightAdvancedSearch::RenderConstraintsOverride 
+      ) unless
+        SearchHistoryController.helpers.is_a?( 
+          BlacklightAdvancedSearch::RenderConstraintsOverride 
+        )
+        
     end
   end
 end
