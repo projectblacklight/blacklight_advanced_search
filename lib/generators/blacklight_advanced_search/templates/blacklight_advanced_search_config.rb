@@ -5,7 +5,7 @@
 #
 # NOTE WELL: Using a seperate request handler is just one option, in most cases
 # it's simpler to use your default solr request handler set in Blacklight itself,
-# in which case you would not want to set any of the configuration below!
+# in which case you can delete/comment out this entire file!
 # See README. 
 
 BlacklightAdvancedSearch.config.merge!(
