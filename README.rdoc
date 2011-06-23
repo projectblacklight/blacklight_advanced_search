@@ -17,7 +17,11 @@ Add to your application's Gemfile:
 then run 'bundle install'.  Then run:
    rails generate blacklight_advanced_search
 
-The 'generate' command will copy some stylesheet/javascript assets to your local app (this architecture will likely change for Rails 3.1), and also install a config/initializers/blacklight_advanced_search.rb . Configuration in the initializer is optional, for many setups no configuration will be neccesary. See 'Configuration' section below. 
+* The 'generate' command will copy some stylesheet/javascript assets to your local app (this architecture will likely change for Rails 3.1)
+* It will also OPTIONALLY install a config/initializers/blacklight_advanced_search.rb . Configuration in the initializer is optional, for many setups no configuration will be neccesary. See 'Configuration' section below.
+* And it can optionally install a localized search form with a link to advanced search. If you've already localized your search form you'll want to do this manually instead. 
+
+You may want to set BlacklightAdvancedSearch.config[:advanced_parse_q] = true to enable AND/OR/NOT parsing even in ordinary search, this is not on by default.  
 
 === Blacklight 2.x/Rails2
 
