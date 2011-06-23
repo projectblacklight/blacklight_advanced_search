@@ -7,5 +7,17 @@ class BlacklightAdvancedSearchGenerator < Rails::Generators::Base
   def copy_public_assets
     BlacklightAdvancedSearch::AssetsGenerator.start
   end
+  
+  def install_config_file
+    if options[:force] or yes?("Install optional example Blacklight Advanced Search config file?")
+      copy_file("blacklight_advanced_search_config.rb", "config/initializers/blacklight_advanced_search.rb")
+    end
+  end
+  
+  def install_localized_search_form
+    if options[:force] or yes?("Install local search form with advanced link?")      
+      copy_file("_search_form.html.erb", "app/views/catalog/_search_form.html.erb")      
+    end
+  end
 
 end
