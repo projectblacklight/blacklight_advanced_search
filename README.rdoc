@@ -3,25 +3,33 @@ This is an advanced search plugin for Blacklight ( http://www.projectblacklight.
 
 == Pre-requisites:
 * The Blacklight plugin ( http://github.com/projectblacklight/blacklight )
-  * NOTE: 2.9 or later is required for current version of Advanced Search plugin. Older tagged versions of Advanced Search may work with older BL. 
-* Parslet gem ( https://github.com/kschiess/parslet )
+  * NOTE: Blacklight 3.x is required for current version of Advanced Search plugin
+  * advanced search plugin 0.12.0 will work with Blacklight 2.9/Rails2. 
+  * Older tagged versions of Advanced Search may work with older BL. 
+
 
 == Installation:
-Clone the advanced search plugin from github into your application's vendor/plugins directory 
+
+=== Blacklight 3.x/Rails 3
+
+Add to your application's Gemfile:
+   gem "blacklight_advanced_search"
+
+then run 'bundle install'.  Then run:
+   rails generate blacklight_advanced_search
+
+The 'generate' command will copy some stylesheet/javascript assets to your local app (this architecture will likely change for Rails 3.1), and also install a config/initializers/blacklight_advanced_search.rb . Configuration in the initializer is optional, for many setups no configuration will be neccesary. See 'Configuration' section below. 
+
+=== Blacklight 2.x/Rails2
+
+Clone the advanced search plugin from github into your application's vendor/plugins directory , and switch
+to a version that works with BL 2.x/Rails2. 
 * cd into your application's vendor/plugins directory and run the following command:
  git clone http://github.com/projectblacklight/blacklight_advanced_search.git
+ git checkout v0.12.0
 
 You can later use standard git commands to update the plugin to a new version.   
- 
-OR
-
-from your application's main directory, run:
-
- ./script/plugin install http://github.com/projectblacklight/blacklight_advanced_search.git
- 
-
-You can later use "./script/plugin update blacklight_advanced_search" to update to latest code.  
- 
+  
 You will now need to add a parslet gem dependency to your app, since blacklight_advanced_search is not currently a gem itself, you have to do this manually. Add "config.gem 'parslet'" to your config/environment.rb, and then run:
 
   sudo rake gems:install
