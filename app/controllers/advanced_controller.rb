@@ -48,6 +48,7 @@ class AdvancedController < CatalogController
     input.merge!( search_context_params )
     input.merge!( :qt => BlacklightAdvancedSearch.config[:qt] , :per_page => 0)
     input.merge!( BlacklightAdvancedSearch.config[:form_solr_parameters] )
+    input[:q] ||= '{!lucene}*:*'
     
     
     Blacklight.solr.find(input.to_hash)
