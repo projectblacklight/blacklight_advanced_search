@@ -22,7 +22,7 @@ module BlacklightAdvancedSearch
   end
 
   def self.logger
-    RAILS_DEFAULT_LOGGER
+    Rails.logger
   end
 
   # Hash of our config. The :search_fields key in hash is used by
