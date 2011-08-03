@@ -38,7 +38,6 @@ module BlacklightAdvancedSearch::ControllerOverride
   # if it's configured to do so. You can of course add it yourself
   # manually too. 
   def add_advanced_parse_q_to_solr(solr_parameters, req_params = params)
-    debugger
     unless req_params[:q].blank?
       field_def = Blacklight.search_field_def_for_key( req_params[:search_field]) ||
         Blacklight.default_search_field
