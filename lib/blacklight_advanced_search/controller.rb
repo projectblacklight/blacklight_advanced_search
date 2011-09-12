@@ -51,24 +51,39 @@ module BlacklightAdvancedSearch::Controller
   # BlacklightAdvancedSearch init code will add it to CatalogController
   # if it's configured to do so. You can of course add it yourself
   # manually too. 
+  #
+  # Note: For syntactically invalid input, we'll just skip the adv
+  # parse and send it straight to solr same as if advanced_parse_q
+  # were not being used. 
   def add_advanced_parse_q_to_solr(solr_parameters, req_params = params)
-    debugger
     unless req_params[:q].blank?
       field_def = Blacklight.search_field_def_for_key( req_params[:search_field]) ||
         Blacklight.default_search_field
         
+              
       # If the individual field has advanced_parse_q suppressed, punt
       return if field_def[:advanced_parse_q] == false  
         
       solr_direct_params = field_def[:solr_parameters] || {}
       solr_local_params = field_def[:solr_local_parameters] || {}
       
-      deep_merge!(solr_parameters, solr_direct_params)
-      
-      deep_merge!(
-        solr_parameters, 
-        ParsingNesting::Tree.parse(req_params[:q]).to_single_query_params( solr_local_params )  
-       )
+      # See if we can parse it, if we can't, we're going to give up
+      # and just allow basic search, perhaps with a warning.
+      begin
+        adv_search_params = ParsingNesting::Tree.parse(req_params[:q]).to_single_query_params( solr_local_params )
+        
+        deep_merge!(solr_parameters, solr_direct_params)
+        
+        deep_merge!(
+          solr_parameters, 
+          adv_search_params    
+         )
+      rescue Parslet::UnconsumedInput => e 
+        # do nothing, don't merge our input in, keep basic search
+        # optional TODO, display error message in flash here, but hard to 
+        # display a good one. 
+        return
+      end
     end
   end
 
@@ -95,6 +110,8 @@ module BlacklightAdvancedSearch::Controller
       end
     end
   end
+  
+  
   
   
 end
