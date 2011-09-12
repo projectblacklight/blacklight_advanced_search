@@ -78,7 +78,7 @@ The optional installer script can install a sample blacklight_advanced_search.rb
 
 If you turn on this feature with `BlacklightAdvancedSearch.config[:advanced_parse_q] = true`, then the plugin will intercept queries entered in ordinary Blacklight search interface, and parse them for AND/OR/NOT (and parens), producing appropriate Solr query. This allows single-field boolean expressions to be entered in ordinary search, providing a consistent experience with advanced search. 
 
-When this feature is turned on, queries that don't have any special operators (eg: AND, OR, NOT, parens) will still be passed to Solr much the same as they were before. But queries with special operators will have appropriate Solr queries generated for them, usually including nested "_query_" elements, to have the same meaning they would in advanced search. 
+When this feature is turned on, queries that don't have any special operators (eg: AND, OR, NOT, parens) will still be passed to Solr much the same as they were before. But queries with special operators will have appropriate Solr queries generated for them, usually including nested "_query_" elements, to have the same meaning they would in advanced search. If a user enters something that is a syntax error for parsed search (for instance an unclosed phrase quote or paren), the logic will rescue from the parse erorr by running the exact user entered query direct to solr without advanced parsing. 
 
 Due to limitations of the logic, sometimes these generated Solr queries may not really be as simple as they could be, they may include a *single* nested _query_, which really doens't need to be a nested query at all, although it will still work fine. 
 
