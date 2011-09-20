@@ -17,11 +17,22 @@ module BlacklightAdvancedSearch
 
     def assets
       if BlacklightAdvancedSearch.use_asset_pipeline?
-        insert_into_file "app/assets/stylesheets/application.css", :before => "*/" do
-          "\n *= require 'blacklight_advanced_search'\n\n"
+        original_css = File.binread("app/assets/stylesheets/application.css")
+        if original_css.include?("require 'blacklight_advanced_search'")
+          say_status("skipped", "insert into app/assets/stylesheets/application.css", :yellow)
+        else        
+          insert_into_file "app/assets/stylesheets/application.css", :before => "*/" do
+            "\n *= require 'blacklight_advanced_search'\n\n"
+          end
         end
-        insert_into_file "app/assets/javascripts/application.js", :after => "//= require jquery" do
-          "\n//= require 'blacklight_advanced_search'\n\n"
+        
+        original_js = File.binread("app/assets/javascripts/application.js")
+        if original_js.include?("require 'blacklight_advanced_search'")
+          say_status("skipped", "insert into app/assets/javascripts/application.js", :yellow)
+        else
+          insert_into_file "app/assets/javascripts/application.js", :after => "//= require jquery" do
+            "\n//= require 'blacklight_advanced_search'\n\n"
+          end
         end
       else
         directory("stylesheets/blacklight_advanced_search", "public/stylesheets")
