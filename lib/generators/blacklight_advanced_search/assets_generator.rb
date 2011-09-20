@@ -13,11 +13,11 @@ require 'rails/generators'
 require 'rails/generators/base'
 module BlacklightAdvancedSearch
   class AssetsGenerator < Rails::Generators::Base
-    source_root File.expand_path('../templates', __FILE__)
+    source_root File.join(BlacklightAdvancedSearch::Engine.root, 'app', 'assets')
 
     def assets
-      directory("public/stylesheets")
-      directory("public/javascripts")
+      directory("stylesheets/blacklight_advanced_search", "public/stylesheets")
+      directory("javascripts/blacklight_advanced_search", "public/javascripts")
     end
 
   end
