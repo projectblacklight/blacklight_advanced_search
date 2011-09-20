@@ -30,7 +30,7 @@ module BlacklightAdvancedSearch
         if original_js.include?("require 'blacklight_advanced_search'")
           say_status("skipped", "insert into app/assets/javascripts/application.js", :yellow)
         else
-          insert_into_file "app/assets/javascripts/application.js", :after => "//= require jquery" do
+          insert_into_file "app/assets/javascripts/application.js", :after => %r{//= require ['"]?jquery['"]?} do
             "\n//= require 'blacklight_advanced_search'\n\n"
           end
         end
