@@ -16,8 +16,17 @@ module BlacklightAdvancedSearch
     source_root File.join(BlacklightAdvancedSearch::Engine.root, 'app', 'assets')
 
     def assets
-      directory("stylesheets/blacklight_advanced_search", "public/stylesheets")
-      directory("javascripts/blacklight_advanced_search", "public/javascripts")
+      if BlacklightAdvancedSearch.use_asset_pipeline?
+        insert_into_file "app/assets/stylesheets/application.css", :before => "*/" do
+          "\n *= require 'blacklight_advanced_search'\n\n"
+        end
+        insert_into_file "app/assets/javascripts/application.js", :after => "//= require jquery" do
+          "\n//= require 'blacklight_advanced_search'\n\n"
+        end
+      else
+        directory("stylesheets/blacklight_advanced_search", "public/stylesheets")
+        directory("javascripts/blacklight_advanced_search", "public/javascripts")        
+      end
     end
 
   end

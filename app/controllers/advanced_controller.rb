@@ -3,7 +3,7 @@
 class AdvancedController < CatalogController
   include AdvancedHelper # so we get the #advanced_search_context method
   
-  before_filter :setup_advanced_search_css, :setup_advanced_search_js, :only => :index
+  before_filter :setup_advanced_search_assets, :only => :index
   
   def index
     unless request.method==:post
@@ -53,10 +53,11 @@ class AdvancedController < CatalogController
     
     Blacklight.solr.find(input.to_hash)
   end
-  def setup_advanced_search_css
-    stylesheet_links << ["blacklight_advanced_search_styles", {:plugin=>:blacklight_advanced_search}]
+  def setup_advanced_search_assets
+    unless BlacklightAdvancedSearch.use_asset_pipeline?
+      stylesheet_links << ["blacklight_advanced_search_styles", {:plugin=>:blacklight_advanced_search}]
+      javascript_includes << ["blacklight_advanced_search_javascript", {:plugin=>:blacklight_advanced_search}]
+    end
   end
-  def setup_advanced_search_js
-    javascript_includes << ["blacklight_advanced_search_javascript", {:plugin=>:blacklight_advanced_search}]
-  end
+  
 end
