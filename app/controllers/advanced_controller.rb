@@ -51,7 +51,7 @@ class AdvancedController < CatalogController
     input[:q] ||= '{!lucene}*:*'
     
     
-    Blacklight.solr.find(input.to_hash)
+    find(input.to_hash)
   end
   def setup_advanced_search_assets
     unless BlacklightAdvancedSearch.use_asset_pipeline?
