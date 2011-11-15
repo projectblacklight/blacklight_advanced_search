@@ -5,13 +5,6 @@ require 'rails'
 module BlacklightAdvancedSearch
   class Engine < Rails::Engine
   
-    config.after_initialize do
-      # After local app initializers that may set some config, we
-      # finish it off with defaults and normalization. 
-      BlacklightAdvancedSearch.init
-    end
-
-    
     # Do these things in a to_prepare block, to try and make them work
     # in development mode with class-reloading. The trick is we can't
     # be sure if the controllers we're modifying are being reloaded in

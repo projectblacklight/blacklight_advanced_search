@@ -16,27 +16,22 @@ module BlacklightAdvancedSearch
     source_root File.join(BlacklightAdvancedSearch::Engine.root, 'app', 'assets')
 
     def assets
-      if BlacklightAdvancedSearch.use_asset_pipeline?
-        original_css = File.binread("app/assets/stylesheets/application.css")
-        if original_css.include?("require 'blacklight_advanced_search'")
-          say_status("skipped", "insert into app/assets/stylesheets/application.css", :yellow)
-        else        
-          insert_into_file "app/assets/stylesheets/application.css", :before => "*/" do
-            "\n *= require 'blacklight_advanced_search'\n\n"
-          end
+      original_css = File.binread("app/assets/stylesheets/application.css")
+      if original_css.include?("require 'blacklight_advanced_search'")
+        say_status("skipped", "insert into app/assets/stylesheets/application.css", :yellow)
+      else        
+        insert_into_file "app/assets/stylesheets/application.css", :before => "*/" do
+          "\n *= require 'blacklight_advanced_search'\n\n"
         end
-        
-        original_js = File.binread("app/assets/javascripts/application.js")
-        if original_js.include?("require 'blacklight_advanced_search'")
-          say_status("skipped", "insert into app/assets/javascripts/application.js", :yellow)
-        else
-          insert_into_file "app/assets/javascripts/application.js", :after => %r{//= require ['"]?jquery['"]?} do
-            "\n//= require 'blacklight_advanced_search'\n\n"
-          end
-        end
+      end
+      
+      original_js = File.binread("app/assets/javascripts/application.js")
+      if original_js.include?("require 'blacklight_advanced_search'")
+        say_status("skipped", "insert into app/assets/javascripts/application.js", :yellow)
       else
-        directory("stylesheets/blacklight_advanced_search", "public/stylesheets")
-        directory("javascripts/blacklight_advanced_search", "public/javascripts")        
+        insert_into_file "app/assets/javascripts/application.js", :after => %r{//= require ['"]?jquery['"]?$} do
+          "\n//= require 'blacklight_advanced_search'\n\n"
+        end
       end
     end
 

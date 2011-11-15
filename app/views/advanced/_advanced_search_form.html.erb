@@ -4,8 +4,6 @@
 
   <div class="input_columns yui-g">
 	      
-    <div class="yui-u first">
-      
       <div class="query_column column">
         <h2>Find items that match <%= select_tag(:op, options_for_select({'all'=>'AND','any'=>'OR'}.sort,'all')) %> of the fields below:</h2>
         
@@ -13,21 +11,13 @@
           <%= render 'advanced/advanced_search_fields' %>
         </div>        
       </div>
-      
-    </div>
-  
-    <div class="yui-u">
-    
-      <div class="limit_column column">      
+           <div class="limit_column column">      
         <h2><strong>AND</strong> have these attributes:</h2>
       
         <div id="advanced_search_facets" class="limit_input">
           <%= render 'advanced_search_facets' %>
         </div>
       </div>
-    
-    </div>
-    
   </div>
   
   <% unless (search_context_str = render_search_to_s( advanced_search_context)).blank? %>
@@ -40,8 +30,8 @@
   
   <div class="sort_submit_buttons">
 	<%= label_tag(:sort, "Sort results by") %> 
-    <%= select_tag(:sort, options_for_select(Blacklight.config[:sort_fields],'')) %>
-	<%= hidden_field_tag(:search_field, BlacklightAdvancedSearch.config[:url_key]) %>
+    <%= select_tag(:sort, options_for_select(sort_fields, h(params[:sort]))) %>
+	<%= hidden_field_tag(:search_field, blacklight_config.advanced_search[:url_key]) %>
     <%= submit_tag 'Search', :class=>'advanced_button', :id=>'advanced_search' %>
 	<%= link_to "Start over", {:controller => "advanced", :action => "index"}, :class =>"reset advanced_button" %>
   </div>

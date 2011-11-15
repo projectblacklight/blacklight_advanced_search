@@ -8,10 +8,8 @@ class BlacklightAdvancedSearchGenerator < Rails::Generators::Base
     BlacklightAdvancedSearch::AssetsGenerator.start
   end
   
-  def install_config_file
-    if options[:force] or yes?("Install optional example Blacklight Advanced Search config file?")
-      copy_file("blacklight_advanced_search_config.rb", "config/initializers/blacklight_advanced_search.rb")
-    end
+  def install_local_controller
+    copy_file("advanced_controller.rb", "app/controllers/advanced_controller.rb")
   end
   
   def install_localized_search_form

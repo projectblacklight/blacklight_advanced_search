@@ -6,7 +6,7 @@ module BlacklightAdvancedSearch::Controller
   extend ActiveSupport::Concern
 
   included do
-    if BlacklightAdvancedSearch.config[:advanced_parse_q]
+    if blacklight_config[:advanced_parse_q]
       # Only to parse AND/OR in ordinary 'q'
       solr_search_params_logic << :add_advanced_parse_q_to_solr
     end
@@ -29,15 +29,15 @@ module BlacklightAdvancedSearch::Controller
     # map that to solr #q, over-riding whatever some other logic may have set, yeah.
     # the hint right now is :search_field request param is set to a magic
     # key.     
-    if (req_params[:search_field] == BlacklightAdvancedSearch.config[:url_key] ||
+    if (req_params[:search_field] == ::AdvancedController.blacklight_config.advanced_search[:url_key] ||
       req_params[:f_inclusive])
       # Set this as a controller instance variable, not sure if some views/helpers depend on it. Better to leave it as a local variable
       # if not, more investigation later.       
-      @advanced_query = BlacklightAdvancedSearch::QueryParser.new(req_params, BlacklightAdvancedSearch.config )
+      @advanced_query = BlacklightAdvancedSearch::QueryParser.new(req_params, ::AdvancedController.blacklight_config )
       deep_merge!(solr_parameters, @advanced_query.to_solr )
       if @advanced_query.keyword_queries.length > 0
         # force :qt if set
-        solr_parameters[:qt] = BlacklightAdvancedSearch.config[:qt] if BlacklightAdvancedSearch.config[:qt]
+        solr_parameters[:qt] = ::AdvancedController.blacklight_config.advanced_search[:qt]
         solr_parameters[:defType] = "lucene"        
       end
       
@@ -57,8 +57,8 @@ module BlacklightAdvancedSearch::Controller
   # were not being used. 
   def add_advanced_parse_q_to_solr(solr_parameters, req_params = params)
     unless req_params[:q].blank?
-      field_def = Blacklight.search_field_def_for_key( req_params[:search_field]) ||
-        Blacklight.default_search_field
+      field_def = search_field_def_for_key( req_params[:search_field]) ||
+        default_search_field
         
               
       # If the individual field has advanced_parse_q suppressed, punt
