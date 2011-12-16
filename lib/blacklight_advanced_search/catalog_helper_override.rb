@@ -19,13 +19,9 @@ module BlacklightAdvancedSearch::CatalogHelperOverride
 
   # Special display for facet limits that include adv search inclusive
   # or limits.
-  def render_facet_limit(solr_field)
-    unless (@advanced_query && @advanced_query.filters.keys.include?( solr_field))
-      super(solr_field)
-    else
-      # our own display
-      render(:partial => "blacklight_advanced_search/facet_limit", :locals=> {:solr_field => solr_field})
-    end
+  def facet_partial_name(display_facet = nil)
+    return "blacklight_advanced_search/facet_limit" if @advanced_query && @advanced_query.filters.keys.include?( display_facet.name )
+    super 
   end
 
   def remove_advanced_facet_param(field, value, my_params = params)

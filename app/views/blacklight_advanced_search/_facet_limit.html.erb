@@ -1,15 +1,3 @@
-<%-
-# Custom facet_limit partial that displays inclusive 'or' advanced facet
-# limits at the top, then lets you drill down into ordinary facets. 
-#
-# pass in :solr_field local. 
-#
-# Assumes an @advanced_query exists, and probably has #filters for this
-# solr_field. 
--%>
-
-<h3><%= facet_field_labels[solr_field] -%></h3>
-
 <div class="advanced_facet_limit">
   <div class="inclusive_or">
     <h4>Any of:</h4>
@@ -20,6 +8,4 @@
     </ul>
   </div>
   
-<%= render(:partial => "catalog/facet_limit", :locals => {:solr_field => solr_field, :display_heading => false}) %>
-
-</div>
+  <%= render_facet_limit display_facet, :layout => nil, :partial => 'catalog/facet_limit' %>
