@@ -1,7 +1,23 @@
-#RAILS_ROOT = "#{File.dirname(__FILE__)}/.."
+require 'rubygems'
+require 'bundler'
 
-Dir[Pathname.new(File.expand_path("../support/**/*.rb", __FILE__))].each {|f| require f}
-require 'lib/blacklight_advanced_search'
+Bundler.require :default, :development
+
+require 'blacklight/engine'
+require 'rsolr'
+require 'rsolr-ext'
+require 'capybara/rspec'
+Combustion.initialize!
+
+Blacklight.solr_config = { :url => 'http://127.0.0.1:8983/solr' }
+
+class SolrDocument
+  include Blacklight::Solr::Document
+end
+
+require 'rspec/rails'
+require 'capybara/rails'
+
 
 RSpec.configure do |config|
 
