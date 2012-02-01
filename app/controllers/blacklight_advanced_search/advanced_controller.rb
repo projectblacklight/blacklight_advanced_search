@@ -3,6 +3,7 @@
 class BlacklightAdvancedSearch::AdvancedController < CatalogController
   include AdvancedHelper # so we get the #advanced_search_context method
 
+
   def index
     unless request.method==:post
       @response = get_advanced_search_facets
@@ -44,8 +45,9 @@ class BlacklightAdvancedSearch::AdvancedController < CatalogController
 
     input = HashWithIndifferentAccess.new
     input.merge!( search_context_params )
-    input.merge!( :qt => blacklight_config.advanced_search.try(:qt) || blacklight_config.default_qt , :per_page => 0)
-    input.merge!( blacklight_config.advanced_search.form_solr_parameters ) if blacklight_config.advanced_search.form_solr_parameters
+    
+    input.merge!( :qt => blacklight_config.advanced_search[:qt] || blacklight_config.default_qt , :per_page => 0)
+    input.merge!( blacklight_config.advanced_search[:form_solr_parameters] ) if blacklight_config.advanced_search[:form_solr_parameters]
     input[:q] ||= '{!lucene}*:*'
     
     

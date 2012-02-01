@@ -12,7 +12,7 @@ module BlacklightAdvancedSearch
     # local, they won't be. But we do our best.
     config.to_prepare do    
 
-      Blacklight::Configuration.default_values[:advanced_search] = Blacklight::OpenStructWithHashAccess.new :url_key => 'advanced', :form_solr_parameters => {}
+      
 
       # Ordinary module over-ride to CatalogController
       CatalogController.send(:include,  
