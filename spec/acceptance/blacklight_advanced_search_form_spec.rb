@@ -2,7 +2,6 @@ require 'spec_helper'
 
 describe "Blacklight Advanced Search Form" do
   before do
-    AdvancedController.blacklight_config = Blacklight::Configuration.new
     AdvancedController.configure_blacklight do |config|
 
       config.add_search_field('title') do |field|
