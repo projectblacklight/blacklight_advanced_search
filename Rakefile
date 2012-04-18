@@ -21,10 +21,9 @@ task :ci do
   require 'combustion'
   require 'blacklight'
 Combustion.initialize!
-  #unless ENV['environment'] == 'test'
-  #  exec("rake ci environment=test") 
-  #  exit
-  #end
+  unless ENV['environment'] == 'test'
+    exec("rake ci environment=test") 
+  end
 
   require 'rails/generators'
   require File.join(Blacklight.root, 'lib', 'generators', 'blacklight', 'jetty_generator.rb')
@@ -36,7 +35,7 @@ Combustion.initialize!
   jetty_params = {
     :jetty_home => File.expand_path(File.dirname(__FILE__) + '/jetty'),
     :quiet => false,
-    :jetty_port => 8983,
+    :jetty_port => 8888,
     :solr_home => File.expand_path(File.dirname(__FILE__) + '/jetty/solr'),
     :startup_wait => 30
   }
