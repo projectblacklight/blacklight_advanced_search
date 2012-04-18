@@ -167,12 +167,16 @@ You may also find the rspecs for parsing a user-entered query and converting it 
  
 == Running tests
 
-(experimental, in progress). 
+The Blacklight Advanced Search acceptance tests require a copy of the blacklight-jetty demo index. You can get a copy by running:
+  
+  git submodule init
+  git submodule update
 
-(Limited) test coverage is provided with rspec, run all tests by running:
-   rspec
+(Limited) test coverage is provided with rspec, run all tests (and start the jetty instance) by running:
+   rake ci 
 
-from the blacklight_advanced_search directory. you may need to `bundle install` first. 
+from the blacklight_advanced_search directory. Note: you may need to `bundle install` first. 
+
   
 == To Do
 
