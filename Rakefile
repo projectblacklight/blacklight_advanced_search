@@ -17,9 +17,20 @@ end
 
 desc "Execute Continuous Integration build"
 task :ci do
-  unless ENV['environment'] == 'test'
-    exec("rake ci environment=test") 
-  end
+
+  require 'combustion'
+  require 'blacklight'
+Combustion.initialize!
+  #unless ENV['environment'] == 'test'
+  #  exec("rake ci environment=test") 
+  #  exit
+  #end
+
+  require 'rails/generators'
+  require File.join(Blacklight.root, 'lib', 'generators', 'blacklight', 'jetty_generator.rb')
+
+  Blacklight::Jetty.start(["--save_location=jetty", "--force"])
+
 
   require 'jettywrapper'
   jetty_params = {
