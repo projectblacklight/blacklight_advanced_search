@@ -7,6 +7,9 @@ Bundler::GemHelper.install_tasks
 
 require 'rspec/core/rake_task'
 
+require 'blacklight'
+import File.join(Blacklight.root, 'lib', 'railties', 'solr_marc.rake')
+
 task :default => :spec
 
 desc "Run specs"
@@ -29,6 +32,13 @@ Combustion.initialize!
   require File.join(Blacklight.root, 'lib', 'generators', 'blacklight', 'jetty_generator.rb')
 
   Blacklight::Jetty.start(["--save_location=jetty", "--force"])
+
+  ENV['RAILS_ENV'] = 'test'
+  ENV['CONFIG_PATH'] = File.expand_path(File.join(Blacklight.root, 'lib', 'generators', 'blacklight', 'templates', 'config', 'SolrMarc', 'config-test.properties'))
+  ENV['SOLRMARC_JAR_PATH'] = File.expand_path(File.join(Blacklight.root, 'lib', 'SolrMarc.jar'))
+  ENV['SOLR_PATH'] = File.expand_path(File.join('jetty', 'solr'))
+  ENV['SOLR_WAR_PATH'] = File.expand_path(File.join('jetty', 'webapps', 'solr.war'))
+  Rake::Task['solr:marc:index_test_data'].invoke
 
 
   require 'jettywrapper'
