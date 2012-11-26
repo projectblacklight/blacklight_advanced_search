@@ -1,39 +1,12 @@
 
 /* Random styles */
 
-.advanced_search_field label {
-  display:block; 
+form.advanced h4 select {
+  height: auto;
+  margin: 0;
 }
 
-.advanced_search_field input {
-  margin-bottom: 0.666em;
-  width: 80%;
-}
 
-form.advanced label {
-  font-weight:normal;
-}
-
-form.advanced h2 {
-  font-weight: normal;
-  background-color: #EEEEEE;
-  height: 3em;
-}
-
-form.advanced .limit_column ul {
-  margin: 1em; 
-}
-
-form.advanced .limit_column li {
-  list-style: none;  
-  padding: 0.1em 0.4em;
-  font-size: 80%;
-}
-
-form.advanced .facet_item h3 {
-  cursor: pointer;
-}
-  
 form.advanced .adv_facet_selections {
   color:green;
   font-size: 80%;
@@ -41,65 +14,10 @@ form.advanced .adv_facet_selections {
   margin-top: 0.25em;
 }
 
-form.advanced .advanced_button {
-    -moz-border-radius: 4px 4px 4px 4px;
-    -webkit-border-radius: 4px 4px 4px 4px;
-    border-radius: 4px 4px 4px 4px;
-    background-color: #F6F6F6;
-    border: 1px solid #CCCCCC;
-    color: #2E4F81;
-    display: inline-block;
-    float: right;
-    margin-right: 1em;
-    padding: 0.4em 1em;
-    text-decoration: none;
-}
-
-form.advanced .reset {  
-}
-
-
 
 .advanced_help li {
   margin-top: 0.5em;
   margin-bottom: 0.5em;
-}
-
-form.advanced .sort_submit_buttons {
- background-color: #EEEEEE;
- padding: 1em; 
- margin-top: 1em;
- overflow: hidden; /* trick into containing floats please */
-}
-
-form.advanced .constraints {
-  padding: 1em;
-  margin-top: 1em;
-  background-color: #E2EDFE;
-  border: 1px solid #C4DAFE;
-}
-
-form.advanced .constraints h4 {
-  margin-bottom: 0.66em; 
-}
-
-form.advanced .constraints .constraint {
-  display:block;
-  padding-left:2em;
-  text-indent:-2em;
-}
-
-form.advanced .constraints .constraint .filterName {
-  font-weight: bold;
-  margin-right: 0.66em;
-}
-
-form.advanced .column > h2 {
-  padding: 0.33em;
-}
-form.advanced .column > div {
-  padding-left: 0.33em;
-  padding-right: 0.33em;
 }
 
 
