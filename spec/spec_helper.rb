@@ -7,7 +7,6 @@ ENV["RAILS_ENV"] = "test"
 
 require 'blacklight/engine'
 require 'rsolr'
-require 'rsolr-ext'
 require 'capybara/rspec'
 Combustion.initialize!
 

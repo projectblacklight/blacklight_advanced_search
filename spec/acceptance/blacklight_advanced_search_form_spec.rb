@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe "Blacklight Advanced Search Form" do
-  before do
+  before(:all) do
     CatalogController.configure_blacklight do |config|
       config.default_solr_params = { 
         :qt => 'search',
