@@ -134,7 +134,7 @@ Within your solrconfig.xml you may then provide the appropriate custom configura
 
 By default, the advanced search form will show as limits whatever facets are configured as default in your Solr request handler.  To have the advanced search form request specific facets and/or specific facet parameters, you can set config[:form_solr_parameters]. 
 
-    config.advanced_search => {
+    config.advanced_search = {
       :form_solr_parameters => {
         "facet.field" => ["format", "language_facet"],
         "facet.limit" => -1, # return all facet values
