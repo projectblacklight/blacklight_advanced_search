@@ -1,6 +1,4 @@
 require 'blacklight'
-require 'blacklight_advanced_search'
-require 'rails'
 
 module BlacklightAdvancedSearch
   class Engine < Rails::Engine

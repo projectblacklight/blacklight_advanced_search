@@ -1,14 +1,10 @@
 require 'rubygems'
-require 'bundler'
-
-Bundler.require :default, :development
+require 'combustion'
 
 ENV["RAILS_ENV"] = "test"
 
-require 'blacklight/engine'
-require 'rsolr'
 require 'capybara/rspec'
-Combustion.initialize!
+Combustion.initialize! :active_model, :action_controller
 
 class SolrDocument
   include Blacklight::Solr::Document

@@ -1,3 +1,3 @@
 Rails.application.routes.draw do
-  match 'advanced' => 'advanced#index'
+  get 'advanced' => 'advanced#index'
 end
