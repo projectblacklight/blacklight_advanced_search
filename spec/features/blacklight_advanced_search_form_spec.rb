@@ -2,27 +2,6 @@ require 'spec_helper'
 
 describe "Blacklight Advanced Search Form" do
   before(:all) do
-    CatalogController.configure_blacklight do |config|
-      config.default_solr_params = { 
-        :qt => 'search',
-        :rows => 10 
-      }
-
-      config.add_facet_field 'language_facet'
-
-      config.add_search_field('title') do |field|
-        field.solr_local_parameters = { :qf => "title_t", :pf => "title_t"}
-      end
-
-      config.add_search_field('author') do |field|
-        field.solr_local_parameters = { :qf => "author_t", :pf => "author_t"}
-      end
-
-      config.add_search_field('dummy_field') do |field|
-        field.include_in_advanced_search = false
-        field.solr_local_parameters = { :qf => "author_t", :pf => "author_t"}
-      end
-    end
     AdvancedController.copy_blacklight_config_from(CatalogController)
   end
 
@@ -67,7 +46,8 @@ describe "Blacklight Advanced Search Form" do
 
     it "scope searches to fields" do
       fill_in "title", :with => "Medicine"
-      click_on "Search"
+      click_on "advanced_search"
+      puts page.current_url
       page.should have_content "Remove constraint Title: Medicine"
       page.should have_content "2007020969"
     end
