@@ -20,4 +20,4 @@
 
   <% end %>
 
-  <%= link_to 'More options', params.merge(:controller=>"advanced", :action=>"index") , :class=>"advanced_search"%>
+  <%= link_to 'More options', advanced_search_path(params), :class=>"advanced_search"%>
