@@ -1,15 +1,8 @@
-require 'rubygems'
-require 'combustion'
-
 ENV["RAILS_ENV"] = "test"
 
+require File.expand_path("config/environment", ENV['RAILS_ROOT'] || File.expand_path("../internal", __FILE__))
+
 require 'capybara/rspec'
-Combustion.initialize! :active_model, :action_controller
-
-class SolrDocument
-  include Blacklight::Solr::Document
-end
-
 require 'rspec/rails'
 require 'capybara/rails'
 

@@ -3,3 +3,5 @@ coverage.data
 coverage/
 log/*
 *.log
+/spec/internal
+/jetty
