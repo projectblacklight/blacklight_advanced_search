@@ -8,6 +8,7 @@ module BlacklightAdvancedSearch::Controller
   included do
     # default adv config values
     self.blacklight_config.advanced_search ||= Blacklight::OpenStructWithHashAccess.new
+    self.blacklight_config.advanced_search[:qt] ||= 'advanced'
     self.blacklight_config.advanced_search[:url_key] ||= 'advanced'
     self.blacklight_config.advanced_search[:form_solr_parameters] ||= {}    
     
@@ -18,8 +19,13 @@ module BlacklightAdvancedSearch::Controller
     # Display advanced search constraints properly
     helper BlacklightAdvancedSearch::RenderConstraintsOverride
     helper BlacklightAdvancedSearch::CatalogHelperOverride
+    helper_method :is_advanced_search?
   end
   
+  def is_advanced_search? req_params = params
+    (req_params[:search_field] == self.blacklight_config.advanced_search[:url_key]) ||
+          req_params[:f_inclusive]
+  end
   
   # this method should get added into the solr_search_params_logic
   # list, in a position AFTER normal query handling (:add_query_to_solr),
@@ -30,8 +36,7 @@ module BlacklightAdvancedSearch::Controller
     # map that to solr #q, over-riding whatever some other logic may have set, yeah.
     # the hint right now is :search_field request param is set to a magic
     # key. OR of :f_inclusive is set for advanced params, we need processing too.     
-    if ( (req_params[:search_field] == self.blacklight_config.advanced_search[:url_key]) ||
-          req_params[:f_inclusive] )
+    if is_advanced_search? req_params
       # Set this as a controller instance variable, not sure if some views/helpers depend on it. Better to leave it as a local variable
       # if not, more investigation later.       
       @advanced_query = BlacklightAdvancedSearch::QueryParser.new(req_params, self.blacklight_config )      

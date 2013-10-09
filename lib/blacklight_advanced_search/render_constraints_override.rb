@@ -4,7 +4,11 @@
 module BlacklightAdvancedSearch::RenderConstraintsOverride
 
   def query_has_constraints?(localized_params = params)
-    !(localized_params[:q].blank? and localized_params[:f].blank? and localized_params[:f_inclusive].blank?)
+    if is_advanced_search? localized_params
+      true
+    else
+      !(localized_params[:q].blank? and localized_params[:f].blank? and localized_params[:f_inclusive].blank?)
+    end
   end
 
   #Over-ride of Blacklight method, provide advanced constraints if needed,
