@@ -34,18 +34,8 @@ module AdvancedHelper
   end
 
   def search_fields_for_advanced_search
-    # If we could count on 1.9.3 with ordered hashes and
-    # Hash#select that worked reasonably, this would be trivial.
-    # instead, a way compat with 1.8.7 and 1.9.x both.
     @search_fields_for_advanced_search ||= begin
-      # make it an ActiveSupport::OrderedHash if it needs to be
-      hash = blacklight_config.search_fields.class.new
-
-      blacklight_config.search_fields.each_pair do |key, value|
-        hash[key] = value unless value.include_in_advanced_search == false
-      end
-
-      hash
+      blacklight_config.search_fields.select { |k,v| v.include_in_advanced_search or v.include_in_advanced_search.nil? }
     end
   end
 
