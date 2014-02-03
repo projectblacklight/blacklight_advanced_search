@@ -18,7 +18,7 @@ Gem::Specification.new do |s|
   s.require_paths = ["lib"]
 
 
-  s.add_dependency "blacklight", "~> 4.0"
+  s.add_dependency "blacklight", "< 4.99", ">= 4.7.0.pre"
   s.add_dependency "parslet"
 
   s.add_development_dependency "rails"
