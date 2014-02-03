@@ -2,11 +2,15 @@ notifications:
   email: false
 
 rvm:
+  - 2.1.0
+  - 2.0.0
   - 1.9.3
   - jruby-19mode
-  - 2.0.0
 
 notifications:
   irc: "irc.freenode.org#blacklight"
   email:
       - blacklight-commits@googlegroups.com
+env:
+  global:
+    - NOKOGIRI_USE_SYSTEM_LIBRARIES=true
