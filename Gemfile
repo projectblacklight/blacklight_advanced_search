@@ -14,6 +14,7 @@ gem 'sqlite3', platform: :ruby
 gem 'jquery-rails'
 gem 'blacklight_marc'
 
+
 if File.exists?('spec/test_app_templates/Gemfile.extra')
   eval File.read('spec/test_app_templates/Gemfile.extra'), nil, 'spec/test_app_templates/Gemfile.extra'
 end

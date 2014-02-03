@@ -3,6 +3,8 @@ platforms :jruby do
   gem 'therubyrhino'
 end
 
+gem 'blacklight', github: 'projectblacklight/blacklight', branch: 'master'
+
 group :test do
   gem 'rspec-rails', '~> 2.13'
   gem 'generator_spec'
