@@ -5,3 +5,6 @@ log/*
 *.log
 /spec/internal
 /jetty
+Gemfile.lock
+pkg/*
+tmp/*
