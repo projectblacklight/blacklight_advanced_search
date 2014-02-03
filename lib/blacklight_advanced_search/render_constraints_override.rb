@@ -18,7 +18,7 @@ module BlacklightAdvancedSearch::RenderConstraintsOverride
     if (@advanced_query.nil? || @advanced_query.keyword_queries.empty? )
       return super(my_params)
     else
-      content = ""
+      content = []
       @advanced_query.keyword_queries.each_pair do |field, query|
         label = search_field_def_for_key(field)[:label]
         content << render_constraint_element(
@@ -29,10 +29,13 @@ module BlacklightAdvancedSearch::RenderConstraintsOverride
       end
       if (@advanced_query.keyword_op == "OR" &&
           @advanced_query.keyword_queries.length > 1)
-        content = '<span class="inclusive_or appliedFilter">' + '<span class="operator">Any of:</span>' + content + '</span>'
+        content.unshift content_tag(:span, "Any of:", class:'operator')
+        content_tag :span, class: "inclusive_or appliedFilter" do
+          safe_join(content.flatten, "\n")
+        end
+      else
+        safe_join(content.flatten, "\n")    
       end
-
-      return content
     end
   end
 
