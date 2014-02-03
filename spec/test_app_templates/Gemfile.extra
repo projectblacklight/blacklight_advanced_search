@@ -13,14 +13,10 @@ gem 'jquery-rails'
 group :test do
   gem 'rspec-rails', '~> 2.13'
   gem 'generator_spec'
-  if defined? :JRUBY_VERSION
-    gem 'capybara', '~> 1.0'
-  else
-    gem 'capybara'
-  end
+  gem 'capybara'
   gem 'simplecov', :platform => :mri_19
 end
 
-gem 'blacklight', :github => 'projectblacklight/blacklight'
+#gem 'blacklight', :github => 'projectblacklight/blacklight'
 gem 'jettywrapper', '>= 1.2.0'
 

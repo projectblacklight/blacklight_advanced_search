@@ -12,4 +12,4 @@ group :test do
   gem 'activerecord-jdbcsqlite3-adapter', :platforms => :jruby
 end
 
-gem 'blacklight', :git => 'git://github.com/projectblacklight/blacklight.git'
+#gem 'blacklight', :git => 'git://github.com/projectblacklight/blacklight.git'
