@@ -17,10 +17,10 @@ Gem::Specification.new do |s|
   s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
   s.require_paths = ["lib"]
 
-
-  s.add_dependency "blacklight", "< 4.99", ">= 4.7.0.pre"
+  s.add_dependency "blacklight", ">= 5.0.0.pre4", "< 6.0"
   s.add_dependency "parslet"
 
+  s.add_development_dependency "blacklight_marc"
   s.add_development_dependency "rails"
   s.add_development_dependency "rspec-rails"
   s.add_development_dependency 'jettywrapper', ">= 1.4.2"

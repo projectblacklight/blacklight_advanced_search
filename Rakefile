@@ -13,7 +13,6 @@ require 'engine_cart/rake_task'
 
 require 'jettywrapper'
 require 'blacklight'
-import File.join(Blacklight.root, 'lib', 'railties', 'solr_marc.rake')
 
 task :default => :ci
 
@@ -25,7 +24,8 @@ end
   desc "Load fixtures"
   task :fixtures => ['engine_cart:generate'] do
     within_test_app do
-      system "rake solr:marc:index_test_data RAILS_ENV=test"
+      ENV['RAILS_ENV'] ||= 'test'
+      system "rake blacklight:solr:seed"
       abort "Error running fixtures" unless $?.success?
     end
   end
