@@ -1,11 +1,6 @@
 platforms :jruby do
-  gem 'jdbc-sqlite3'
   gem 'mediashelf-loggable', '>= 0.4.8'
   gem 'therubyrhino'
-end
-
-platforms :ruby do
- gem 'sqlite3'
 end
 
 gem 'jquery-rails'
@@ -17,6 +12,5 @@ group :test do
   gem 'simplecov', :platform => :mri_19
 end
 
-#gem 'blacklight', :github => 'projectblacklight/blacklight'
 gem 'jettywrapper', '>= 1.2.0'
 
