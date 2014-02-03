@@ -19,9 +19,7 @@ class BlacklightAdvancedSearch::AdvancedController < CatalogController
       # that context -- but we dont' want to search within any
       # existing :q or ADVANCED facets, so we remove those params.
       adv_keys = blacklight_config.search_fields.keys.map {|k| k.to_sym}
-      trimmed_params = params.reject do |k,v|        
-        adv_keys.include?(k.to_sym) # the individual q params
-      end
+      trimmed_params = params.except *adv_keys
       trimmed_params.delete(:f_inclusive) # adv facets
       
       search_context_params = solr_search_params(trimmed_params)

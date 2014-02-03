@@ -23,14 +23,9 @@ module AdvancedHelper
   # Current params without fields that will be over-written by adv. search,
   # or other fields we don't want.
   def advanced_search_context
-    my_params = params.dup
-    [:page, :commit, :f_inclusive, :q, :search_field, :op, :action, :index, :sort, :controller].each do |bad_key|
-      my_params.delete(bad_key)
-    end
-    search_fields_for_advanced_search.each do |key, field_def|
-      my_params.delete( field_def[:key] )
-    end
-    my_params
+    my_params = params.except :page, :commit, :f_inclusive, :q, :search_field, :op, :action, :index, :sort, :controller
+
+    my_params.except! *search_fields_for_advanced_search.map { |key, field_def| field_def[:key] }
   end
 
   def search_fields_for_advanced_search
