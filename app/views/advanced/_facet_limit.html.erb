@@ -1,7 +1,7 @@
 <ul>
   <% display_facet.items.each do |item| -%>
   <li>
-    <%= label_tag "f_inclusive_#{solr_field}[#{item.value.to_sym}]", (check_box_tag "f_inclusive[#{solr_field}][#{item.value.to_sym}]", 1, facet_value_checked?(solr_field, item.value)) + content_tag(:span, item.value, :class => 'facet-value') + " (#{format_num item.hits})".html_safe, :class => 'checkbox' %>
+    <%= label_tag "f_inclusive_#{solr_field}[#{item.value.to_sym}]", (check_box_tag "f_inclusive[#{solr_field}][#{item.value.to_sym}]", 1, facet_value_checked?(solr_field, item.value)) + content_tag(:span, item.value, :class => 'facet-value') + " (#{number_with_delimiter item.hits})".html_safe, :class => 'checkbox' %>
   </li>
   <% end -%>
 </ul>
