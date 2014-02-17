@@ -27,13 +27,14 @@ You may want to  `include BlacklightAdvancedSearch::ParseBasicQ` in your Catalog
 
 == Accessing
  
-The advanced search form will be available in your app at /advanced
+The advanced search form will be available in your app at /advanced, and in your app using
+routing helper `advanced_search_path`. 
 
-  url_for(:controller => "advanced", :action => "index")
+  advanced_search_path
   
 You can also send the advanced search form url parameters representing a search, to have the form add on additional 'advanced' criteria to the search.  For example:
 
-  url_for( params.merge(:controller => "advanced", :action => "index")
+  advanced_search_path( params )
    
 By default there won't be any links in your application to the search form. If you've heavily customized your app, you can put them wherever you want as above. 
 
