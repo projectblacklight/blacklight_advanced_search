@@ -8,8 +8,9 @@ module BlacklightAdvancedSearch::Controller
   included do
     # default adv config values
     self.blacklight_config.advanced_search ||= Blacklight::OpenStructWithHashAccess.new
-    self.blacklight_config.advanced_search[:qt] ||= 'advanced'
+    #self.blacklight_config.advanced_search[:qt] ||= 'advanced'
     self.blacklight_config.advanced_search[:url_key] ||= 'advanced'
+    self.blacklight_config.advanced_search[:query_parser] ||= 'dismax'
     self.blacklight_config.advanced_search[:form_solr_parameters] ||= {}    
     
     

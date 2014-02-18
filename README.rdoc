@@ -27,13 +27,14 @@ You may want to  `include BlacklightAdvancedSearch::ParseBasicQ` in your Catalog
 
 == Accessing
  
-The advanced search form will be available in your app at /advanced
+The advanced search form will be available in your app at /advanced, and in your app using
+routing helper `advanced_search_path`. 
 
-  url_for(:controller => "advanced", :action => "index")
+  advanced_search_path
   
 You can also send the advanced search form url parameters representing a search, to have the form add on additional 'advanced' criteria to the search.  For example:
 
-  url_for( params.merge(:controller => "advanced", :action => "index")
+  advanced_search_path( params )
    
 By default there won't be any links in your application to the search form. If you've heavily customized your app, you can put them wherever you want as above. 
 
@@ -148,11 +149,17 @@ By default, the advanced search form will show as limits whatever facets are con
 Complete list of keys that can be supplied inside your configure_blacklight `advanced_search` block:
 
 [:qt] 
-   Solr request handler to use for any search that includes advanced search criteria. Defaults to what the application has set as Blacklight.config[:default_qt]
+   Solr request handler to use for any search that includes advanced search criteria. Defaults to what the application has set as blacklight_config.default_solr_params[:qt]
 [:url_key]
    Key to use in application URLs to indicate advanced search is included in a query, defaults to "advanced". URLs will have "&search_field=[url key]".
 [:form_solr_paramters]
   A hash of solr parameters which will be included in Solr request sent before display of advanced search form. Can be used to set facet parameters for advanced search form display.  
+[:query_parser]
+  advanced searches are translated to solr nested queries, where the inner queries are of a dismax-type. 
+  By default, they are actually specifically 'dismax', but you can set :query_parser to 'edismax' instead. 
+  This may make additional features available like * wildcards in advanced searches; but it may also
+  cause some user query elements to be interpreted as operators for edismax when they
+  were intended as literals. Somewhat experimental. See Github issues #11 and #14. 
 
 
 == Translation to Solr Query, technical details

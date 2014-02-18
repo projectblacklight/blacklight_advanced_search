@@ -23,6 +23,7 @@ class BlacklightAdvancedSearch::AdvancedController < CatalogController
       trimmed_params.delete(:f_inclusive) # adv facets
       
       search_context_params = solr_search_params(trimmed_params)
+
       # Don't want to include the 'q' from basic search in our search
       # context. Kind of hacky becuase solr_search_params insists on
       # using controller.params, not letting us over-ride. 
@@ -30,11 +31,10 @@ class BlacklightAdvancedSearch::AdvancedController < CatalogController
       search_context_params.delete("q")
       
       # Also delete any facet-related params, or anything else
-      # we want to set ourselves or inherit from Solr request handler
-      # defaults. 
+      # we want to set ourselves
       search_context_params.delete_if do |k, v|
         k = k.to_s
-        (["facet.limit", "facet.sort", "f", "facets", "facet.fields", "qt", "per_page"].include?(k) ||                
+        (["facet.limit", "facet.sort", "f", "facets", "facet.fields", "per_page"].include?(k) ||                
           k =~ /f\..+\.facet\.limit/ ||
           k =~ /f\..+\.facet\.sort/
         )        
@@ -43,12 +43,18 @@ class BlacklightAdvancedSearch::AdvancedController < CatalogController
 
     input = HashWithIndifferentAccess.new
     input.merge!( search_context_params )
+
+    input[:per_page] = 0 # force
+
+    # force if set
+    input[:qt] = blacklight_config.advanced_search[:qt] if blacklight_config.advanced_search[:qt] 
     
-    input.merge!( :qt => blacklight_config.advanced_search[:qt] || blacklight_config.default_qt , :per_page => 0)
     input.merge!( blacklight_config.advanced_search[:form_solr_parameters] ) if blacklight_config.advanced_search[:form_solr_parameters]
+
+    # ensure empty query is all records, to fetch available facets on entire corpus
     input[:q] ||= '{!lucene}*:*'
     
-    
-    find(input.to_hash)
+    # first arg nil, use default search path. 
+    find(nil, input.to_hash)
   end
 end
