@@ -40,7 +40,7 @@ module BlacklightAdvancedSearch::ParseBasicQ
       # See if we can parse it, if we can't, we're going to give up
       # and just allow basic search, perhaps with a warning.
       begin
-        adv_search_params = ParsingNesting::Tree.parse(req_params[:q]).to_single_query_params( solr_local_params )
+        adv_search_params = ParsingNesting::Tree.parse(req_params[:q], blacklight_config.advanced_search[:query_parser]).to_single_query_params( solr_local_params )
         
         BlacklightAdvancedSearch.deep_merge!(solr_parameters, solr_direct_params)
         BlacklightAdvancedSearch.deep_merge!(solr_parameters, adv_search_params)        

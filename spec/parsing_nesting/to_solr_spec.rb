@@ -8,8 +8,12 @@ require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 #load '../../lib/parsing_nesting/tree.rb'
 
 module SolrQuerySpecHelper
-  def parse(s)
-    ParsingNesting::Tree.parse(s)
+  def parse(s, arg=nil)
+    if arg
+      ParsingNesting::Tree.parse(s, arg)
+    else
+      ParsingNesting::Tree.parse(s)
+    end
   end
   
   # yields localparam string, and the actual internal query
@@ -65,15 +69,6 @@ describe "NestingParser" do
       before do
         @query = parse("one two three").to_query(:qf => "field field2^5", :pf=>"$pf_title")
       end
-      
-      it "should insist on dismax for nested query" do
-        query = parse("one two three").to_query(:defType => "field", :qf=>"$qf")
-        local_param_match(query) do |params, query|
-          params.should match(/^\!dismax /)
-          params.should_not match(/field/)
-        end
-      end
-      
       it "should include LocalParams" do
         local_param_match(@query) do |params, query|
           params.should include("pf=$pf_title")
@@ -87,6 +82,25 @@ describe "NestingParser" do
         end
       end
     end
+
+    describe "with custom qf" do
+      it "should insist on dismax for nested query" do
+        query = parse("one two three").to_query(:defType => "field", :qf=>"$qf")
+        local_param_match(query) do |params, query|
+          params.should match(/^\!dismax /)
+          params.should_not match(/field/)
+        end
+      end
+
+      it "should insist on edismax for nested query" do
+        query = parse("one two three", 'edismax').to_query(:defType => "field", :qf=>"$qf")
+        local_param_match(query) do |params, query|
+          params.should match(/^\!edismax qf=\$qf/)
+          params.should_not match(/field/)
+        end
+      end
+    end
+      
     
     describe "with simple mandatory/excluded terms" do
       before do
