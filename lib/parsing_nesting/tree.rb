@@ -22,8 +22,8 @@ module ParsingNesting::Tree
   #
   # the #negate method was an experiment in transforming parse tree in
   # place, but isn't being used. But it's left as a sign post. 
-  def self.parse(string)
-    to_node_tree(ParsingNesting::Grammar.new.parse(string))
+  def self.parse(string, query_parser='dismax')
+    to_node_tree(ParsingNesting::Grammar.new.parse(string), query_parser)
   end
   
 
@@ -31,25 +31,25 @@ module ParsingNesting::Tree
   # manner in which I'm parsing to Parslet labelled hash isn't exactly what
   # Parslet Transform is set up to work with, I couldn't figure it out. But
   # easy enough to do 'manually'.
-  def self.to_node_tree(tree)
+  def self.to_node_tree(tree, query_parser)
     if tree.kind_of? Array  
       # at one point I was normalizing top-level lists of one item to just
       # be that item, no list wrapper. But having the list wrapper
       # at the top level is actually useful for Solr output.       
-      List.new( tree.collect {|i| to_node_tree(i)})      
+      List.new( tree.collect {|i| to_node_tree(i, query_parser)}, query_parser)
     elsif tree.kind_of? Hash       
       if list = tree[:list]
-        List.new( list.collect {|i| to_node_tree(i)} )
+        List.new( list.collect {|i| to_node_tree(i, query_parser)}, query_parser)
       elsif tree.has_key?(:and_list)
-        AndList.new( tree[:and_list].collect{|i| to_node_tree(i)  } )
+        AndList.new( tree[:and_list].collect{|i| to_node_tree(i, query_parser)  }, query_parser)
       elsif tree.has_key?(:or_list)
-        OrList.new( tree[:or_list].collect{|i| to_node_tree(i)  } )
+        OrList.new( tree[:or_list].collect{|i| to_node_tree(i, query_parser)  }, query_parser )
       elsif not_payload = tree[:not_expression]
-        NotExpression.new( to_node_tree(not_payload) )
+        NotExpression.new( to_node_tree(not_payload, query_parser) )
       elsif tree.has_key?(:mandatory)
-        MandatoryClause.new( to_node_tree(tree[:mandatory]  ))
+        MandatoryClause.new( to_node_tree(tree[:mandatory], query_parser))
       elsif tree.has_key?(:excluded)
-        ExcludedClause.new( to_node_tree(tree[:excluded]))
+        ExcludedClause.new( to_node_tree(tree[:excluded], query_parser))
       elsif phrase = tree[:phrase]
         Phrase.new( phrase )
       elsif tree.has_key?(:token)
@@ -87,7 +87,7 @@ module ParsingNesting::Tree
       
       # if it's pure negative, we need to transform
       if embeddables.find_all{|n| n.kind_of?(ExcludedClause)}.length == embeddables.length
-        negated = NotExpression.new( List.new(embeddables.collect {|n| n.operand}))
+        negated = NotExpression.new( List.new(embeddables.collect {|n| n.operand}, options[:force_deftype] ))
         solr_params = solr_params.merge(:mm => "1")        
         return negated.to_query(solr_params)              
       else
@@ -103,8 +103,7 @@ module ParsingNesting::Tree
 
       end      
     end
-            
-    
+
     # Pass in nil 2nd argument if you DON'T want to embed
     # "!dismax" in your local params. Used by #to_single_query_params
     def build_local_params(hash = {}, force_deftype = "dismax")
@@ -135,7 +134,9 @@ module ParsingNesting::Tree
   
   class List < Node
     attr_accessor :list
-    def initialize(aList)
+    attr_reader :query_parser
+    def initialize(aList, query_parser)
+      @query_parser = query_parser
       self.list = aList
     end
     def can_embed?
@@ -152,7 +153,7 @@ module ParsingNesting::Tree
       (embeddable, gen_full_query) = list.partition {|i| i.respond_to?(:can_embed?) && i.can_embed?}
        
       unless embeddable.empty?
-        queries << build_nested_query(embeddable, solr_params)
+        queries << build_nested_query(embeddable, solr_params, force_deftype: query_parser)
       end
       
       gen_full_query.each do |node|
@@ -185,7 +186,7 @@ module ParsingNesting::Tree
         { 
           #build_local_params(solr_local_params, nil) + list.collect {|n| n.to_embed}.join(" "),
           :q => build_nested_query(list, solr_local_params, :always_nested => false, :force_deftype => nil), 
-          :defType => "dismax"
+          :defType => query_parser
         }        
       else
         # Can't be expressed in a single dismax, do it the normal way
@@ -199,7 +200,6 @@ module ParsingNesting::Tree
     def negate
       List.new(list.collect {|i| i.negate})
     end
-
   end
   
   class AndList < List
@@ -355,8 +355,6 @@ module ParsingNesting::Tree
       false
     end
     
-    
-     
     def negate
       operand
     end
