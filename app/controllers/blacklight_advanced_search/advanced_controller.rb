@@ -46,7 +46,7 @@ class BlacklightAdvancedSearch::AdvancedController < CatalogController
     input = HashWithIndifferentAccess.new
     input.merge!( search_context_params )
     
-    input.merge!( :qt => blacklight_config.advanced_search[:qt] || blacklight_config.default_qt || blacklight_config.default_solr_params[:qt], :per_page => 0)
+    input.merge!( :qt => blacklight_config.advanced_search[:qt] || blacklight_config.default_solr_params[:qt], :per_page => 0)
     input.merge!( blacklight_config.advanced_search[:form_solr_parameters] ) if blacklight_config.advanced_search[:form_solr_parameters]
     input[:q] ||= '{!lucene}*:*'
     
