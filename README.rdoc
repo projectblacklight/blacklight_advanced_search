@@ -149,7 +149,7 @@ By default, the advanced search form will show as limits whatever facets are con
 Complete list of keys that can be supplied inside your configure_blacklight `advanced_search` block:
 
 [:qt] 
-   Solr request handler to use for any search that includes advanced search criteria. Defaults to what the application has set as Blacklight.config[:default_qt]
+   Solr request handler to use for any search that includes advanced search criteria. Defaults to what the application has set as blacklight_config.default_solr_params[:qt]
 [:url_key]
    Key to use in application URLs to indicate advanced search is included in a query, defaults to "advanced". URLs will have "&search_field=[url key]".
 [:form_solr_paramters]
