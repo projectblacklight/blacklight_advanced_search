@@ -17,7 +17,7 @@ Gem::Specification.new do |s|
   s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
   s.require_paths = ["lib"]
 
-  s.add_dependency "blacklight", ">= 5.0.0.pre4", "< 6.0"
+  s.add_dependency "blacklight", ">= 5.1", "< 6.0"
   s.add_dependency "parslet"
 
   s.add_development_dependency "blacklight_marc"

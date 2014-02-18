@@ -47,7 +47,7 @@ module BlacklightAdvancedSearch::RenderConstraintsOverride
 
     if (@advanced_query)
       @advanced_query.filters.each_pair do |field, value_list|
-        label = facet_field_labels[field]
+        label = facet_field_label(field)
         content << render_constraint_element(label,
           value_list.join(" OR "),
           :remove => catalog_index_path( remove_advanced_filter_group(field, my_params) )
@@ -65,7 +65,7 @@ module BlacklightAdvancedSearch::RenderConstraintsOverride
 
     if (advanced_query.filters.length > 0)
       advanced_query.filters.each_pair do |field, values|
-        label = facet_field_labels[field]
+        label = facet_field_label(field)
 
         content << render_search_to_s_element(
           label,
