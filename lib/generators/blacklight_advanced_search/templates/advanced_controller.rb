@@ -1,13 +1,14 @@
 class AdvancedController < BlacklightAdvancedSearch::AdvancedController
 
   blacklight_config.configure do |config|
-    # name of Solr request handler, leave unset to use the same one as your Blacklight.config[:default_qt]
-    config.advanced_search.qt = 'advanced'
+    # name of Solr request handler, leave unset to use the same one your Blacklight
+    # is ordinarily using (recommended if possible)
+    # config.advanced_search.qt = 'advanced'
 
     ##
     # The advanced search form displays facets as a limit option.
     # By default it will use whatever facets, if any, are returned
-    # by the Solr qt request handler in use. However, you can use
+    # by the Solr request handler in use. However, you can use
     # this config option to have it request other facet params than
     # default in the Solr request handler, in desired.
     config.advanced_search.form_solr_parameters = {}
