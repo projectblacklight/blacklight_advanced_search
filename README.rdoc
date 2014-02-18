@@ -154,6 +154,12 @@ Complete list of keys that can be supplied inside your configure_blacklight `adv
    Key to use in application URLs to indicate advanced search is included in a query, defaults to "advanced". URLs will have "&search_field=[url key]".
 [:form_solr_paramters]
   A hash of solr parameters which will be included in Solr request sent before display of advanced search form. Can be used to set facet parameters for advanced search form display.  
+[:query_parser]
+  advanced searches are translated to solr nested queries, where the inner queries are of a dismax-type. 
+  By default, they are actually specifically 'dismax', but you can set :query_parser to 'edismax' instead. 
+  This may make additional features available like * wildcards in advanced searches; but it may also
+  cause some user query elements to be interpreted as operators for edismax when they
+  were intended as literals. Somewhat experimental. See Github issues #11 and #14. 
 
 
 == Translation to Solr Query, technical details
