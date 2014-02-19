@@ -30,7 +30,7 @@ module BlacklightAdvancedSearch::RenderConstraintsOverride
       if (@advanced_query.keyword_op == "OR" &&
           @advanced_query.keyword_queries.length > 1)
         content.unshift content_tag(:span, "Any of:", class:'operator')
-        content_tag :span, class: "inclusive_or appliedFilter" do
+        content_tag :span, class: "inclusive_or appliedFilter well" do
           safe_join(content.flatten, "\n")
         end
       else

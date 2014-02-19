@@ -2,40 +2,20 @@
 
 /* constraints */
 
+.inclusive_or.appliedFilter {
+  /* kinda lame, but we have to group the 'any' criteria somehow, as they are still
+   'and'd with facet and other criteria. It's got a bootstrap 'well' class
+   on it already. */
+  display: inline-block;
+  padding: 4px 8px;
+  margin: 0;
+}
+
 .inclusive_or .operator {
   margin-right: 1em;
 }
 
-.inclusive_or .appliedFilter {
-  background-color: #F0F0F0; 
-}
 
-/* making it match an h3 */
 #appliedParams .inclusive_or .operator {
   font-weight: bold;  
-  color: #555555;
-  font-size: 108%;
 }
-
-/*  Facet limit */
-
-  /* over-ride BL */
-#facets .advanced_facet_limit ul {
-  border-bottom: none;
-  padding-bottom: 0;
-}
-
-
-.facet_limit .inclusive_or h4 {
-  margin-bottom: 0.5em;
-}
-
-.facet_limit .inclusive_or li {
-  margin-left: 1em;
-}
-
-/* optional link to search form */
-.search .advanced_search {
-  font-size: 83.33%; 
-}
-
