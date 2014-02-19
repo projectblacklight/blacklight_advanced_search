@@ -1,18 +1,26 @@
-<%= form_tag catalog_index_path, :class => 'advanced', :method => :get do  %>
+  <% unless (search_context_str = render_search_to_s( advanced_search_context)).blank? %>
+    <div class="constraints well">
+      <h4>Within search</h4>
+      <%= search_context_str %>
+    </div>
+  <% end %>
+
+<%= form_tag catalog_index_path, :class => 'advanced form-horizontal', :method => :get do  %>
 
   <%= render_hash_as_hidden_fields(params_for_search(advanced_search_context)) %>
 
-  <div class="input_columns row">
+  <div class="input-criteria">
 
-      <div class="query_column span6">
-        <h4>Find items that match <%= select_tag(:op, options_for_select({'all'=>'AND','any'=>'OR'}.sort,'all'), :class => 'input-small') %> of the fields below:</h4>
+      <div class="query-criteria">
+        <h3 class="query-criteria-heading">Find items that match <%= select_tag(:op, options_for_select({'all'=>'AND','any'=>'OR'}.sort,'all'), :class => 'input-small') %> of</h3>
 
         <div id="advanced_search">
           <%= render 'advanced/advanced_search_fields' %>
         </div>
       </div>
-           <div class="limit_column offset1 span4">
-        <h4><strong>AND</strong> have these attributes:</h4>
+      
+      <div class="limit-criteria">
+        <h3 class="limit-criteria-heading"><strong>AND</strong> have these attributes</h3>
 
         <div id="advanced_search_facets" class="limit_input">
           <%= render 'advanced_search_facets' %>
@@ -20,23 +28,22 @@
       </div>
   </div>
 
-  <% unless (search_context_str = render_search_to_s( advanced_search_context)).blank? %>
-    <div class="constraints">
-      <h4>Within search:</h4>
-      <%= search_context_str %>
-    </div>
-  <% end %>
+  <div class="sort-submit-buttons clearfix">
+    <hr>
 
+      <div class="sort-buttons pull-left">    
+        <%= label_tag(:sort, "Sort results by", :class => "control-label") %>
+      
+        <%= select_tag(:sort, options_for_select(sort_fields, h(params[:sort])), :class => "form-control") %>
+        <%= hidden_field_tag(:search_field, blacklight_config.advanced_search[:url_key]) %>
+      </div>
 
-  <div class="sort_submit_buttons well clearfix">
-    <div class="pull-left">
-	<%= label_tag(:sort, "Sort results by") %>
-    <%= select_tag(:sort, options_for_select(sort_fields, h(params[:sort]))) %>
-	<%= hidden_field_tag(:search_field, blacklight_config.advanced_search[:url_key]) %>
-</div>
-<div class="pull-right">
-    <%= submit_tag 'Search', :class=>'btn btn-primary', :id=>'advanced_search' %>
-	<%= link_to "Start over", {:controller => "advanced", :action => "index"}, :class =>"reset btn" %>
-</div>
+      <div class="submit-buttons pull-right">
+        <%= link_to "Start over", advanced_search_path, :class =>"btn btn-default" %>
+
+        <%= submit_tag 'Search', :class=>'btn btn-primary advanced-search-submit' %>
+      </div>
+
   </div>
+
 <% end %>

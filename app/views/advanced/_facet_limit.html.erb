@@ -1,7 +1,15 @@
-<ul>
+<ul class="facet-values list-unstyled blacklight-advanced-facet-select">
   <% display_facet.items.each do |item| -%>
   <li>
-    <%= label_tag "f_inclusive_#{solr_field}[#{item.value.to_sym}]", (check_box_tag "f_inclusive[#{solr_field}][#{item.value.to_sym}]", 1, facet_value_checked?(solr_field, item.value)) + content_tag(:span, facet_display_value(solr_field, item), :class => 'facet-value') + " " + render_facet_count(item.hits), :class => 'checkbox' %>
+        <span class="facet-checkbox">
+            <%= check_box_tag "f_inclusive[#{solr_field}][#{item.value.to_sym}]", 1, facet_value_checked?(solr_field, item.value) %>
+        </span>
+
+        <span class="label-and-count">
+            <%= label_tag "f_inclusive_#{solr_field}[#{item.value.to_sym}]"  do %>
+                <%= render_facet_value(solr_field, item, :suppress_link => true) %>  
+            <% end %>
+        <span>
   </li>
   <% end -%>
 </ul>

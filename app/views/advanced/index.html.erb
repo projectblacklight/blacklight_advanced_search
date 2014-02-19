@@ -1,8 +1,21 @@
 <% @page_title = "More Search Options - #{application_name}" %>
-<script type="text/javascript">
-  $(document).ready(function(){$("form.advanced input:first").focus();});
-</script>
 
-<h1 class="advanced">More Search Options</h1>
-<%= render 'advanced_search_form' %>
-<%= render "advanced_search_help" %>
+<div class="advanced-search-form">
+
+    <h1 class="advanced page-header">
+        More Search Options 
+        <%= link_to "Start over", advanced_search_path, :class =>"btn btn-default pull-right" %>
+    </h1>
+
+    <div class="row">
+
+        <div class="col-md-8">
+            <%= render 'advanced_search_form' %>
+        </div>
+        <div class="col-md-4">
+            <%= render "advanced_search_help" %>
+        </div>
+
+    </div>
+
+</div>
