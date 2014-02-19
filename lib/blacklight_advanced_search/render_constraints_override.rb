@@ -58,6 +58,25 @@ module BlacklightAdvancedSearch::RenderConstraintsOverride
     return content
   end
 
+  # override of BL method, so our inclusive facet selections
+  # are still recgonized for eg highlighting facet with selected
+  # values. 
+  def facet_field_in_params?(field)
+    return true if super
+
+    # otherwise use our own logic. And work around a weird bug
+    # in BL that assumes params[:f][field] will exist if facet_field_in_params?
+    # hacky insistence on params[:f] etc won't be neccesary if after:
+    # https://github.com/projectblacklight/blacklight/pull/790
+    if  @advanced_query && @advanced_query.filters.keys.include?( field )
+      params[:f] ||= {}
+      params[:f][field] ||= []
+      return true
+    end
+
+    return false
+  end
+
   def render_search_to_s_filters(my_params)
     content = super(my_params)
 
