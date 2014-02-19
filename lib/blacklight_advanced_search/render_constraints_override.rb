@@ -68,7 +68,8 @@ module BlacklightAdvancedSearch::RenderConstraintsOverride
     # in BL that assumes params[:f][field] will exist if facet_field_in_params?
     # hacky insistence on params[:f] etc won't be neccesary if after:
     # https://github.com/projectblacklight/blacklight/pull/790
-    if  @advanced_query && @advanced_query.filters.keys.include?( field )
+    query = BlacklightAdvancedSearch::QueryParser.new(params, self.blacklight_config )
+    if query.filters.keys.include?( field )
       params[:f] ||= {}
       params[:f][field] ||= []
       return true
