@@ -1,8 +1,8 @@
 This is an advanced search plugin for Blacklight ( http://www.projectblacklight.org ).  
 
-== Blacklight version compatibility
+## Blacklight version compatibility
 
-This is a plugin for Blacklight: http://github.com/projectblacklight/blacklight
+This is a plugin for [Blacklight](http://github.com/projectblacklight/blacklight)
 
 It has been hard to keep track of which versions of `blacklight_advanced_search`
 work with which versions of `blacklight`. Some notes:
@@ -15,46 +15,45 @@ work with which versions of `blacklight`. Some notes:
 * advanced search plugin latest 0.X.X version will work with Blacklight 2.9/Rails2. 
 * Older tagged versions of Advanced Search may work with even older BL. 
 
-== Installation:
+## Installation
 
-=== Blacklight 3.x/Rails 3
+### Blacklight 3.x/Rails 3
 
 Add to your application's Gemfile:
 
-   gem "blacklight_advanced_search"
+    gem "blacklight_advanced_search"
 
 then run 'bundle install'.  Then run:
 
-   rails generate blacklight_advanced_search
+    rails generate blacklight_advanced_search
 
 * The 'generate' command will install 'require' statements for the plugin's assets into your application's application.js/application.css asset pipeline files
 * And it can optionally install a localized search form with a link to advanced search. If you've already localized your search form you'll want to do this manually instead. 
 
 You may want to  `include BlacklightAdvancedSearch::ParseBasicQ` in your CatalogController to enable AND/OR/NOT parsing even in ordinary search, this is not on by default.  
 
-== Accessing
+## Accessing
  
 The advanced search form will be available in your app at /advanced, and in your app using
 routing helper `advanced_search_path`. 
 
-  advanced_search_path
+    advanced_search_path
   
 You can also send the advanced search form url parameters representing a search, to have the form add on additional 'advanced' criteria to the search.  For example:
 
-  advanced_search_path( params )
+    advanced_search_path( params )
    
 By default there won't be any links in your application to the search form. If you've heavily customized your app, you can put them wherever you want as above. 
 
 However, especially if your app isn't much customized, the optional installer can write a localized Blacklight search form into your application with a 'more options' link to advanced. You may need to adjust your styles to make room for the new link, depending on what you've done with your app. 
 
 
+## Configuration
 
-== Configuration:
-
-If your application uses a single Solr qt request handler for all its search fields, then this plugin may work well with no configuration.  Nonetheless, configuration is available to change or improve behavior, or to use a separate Solr request handler for the advanced search plugin. Most configuration takes place in your ./app/controllers/catalog_controller.rb `configure_blacklight` block.
+If your application uses a single Solr qt request handler for all its search fields, then this plugin may work well with no configuration.  Nonetheless, configuration is available to change or improve behavior, or to use a separate Solr request handler for the advanced search plugin. Most configuration takes place in your `./app/controllers/catalog_controller.rb` `configure_blacklight` block.
 
 
-=== Expression parsing in ordinary search
+### Expression parsing in ordinary search
 
 Turn this feature on by adding to your CatalogController definition:
 
@@ -76,7 +75,7 @@ Due to limitations of the logic, sometimes these generated Solr queries may not 
 
 If there'a a parse error trying to parse as boolean expression, it'll give up and pass the query on through same as it would without ParseBasicQ. 
 
-=== Search fields
+### Search fields
 
 Your main blacklight search fields are generally defined in CatalogController blacklight_config using `add_search_field`. They are all by default used in advanced search. 
 
@@ -89,10 +88,10 @@ If there are particular search fields in your main blacklight config you want ex
 
 If you want search fields ONLY available in advanced search, you can suppress them from ordinary search:
 
-   config.add_search_field("publisher") do |field|
+    config.add_search_field("publisher") do |field|
       field.include_in_simple_select = false
       field.solr_parameters = { :qf => "publisher_t" }        
-   end
+    end
 
 All advanced search fields must share the same Solr request handler (":qt"). As such, search fields that use a custom ":qt" parameter may not be re-used by the advanced search plugin. However, you may use a separate Solr request handler than the Blacklight default. If you would like the advanced search to use a different Solr request handler than your app's default, set:
  
@@ -115,30 +114,31 @@ Additionally, to make your advanced search solr requests more concise, you are s
 
 Within your solrconfig.xml you may then provide the appropriate custom configuration.
 
-  <requestHandler name="advanced" class="solr.SearchHandler" >
-    <lst name="defaults">
-      <!-- ... -->
-      <str name="qf_author">
-        author_1xx_unstem_search^200
-        author_7xx_unstem_search^50
-        author_8xx_unstem_search^10
-        author_1xx_search^20       vern_author_1xx_search^20
-        author_7xx_search^5        vern_author_7xx_search^5
-        author_8xx_search          vern_author_8xx_search
-      </str>
-      <str name="pf_author">
-        author_1xx_unstem_search^5000
-        author_7xx_unstem_search^3000
-        author_1xx_search^500        vern_author_1xx_search^500
-        author_7xx_search^300        vern_author_7xx_search^300
-        author_8xx_unstem_search^250
-        author_8xx_search^200        vern_author_8xx_search^200
-      </str>
-    </lst>
-  </requestHandler>
+
+    <requestHandler name="advanced" class="solr.SearchHandler" >
+      <lst name="defaults">
+        <!-- ... -->
+        <str name="qf_author">
+          author_1xx_unstem_search^200
+          author_7xx_unstem_search^50
+          author_8xx_unstem_search^10
+          author_1xx_search^20       vern_author_1xx_search^20
+          author_7xx_search^5        vern_author_7xx_search^5
+          author_8xx_search          vern_author_8xx_search
+        </str>
+        <str name="pf_author">
+          author_1xx_unstem_search^5000
+          author_7xx_unstem_search^3000
+          author_1xx_search^500        vern_author_1xx_search^500
+          author_7xx_search^300        vern_author_7xx_search^300
+          author_8xx_unstem_search^250
+          author_8xx_search^200        vern_author_8xx_search^200
+        </str>
+      </lst>
+    </requestHandler>
 
 
-=== Facets
+### Facets
 
 By default, the advanced search form will show as limits whatever facets are configured as default in your Solr request handler.  To have the advanced search form request specific facets and/or specific facet parameters, you can set config[:form_solr_parameters]. 
 
@@ -151,40 +151,37 @@ By default, the advanced search form will show as limits whatever facets are con
     }
  
 
-=== Advanced Search Config Options
+### Advanced Search Config Options
 
 Complete list of keys that can be supplied inside your configure_blacklight `advanced_search` block:
 
-[:qt] 
-   Solr request handler to use for any search that includes advanced search criteria. Defaults to what the application has set as blacklight_config.default_solr_params[:qt]
-[:url_key]
-   Key to use in application URLs to indicate advanced search is included in a query, defaults to "advanced". URLs will have "&search_field=[url key]".
-[:form_solr_paramters]
-  A hash of solr parameters which will be included in Solr request sent before display of advanced search form. Can be used to set facet parameters for advanced search form display.  
-[:query_parser]
-  advanced searches are translated to solr nested queries, where the inner queries are of a dismax-type. 
+* :qt
+  * Solr request handler to use for any search that includes advanced search criteria. Defaults to what the application has set as blacklight_config.default_solr_params[:qt]
+* :url_key
+  * Key to use in application URLs to indicate advanced search is included in a query, defaults to "advanced". URLs will have "&search_field=[url key]".
+* :form_solr_paramters
+  * A hash of solr parameters which will be included in Solr request sent before display of advanced search form. Can be used to set facet parameters for advanced search form display.  
+* :query_parser
+  * advanced searches are translated to solr nested queries, where the inner queries are of a dismax-type. 
   By default, they are actually specifically 'dismax', but you can set :query_parser to 'edismax' instead. 
   This may make additional features available like * wildcards in advanced searches; but it may also
   cause some user query elements to be interpreted as operators for edismax when they
   were intended as literals. Somewhat experimental. See Github issues #11 and #14. 
 
 
-== Translation to Solr Query, technical details
+## Translation to Solr Query, technical details
 
 The code for mapping a user-entered query to a Solr query is called "nesting_parsing", and maps to a 'lucene' query parser query, with nested 'dismax' query parser queries. 
 
 Some technical details can be found in the nesting_parsing README: [https://github.com/projectblacklight/blacklight_advanced_search/tree/master/lib/parsing_nesting]
 
 You may also find the rspecs for parsing a user-entered query and converting it to Solr illumnating:
+
 1. Converting user-entered query to Solr: [https://github.com/projectblacklight/blacklight_advanced_search/blob/master/spec/parsing_nesting/to_solr_spec.rb]
 2. Parsing user-entered query to internal syntax tree: [https://github.com/projectblacklight/blacklight_advanced_search/blob/master/spec/parsing_nesting/build_tree_spec.rb]
  
-== Running tests
+## Running tests
 
-The Blacklight Advanced Search acceptance tests require a copy of the blacklight-jetty demo index. You can get a copy by running:
-  
-  git submodule init
-  git submodule update
 
 (Limited) test coverage is provided with rspec, run all tests (and start the jetty instance) by running:
    rake ci 
@@ -192,9 +189,7 @@ The Blacklight Advanced Search acceptance tests require a copy of the blacklight
 from the blacklight_advanced_search directory. Note: you may need to `bundle install` first. 
 
   
-== To Do
+## To Do
 
 * Alphabetical sorting of facet values returned by solr in count order (perhaps with limit). 
 * Parse for fielded search too like << title:"some title" >>.  'field:' that doesn't match an actual known field should be passed through same as now, while recognized fields should generate nested queries tied to those blacklight search types. 
-
-
