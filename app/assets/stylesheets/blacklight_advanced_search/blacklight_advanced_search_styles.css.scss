@@ -18,7 +18,7 @@ form.advanced .adv_facet_selections {
   }
 
 
-  select.form-control {
+  select.form-control.sort-select {
     width: auto; // why does Bootstrap try to insist on explicit width? dunno. 
     display: inline-block;
   }

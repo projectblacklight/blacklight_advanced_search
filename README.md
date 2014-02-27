@@ -114,7 +114,6 @@ Additionally, to make your advanced search solr requests more concise, you are s
 
 Within your solrconfig.xml you may then provide the appropriate custom configuration.
 
-
     <requestHandler name="advanced" class="solr.SearchHandler" >
       <lst name="defaults">
         <!-- ... -->
@@ -138,7 +137,7 @@ Within your solrconfig.xml you may then provide the appropriate custom configura
     </requestHandler>
 
 
-### Facets
+### Facets on advanced search form
 
 By default, the advanced search form will show as limits whatever facets are configured as default in your Solr request handler.  To have the advanced search form request specific facets and/or specific facet parameters, you can set config[:form_solr_parameters]. 
 
@@ -149,7 +148,22 @@ By default, the advanced search form will show as limits whatever facets are con
         "facet.sort" => "index" # sort by byte order of values
       }
     }
- 
+
+Multiply selected advanced search form facets are combined with `or` (ie `any` or `union`). 
+
+The default advanced search form facet display is very much like Blacklight's
+sidebar facets (and uses some code straight from BL to render), but with checkboxes
+next to each value. 
+
+(IN PROGRESS) An alternate view using a multi-element HTML `select` is available, and can also
+be combined with chosen.js for a fancy type-ahead sort of UX. This can be especially
+useful if you want to offer many facet values at once on the form (beware, they are all
+still loaded in HTML, so this is probably good for at most hundreds, not thousands.)
+
+    config.advanced_search = {
+      # ...
+      :form_facet_partial => "advanced_search_facets_as_select"
+    }
 
 ### Advanced Search Config Options
 

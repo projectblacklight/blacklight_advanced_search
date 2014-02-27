@@ -23,7 +23,11 @@
         <h3 class="limit-criteria-heading"><strong>AND</strong> have these attributes</h3>
 
         <div id="advanced_search_facets" class="limit_input">
-          <%= render 'advanced_search_facets' %>
+          <% if blacklight_config.try(:advanced_search).try {|h| h[:form_facet_partial] } %>
+            <%= render blacklight_config.advanced_search[:form_facet_partial] %>
+          <% else %>
+            <%= render 'advanced_search_facets' %>
+          <% end %>
         </div>
       </div>
   </div>
@@ -34,7 +38,7 @@
       <div class="sort-buttons pull-left">    
         <%= label_tag(:sort, "Sort results by", :class => "control-label") %>
       
-        <%= select_tag(:sort, options_for_select(sort_fields, h(params[:sort])), :class => "form-control") %>
+        <%= select_tag(:sort, options_for_select(sort_fields, h(params[:sort])), :class => "form-control sort-select") %>
         <%= hidden_field_tag(:search_field, blacklight_config.advanced_search[:url_key]) %>
       </div>
 
