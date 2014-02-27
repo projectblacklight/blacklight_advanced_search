@@ -1,5 +1,5 @@
-// Master manifest file for engine, so local app can require
-// this one file, but get all our files -- and local app
-// require does not need to change if we change file list.
+// Yeah, this is empty right now. It used to have stuff. 
+// We're leaving it here, so if in future versions of advanced_search it has
+// stuff, existing apps will already be linked in. 
 
-//= require_tree './blacklight_advanced_search'
+//Is this a bad idea, it should just be removed? Not sure. 
