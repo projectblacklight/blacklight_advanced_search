@@ -47,19 +47,20 @@ module BlacklightAdvancedSearch
     end
 
     # extracts advanced-type filters from query params,
-    # returned as a hash of field => array of values
+    # returned as a hash of field => [array of values]
     def filters
       unless (@filters)
         @filters = {}
         return @filters unless @params[:f_inclusive]
-        @params[:f_inclusive].each_pair do |field, value_hash|
-          value_hash.each_pair do |value, type|
-            @filters[field] ||= []
-            @filters[field] << value
-          end
+        @params[:f_inclusive].each_pair do |field, value_array|
+          @filters[field] ||= value_array.dup
         end
       end
       return @filters
+    end
+
+    def filters_include_value?(field, value)
+      filters[field.to_s].try {|array| array.include? value}
     end
 
     def empty?

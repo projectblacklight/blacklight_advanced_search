@@ -2,11 +2,11 @@
   <% display_facet.items.each do |item| -%>
   <li>
         <span class="facet-checkbox">
-            <%= check_box_tag "f_inclusive[#{solr_field}][#{item.value.to_sym}]", 1, facet_value_checked?(solr_field, item.value) %>
+            <%= check_box_tag "f_inclusive[#{solr_field}][]", item.value.to_sym, facet_value_checked?(solr_field, item.value), :id =>  "f_inclusive_#{solr_field}_#{item.value.parameterize}"%>
         </span>
 
         <span class="label-and-count">
-            <%= label_tag "f_inclusive_#{solr_field}[#{item.value.to_sym}]"  do %>
+            <%= label_tag "f_inclusive_#{solr_field}_#{item.value.parameterize}"  do %>
                 <%= render_facet_value(solr_field, item, :suppress_link => true) %>  
             <% end %>
         <span>

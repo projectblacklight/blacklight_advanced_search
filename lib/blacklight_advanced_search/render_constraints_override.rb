@@ -85,6 +85,9 @@ module BlacklightAdvancedSearch::RenderConstraintsOverride
 
     if (advanced_query.filters.length > 0)
       advanced_query.filters.each_pair do |field, values|
+        # old-style, may still be in history
+        values = values.keys if values.kind_of? Hash
+
         label = facet_field_label(field)
 
         content << render_search_to_s_element(
