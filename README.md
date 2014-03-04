@@ -156,9 +156,10 @@ sidebar facets (and uses some code straight from BL to render), but with checkbo
 next to each value. 
 
 (IN PROGRESS) An alternate view using a multi-element HTML `select` is available, and can also
-be combined with chosen.js for a fancy type-ahead sort of UX. This can be especially
-useful if you want to offer many facet values at once on the form (beware, they are all
-still loaded in HTML, so this is probably good for at most hundreds, not thousands.)
+be combined with [chosen.js](http://harvesthq.github.io/chosen/) for a fancy type-ahead style of UI.
+This can be especially useful if you want to offer many facet values at once on
+the form (beware, they are all still loaded in HTML, so this is probably good for
+at most hundreds, not thousands.)
 
     config.advanced_search = {
       # ...
