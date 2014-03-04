@@ -8,6 +8,11 @@ It has been hard to keep track of which versions of `blacklight_advanced_search`
 work with which versions of `blacklight`. Some notes:
 
 * versions 5.x of Advanced Search plugin should work with Blacklight >= 5.1 and < 6 -- we now synchronize the _major_ version number between `blacklight` and `blacklight_advanced_search`.
+  * `blacklight_advanced_search` 5.x changes the URL query param format for advanced 'inclusive'
+     facet selections, from the advanced form. If you'd like to keep old-style possibly
+     bookmarked URLs working, by redirecting to new format, add this to your
+     `CatalogController`:
+         before_filter BlacklightAdvancedSearch::RedirectLegacyParamsFilter, :only => :index
 * version 2.2 of `blacklight_advanced_search` should work with `blacklight` 4.x. 
 * versions `1.2.*` of Advanced Search plugin can work with blacklight 3.2.2 through latest 3.2.x
 * 1.2.0 was an aborted version, don't use it, if you did, re-do your configuration according to current instructions and delete any local ./app/controllers/advanced_controller.rb file. 

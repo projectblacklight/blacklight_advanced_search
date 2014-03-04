@@ -6,10 +6,10 @@ module BlacklightAdvancedSearch
   autoload :ParsingNestingParser, 'blacklight_advanced_search/parsing_nesting_parser'
   autoload :FilterParser, 'blacklight_advanced_search/filter_parser'
   autoload :ParseBasicQ, 'blacklight_advanced_search/parse_basic_q'
+  autoload :RedirectLegacyParamsFilter, 'blacklight_advanced_search/redirect_legacy_params_filter'
 
   require 'blacklight_advanced_search/version'
   require 'blacklight_advanced_search/engine'
-
   
   # Utility method used in our solr search logic. 
   # Merges new_hash into source_hash, but will recursively
@@ -33,6 +33,6 @@ module BlacklightAdvancedSearch
         new
       end
     end
-  end
+  end  
   
 end
