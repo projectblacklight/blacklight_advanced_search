@@ -11,8 +11,8 @@ describe "Blacklight Advanced Search Form" do
     end
 
     it "should have field and facet blocks" do
-      page.should have_selector('.query_column')
-      page.should have_selector('.limit_column')
+      page.should have_selector('.query-criteria')
+      page.should have_selector('.limit-criteria')
     end
 
     describe "query column" do
@@ -25,8 +25,8 @@ describe "Blacklight Advanced Search Form" do
       end
 
       it "should list the configured search fields" do
-        page.should have_selector '.advanced_search_field #title'
-        page.should have_selector '.advanced_search_field #author'
+        page.should have_selector '.advanced-search-field #title'
+        page.should have_selector '.advanced-search-field #author'
       end
 
       it "should not list the search fields listed as not to be included in adv search" do
@@ -46,7 +46,7 @@ describe "Blacklight Advanced Search Form" do
 
     it "scope searches to fields" do
       fill_in "title", :with => "Medicine"
-      click_on "advanced_search"
+      click_on "advanced-search-submit"
       puts page.current_url
       page.should have_content "Remove constraint Title: Medicine"
       page.should have_content "2007020969"
