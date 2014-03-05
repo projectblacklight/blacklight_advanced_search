@@ -188,6 +188,15 @@ Complete list of keys that can be supplied inside your configure_blacklight `adv
   cause some user query elements to be interpreted as operators for edismax when they
   were intended as literals. Somewhat experimental. See Github issues #11 and #14. 
 
+## Customizing the advanced search form
+
+Most of the labels on the advanced search form are [provided via Rails i18n](./config/locales), and can
+be customized in a local app i18n file. 
+
+Additionally, you can override the templates from this gem used to display the form. 
+We've tried to break it up into partials at the right granularity for over-riding
+in likely ways.  For one example, see the wiki page on [Adding a range limit to the advanced search form](https://github.com/projectblacklight/blacklight_advanced_search/wiki/Adding-a-range-limit-to-the-advanced-search-form).
+
 
 ## Translation to Solr Query, technical details
 
