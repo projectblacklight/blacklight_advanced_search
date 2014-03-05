@@ -1,0 +1,12 @@
+en:
+  blacklight_advanced_search:
+    all: all
+    any: any
+    form:
+      title: More Search Options
+      search_context: Within search
+      limit_criteria_heading_html: "<strong>AND</strong> have these attributes"
+      query_criteria_heading_html: "Find items that match %{select_menu} of"
+      sort_label: "Sort results by"
+      start_over: "Start over"
+      search_btn: 'Search'

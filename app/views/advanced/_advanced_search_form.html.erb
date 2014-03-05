@@ -1,6 +1,6 @@
   <% unless (search_context_str = render_search_to_s( advanced_search_context)).blank? %>
     <div class="constraints well search_history">
-      <h4>Within search</h4>
+      <h4><%= t 'blacklight_advanced_search.form.search_context' %></h4>
       <%= search_context_str %>
     </div>
   <% end %>
@@ -12,7 +12,9 @@
   <div class="input-criteria">
 
       <div class="query-criteria">
-        <h3 class="query-criteria-heading">Find items that match <%= select_tag(:op, options_for_select({'all'=>'AND','any'=>'OR'}.sort,params[:op]), :class => 'input-small') %> of</h3>
+        <h3 class="query-criteria-heading">
+          <%= t('blacklight_advanced_search.form.query_criteria_heading_html', :select_menu =>  select_menu_for_field_operator ) %> 
+        </h3>
 
         <div id="advanced_search">
           <%= render 'advanced/advanced_search_fields' %>
@@ -20,7 +22,7 @@
       </div>
       
       <div class="limit-criteria">
-        <h3 class="limit-criteria-heading"><strong>AND</strong> have these attributes</h3>
+        <h3 class="limit-criteria-heading"><%= t('blacklight_advanced_search.form.limit_criteria_heading_html')%></h3>
 
         <div id="advanced_search_facets" class="limit_input">
           <% if blacklight_config.try(:advanced_search).try {|h| h[:form_facet_partial] } %>
@@ -36,16 +38,16 @@
     <hr>
 
       <div class="sort-buttons pull-left">    
-        <%= label_tag(:sort, "Sort results by", :class => "control-label") %>
+        <%= label_tag(:sort, t('blacklight_advanced_search.form.sort_label'), :class => "control-label") %>
       
         <%= select_tag(:sort, options_for_select(sort_fields, h(params[:sort])), :class => "form-control sort-select") %>
         <%= hidden_field_tag(:search_field, blacklight_config.advanced_search[:url_key]) %>
       </div>
 
       <div class="submit-buttons pull-right">
-        <%= link_to "Start over", advanced_search_path, :class =>"btn btn-default" %>
+        <%= link_to t('blacklight_advanced_search.form.start_over'), advanced_search_path, :class =>"btn btn-default" %>
 
-        <%= submit_tag 'Search', :class=>'btn btn-primary advanced-search-submit', :id => "advanced-search-submit" %>
+        <%= submit_tag t('blacklight_advanced_search.form.search_btn'), :class=>'btn btn-primary advanced-search-submit', :id => "advanced-search-submit" %>
       </div>
 
   </div>

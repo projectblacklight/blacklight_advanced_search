@@ -20,6 +20,15 @@ module AdvancedHelper
     BlacklightAdvancedSearch::QueryParser.new(params, blacklight_config).filters_include_value?(field, value)
   end
 
+  def select_menu_for_field_operator
+    options = {
+      t('blacklight_advanced_search.all') => 'AND',
+      t('blacklight_advanced_search.any') => 'OR'
+    }.sort
+
+    return select_tag(:op, options_for_select(options,params[:op]), :class => 'input-small')
+  end
+
   # Current params without fields that will be over-written by adv. search,
   # or other fields we don't want.
   def advanced_search_context
