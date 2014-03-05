@@ -34,22 +34,10 @@
       </div>
   </div>
 
+  <hr>
+
   <div class="sort-submit-buttons clearfix">
-    <hr>
-
-      <div class="sort-buttons pull-left">    
-        <%= label_tag(:sort, t('blacklight_advanced_search.form.sort_label'), :class => "control-label") %>
-      
-        <%= select_tag(:sort, options_for_select(sort_fields, h(params[:sort])), :class => "form-control sort-select") %>
-        <%= hidden_field_tag(:search_field, blacklight_config.advanced_search[:url_key]) %>
-      </div>
-
-      <div class="submit-buttons pull-right">
-        <%= link_to t('blacklight_advanced_search.form.start_over'), advanced_search_path, :class =>"btn btn-default" %>
-
-        <%= submit_tag t('blacklight_advanced_search.form.search_btn'), :class=>'btn btn-primary advanced-search-submit', :id => "advanced-search-submit" %>
-      </div>
-
+    <%= render 'advanced_search_submit_btns' %>
   </div>
 
 <% end %>
