@@ -9,11 +9,11 @@
 <% facets_from_request(facet_field_names).each do |display_facet| %>
     <% if should_render_facet?(display_facet) %>
         <div class="form-group advanced-search-facet">
-            <%= label_tag display_facet.name.parameterize, :class => "col-sm-2 control-label" do %>
+            <%= label_tag display_facet.name.parameterize, :class => "col-sm-3 control-label" do %>
                 <%= facet_field_label(display_facet.name) %>
             <% end %>            
 
-            <div class="col-sm-10">
+            <div class="col-sm-9">
                 <%= content_tag(:select, :multiple => true,                     
                     :name   => "f_inclusive[#{display_facet.name}][]",
                     :id     => display_facet.name.parameterize,
