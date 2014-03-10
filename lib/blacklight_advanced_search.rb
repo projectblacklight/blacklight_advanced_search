@@ -17,22 +17,33 @@ module BlacklightAdvancedSearch
   # or blank values from new_hash into source_hash, nil or blank values
   # in new_hash will not overwrite values in source_hash. 
   def self.deep_merge!(source_hash, new_hash)
-    source_hash.merge!(new_hash) do |key, old, new|
-      if new.respond_to?(:blank) && new.blank?
-        old        
-      elsif (old.kind_of?(Hash) and new.kind_of?(Hash))
-        deep_merge!(old, new)
-      elsif (old.kind_of?(Array) and new.kind_of?(Array))
-        old.concat(new).uniq
-      elsif new.nil?
-        # Allowing nil values to over-write on merge messes things up.
-        # don't set a nil value if you really want to force blank, set
-        # empty string. 
-        old
-      else
-        new
-      end
+    # We used to use built-in source_hash.merge() with a block arg
+    # to customize merge behavior, but that was breaking in some
+    # versions of BL/Rails where source_hash was a kind of HashWithIndifferentAccess,
+    # and hwia is unreliable in some versions of Rails. Oh well. 
+    # https://github.com/projectblacklight/blacklight/issues/827
+
+    new_hash.each_pair do |key, new_value|
+      old = source_hash.fetch(key, nil)
+
+      source_hash[key] =     
+        if new_value.respond_to?(:blank) && new.blank?
+          old        
+        elsif (old.kind_of?(Hash) and new_value.kind_of?(Hash))          
+          deep_merge!(old, new_value)
+          old
+        elsif (old.kind_of?(Array) and new_value.kind_of?(Array))
+          old.concat(new_value).uniq
+        elsif new_value.nil?
+          # Allowing nil values to over-write on merge messes things up.
+          # don't set a nil value if you really want to force blank, set
+          # empty string. 
+          old
+        else
+          new_value
+        end
     end
+    source_hash
   end  
   
 end
