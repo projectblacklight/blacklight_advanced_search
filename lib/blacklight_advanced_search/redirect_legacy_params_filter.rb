@@ -8,7 +8,8 @@
   #
   module BlacklightAdvancedSearch
     class RedirectLegacyParamsFilter
-      def self.filter(controller)      
+
+      def self.before(controller)
         params = controller.send(:params)
 
         if params[:f_inclusive]
