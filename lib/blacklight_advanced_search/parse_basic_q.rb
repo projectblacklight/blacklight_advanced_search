@@ -10,7 +10,7 @@ module BlacklightAdvancedSearch::ParseBasicQ
   extend ActiveSupport::Concern
   
   included do
-    solr_search_params_logic << :add_advanced_parse_q_to_solr
+    self.solr_search_params_logic += [:add_advanced_parse_q_to_solr]
   end
   
   
