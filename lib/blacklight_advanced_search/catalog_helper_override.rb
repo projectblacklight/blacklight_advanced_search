@@ -13,6 +13,10 @@ module BlacklightAdvancedSearch::CatalogHelperOverride
       my_params = my_params.dup
       my_params[:f_inclusive] = my_params[:f_inclusive].dup
       my_params[:f_inclusive].delete(field)
+
+      if my_params[:f_inclusive].empty?
+        my_params.delete :f_inclusive
+      end
     end
     my_params
   end
