@@ -12,7 +12,7 @@
       def self.before(controller)
         params = controller.send(:params)
 
-        if params[:f_inclusive]
+        if params[:f_inclusive] && params[:f_inclusive].respond_to?(:each_pair)
           legacy_converted = false
 
           params[:f_inclusive].each_pair do |field, value|
