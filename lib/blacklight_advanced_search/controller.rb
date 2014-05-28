@@ -15,7 +15,7 @@ module BlacklightAdvancedSearch::Controller
     
     
     # Parse app URL params used for adv searches 
-    solr_search_params_logic << :add_advanced_search_to_solr
+    self.solr_search_params_logic += [:add_advanced_search_to_solr]
     
     # Display advanced search constraints properly
     helper BlacklightAdvancedSearch::RenderConstraintsOverride
