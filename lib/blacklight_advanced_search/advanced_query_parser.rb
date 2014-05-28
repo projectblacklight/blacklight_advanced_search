@@ -51,7 +51,7 @@ module BlacklightAdvancedSearch
     def filters
       unless (@filters)
         @filters = {}
-        return @filters unless @params[:f_inclusive]
+        return @filters unless @params[:f_inclusive] && @params[:f_inclusive].respond_to?(:each_pair)
         @params[:f_inclusive].each_pair do |field, value_array|
           @filters[field] ||= value_array.dup
         end
