@@ -1,0 +1,3 @@
+module BlacklightAdvancedSearchHelper
+  include BlacklightAdvancedSearch::AdvancedHelperBehavior
+end
