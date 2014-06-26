@@ -21,4 +21,15 @@ class BlacklightAdvancedSearchGenerator < Rails::Generators::Base
     end
   end
 
+  def install_catalog_controller_mixin
+    inject_into_class "app/controllers/catalog_controller.rb", "CatalogController" do
+      '  include BlacklightAdvancedSearch::Controller'
+    end
+  end
+
+  def copy_helper
+    copy_file "advanced_search_helper.rb", "app/helpers/advanced_search_helper.rb"
+    inject_into_class 'app/helpers/application_helper.rb', ApplicationHelper, "  include AdvancedSearchHelper"
+  end    
+
 end

@@ -1,5 +1,6 @@
 class CatalogController < ApplicationController
   include Blacklight::Catalog
+  include BlacklightAdvancedSearch::Controller
 
   configure_blacklight do |config|
       config.default_solr_params = { 
