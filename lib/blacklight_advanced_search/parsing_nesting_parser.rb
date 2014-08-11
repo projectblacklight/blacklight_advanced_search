@@ -4,7 +4,7 @@ module BlacklightAdvancedSearch::ParsingNestingParser
   def process_query(params,config)
     queries = []
     keyword_queries.each do |field,query| 
-      queries << ParsingNesting::Tree.parse(query).to_query( local_param_hash(field, config)  )            
+      queries << ParsingNesting::Tree.parse(query, config.advanced_search[:query_parser]).to_query( local_param_hash(field, config) )
     end
     queries.join( ' ' + keyword_op + ' ')
   end
