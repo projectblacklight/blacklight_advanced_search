@@ -1,3 +1,6 @@
+require 'parslet'
+require 'parsing_nesting/tree'
+
 # A solr search logic mix-in to CatalogController. 
 # If mixed-in, adds Advanced Search parsing behavior
 # to queries entered on basic/standard/simple search
@@ -11,6 +14,14 @@ module BlacklightAdvancedSearch::ParseBasicQ
   
   included do
     self.solr_search_params_logic += [:add_advanced_parse_q_to_solr]
+  end
+
+  # Different versions of Parslet raise different exception classes,
+  # need to figure out which one exists to rescue
+  @@parslet_failed_exceptions = if defined? Parslet::UnconsumedInput
+    [Parslet::UnconsumedInput]
+  else
+    [Parslet::ParseFailed]
   end
   
   
@@ -41,10 +52,10 @@ module BlacklightAdvancedSearch::ParseBasicQ
       # and just allow basic search, perhaps with a warning.
       begin
         adv_search_params = ParsingNesting::Tree.parse(req_params[:q], blacklight_config.advanced_search[:query_parser]).to_single_query_params( solr_local_params )
-        
+
         BlacklightAdvancedSearch.deep_merge!(solr_parameters, solr_direct_params)
         BlacklightAdvancedSearch.deep_merge!(solr_parameters, adv_search_params)        
-      rescue Parslet::UnconsumedInput => e 
+      rescue *@@parslet_failed_exceptions => e
         # do nothing, don't merge our input in, keep basic search
         # optional TODO, display error message in flash here, but hard to 
         # display a good one. 
