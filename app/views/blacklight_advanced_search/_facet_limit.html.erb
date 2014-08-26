@@ -12,6 +12,5 @@
     <% end %>
     </ul>
   </div>
-
-  <%= render_facet_limit display_facet, :layout => nil, :partial => 'catalog/facet_limit' %>
+  <%= render_facet_limit display_facet, :layout => nil, :partial => advanced_search_facet_partial_name(display_facet) %>
 </div>
