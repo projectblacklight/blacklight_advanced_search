@@ -22,11 +22,8 @@ Gem::Specification.new do |s|
 
   s.add_development_dependency "blacklight_marc"
   s.add_development_dependency "rails"
-  s.add_development_dependency "rspec-rails"
+  s.add_development_dependency "rspec-rails", "~> 2.99"
+  s.add_development_dependency "capybara"
   s.add_development_dependency 'jettywrapper', ">= 1.4.2"
-
-  # engine_cart 0.3 is out, but can't run tests if we're using it,
-  # not sure what we need to change to work with 0.3, possibly cbeer
-  # might know, in the meantime locking to 0.2.x. 
-  s.add_development_dependency 'engine_cart', "~> 0.2.2"
+  s.add_development_dependency 'engine_cart', "~> 0.4"
 end
