@@ -15,46 +15,46 @@ module ParseTreeSpecHelper
   # make sure they are and return the element
   def parse_one_element(s)
     l = parse(s)
-    l.should be_kind_of( List )
-    l.list.length.should == 1
+    expect(l).to be_kind_of( List )
+    expect(l.list.length).to eq(1)
     return l.list.first
   end
   
   def should_be_and_list(graph)
-    graph.should be_kind_of( AndList )
+    expect(graph).to be_kind_of( AndList )
     yield graph.list if block_given?
   end
   
   def should_be_list(graph)
-    graph.should be_kind_of( List)
+    expect(graph).to be_kind_of( List)
     yield graph.list if block_given?
   end
   
   def should_be_or_list(graph)
-    graph.should be_kind_of( OrList )
+    expect(graph).to be_kind_of( OrList )
     yield graph.list if block_given?
   end
   
   def should_be_term(graph, value)
-    graph.should be_kind_of( Term )
-    graph.value.should == value
+    expect(graph).to be_kind_of( Term )
+    expect(graph.value).to eq(value)
   end
   
   def should_be_phrase(graph, value)
-    graph.should be_kind_of( Phrase )
-    graph.value.should == value
+    expect(graph).to be_kind_of( Phrase )
+    expect(graph.value).to eq(value)
   end
   
   def should_be_mandatory(graph)
-    graph.should be_kind_of(MandatoryClause)
+    expect(graph).to be_kind_of(MandatoryClause)
     yield graph.operand if block_given?
   end
   def should_be_excluded(graph)
-    graph.should be_kind_of(ExcludedClause)
+    expect(graph).to be_kind_of(ExcludedClause)
     yield graph.operand if block_given?
   end
   def should_be_not_expression(graph)
-    graph.should be_kind_of(NotExpression)
+    expect(graph).to be_kind_of(NotExpression)
     yield graph.operand if block_given?
   end
 end
@@ -66,7 +66,7 @@ describe "NestingParser" do
     
     it "should build for term list" do
       should_be_list parse("one two three")  do |list|
-        list.length.should == 3
+        expect(list.length).to eq(3)
         should_be_term list[0], "one"
         should_be_term list[1], "two"
         should_be_term list[2], "three"        
@@ -75,7 +75,7 @@ describe "NestingParser" do
     
     it "should build AND list" do
       should_be_and_list parse_one_element("one AND two AND three") do |list|
-        list.length.should == 3
+        expect(list.length).to eq(3)
         
         should_be_term list[0], "one"
         should_be_term list[1], "two"
@@ -85,7 +85,7 @@ describe "NestingParser" do
     
     it "should build OR list" do
       should_be_or_list parse_one_element("one OR two OR three") do |list|        
-        list.length.should == 3
+        expect(list.length).to eq(3)
         should_be_term list[0], "one"
         should_be_term list[1], "two"
         should_be_term list[2], "three"                  
@@ -94,7 +94,7 @@ describe "NestingParser" do
     
     it "allows AND list of lists" do
       should_be_and_list parse_one_element('(one two) AND (blue yellow)') do |and_list|
-        and_list.length.should == 2
+        expect(and_list.length).to eq(2)
         should_be_list and_list[0] do |list|
           should_be_term(list[0], "one")
           should_be_term(list[1], "two")
@@ -105,7 +105,7 @@ describe "NestingParser" do
     
     it "should build for mandatory and excluded" do
       should_be_list parse("+one -two") do |list|
-        list.length.should == 2
+        expect(list.length).to eq(2)
         
         should_be_mandatory list[0] do |operand|
           should_be_term(operand, "one")
@@ -119,7 +119,7 @@ describe "NestingParser" do
     
     it "should build phrases" do
       should_be_list parse('"quick brown" +"jumps over" -"lazy dog"') do |list|
-        list.length.should == 3
+        expect(list.length).to eq(3)
         
         should_be_phrase(list[0], "quick brown")
       
@@ -169,12 +169,12 @@ describe "NestingParser" do
     
     it "should bind OR more tightly than AND" do
       should_be_and_list parse_one_element("grey AND big OR small AND tail") do |list|        
-        list.length.should == 3
+        expect(list.length).to eq(3)
         
         should_be_term list[0], "grey"
         
         should_be_or_list list[1] do |or_list|
-            or_list.length.should == 2
+            expect(or_list.length).to eq(2)
             should_be_term or_list[0], "big"
             should_be_term or_list[1], "small"         
         end
@@ -185,17 +185,17 @@ describe "NestingParser" do
     
     it "should parse AND'd lists" do      
       should_be_and_list parse_one_element("(foo bar one AND two) AND (three four ten OR twelve)") do |list|                
-        list.length.should == 2        
+        expect(list.length).to eq(2)        
         
         should_be_list(list[0]) do |first_half|
-          first_half[0].value.should == 'foo'
-          first_half[1].value.should == "bar"
+          expect(first_half[0].value).to eq('foo')
+          expect(first_half[1].value).to eq("bar")
           should_be_and_list(first_half[2])          
         end
         
         should_be_list(list[1]) do |second_half|
-          second_half[0].value.should == "three"
-          second_half[1].value.should == "four"
+          expect(second_half[0].value).to eq("three")
+          expect(second_half[1].value).to eq("four")
           should_be_or_list second_half[2]          
         end
       end
@@ -215,7 +215,7 @@ describe "NestingParser" do
             should_be_term or_list[1], "fun"
             
             should_be_and_list or_list[2] do |and_list|
-              and_list.length.should == 2
+              expect(and_list.length).to eq(2)
               
               should_be_and_list and_list[0]
               

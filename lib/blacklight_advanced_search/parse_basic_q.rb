@@ -11,6 +11,8 @@ require 'parsing_nesting/tree'
 # in your CatalogController
 module BlacklightAdvancedSearch::ParseBasicQ
   extend ActiveSupport::Concern
+
+  include Blacklight::SearchFields
   
   included do
     self.solr_search_params_logic += [:add_advanced_parse_q_to_solr]

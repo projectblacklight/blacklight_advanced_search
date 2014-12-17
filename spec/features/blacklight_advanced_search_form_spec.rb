@@ -11,35 +11,35 @@ describe "Blacklight Advanced Search Form" do
     end
 
     it "should have field and facet blocks" do
-      page.should have_selector('.query-criteria')
-      page.should have_selector('.limit-criteria')
+      expect(page).to have_selector('.query-criteria')
+      expect(page).to have_selector('.limit-criteria')
     end
 
     describe "query column" do
       it "should give the user a choice between and/or queries" do
-        page.should have_selector('#op')
+        expect(page).to have_selector('#op')
         within('#op') do
-          page.should have_selector('option[value="AND"]')
-          page.should have_selector('option[value="OR"]')
+          expect(page).to have_selector('option[value="AND"]')
+          expect(page).to have_selector('option[value="OR"]')
         end
       end
 
       it "should list the configured search fields" do
-        page.should have_selector '.advanced-search-field #title'
-        page.should have_selector '.advanced-search-field #author'
+        expect(page).to have_selector '.advanced-search-field #title'
+        expect(page).to have_selector '.advanced-search-field #author'
       end
 
       it "should not list the search fields listed as not to be included in adv search" do
-        page.should_not have_selector '.advanced_search_field #dummy_field'
+        expect(page).not_to have_selector '.advanced_search_field #dummy_field'
       end
     end
 
     describe "facet column" do
       it "should list facets" do
-        page.should have_selector('.blacklight-language_facet')
+        expect(page).to have_selector('.blacklight-language_facet')
 
         within('.blacklight-language_facet') do
-          page.should have_content "Language Facet"
+          expect(page).to have_content "Language Facet"
         end
       end
     end
@@ -47,14 +47,13 @@ describe "Blacklight Advanced Search Form" do
     it "scope searches to fields" do
       fill_in "title", :with => "Medicine"
       click_on "advanced-search-submit"
-      puts page.current_url
-      page.should have_content "Remove constraint Title: Medicine"
-      page.should have_content "2007020969"
+      expect(page).to have_content "Remove constraint Title: Medicine"
+      expect(page).to have_content "2007020969"
     end
   end
 
   it "should show the search fields" do
     visit '/advanced'
-    page.should have_selector('input#title')
+    expect(page).to have_selector('input#title')
   end
 end
