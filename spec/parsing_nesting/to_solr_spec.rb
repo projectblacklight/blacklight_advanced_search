@@ -18,19 +18,19 @@ module SolrQuerySpecHelper
   
   # yields localparam string, and the actual internal query
   def local_param_match(query)
-    query.should =~ /^ *_query_:\"\{([^}]+)\}(.*)" *$/
+    expect(query).to match(/^ *_query_:\"\{([^}]+)\}(.*)" *$/)
     query =~ /^ *_query_:\"\{([^}]+)\}(.*)" *$/
-    (param_str = $1).should_not be_nil
-    (query = $2).should_not be_nil
+    expect(param_str = $1).not_to be_nil
+    expect(query = $2).not_to be_nil
     
     yield [param_str, query] if block_given?
   end
   
   def bare_local_param_match(query)
-    query.should =~ / *\{([^}]+)\}(.*)/
+    expect(query).to match(/ *\{([^}]+)\}(.*)/)
     query =~ /\{([^}]+)\}(.*)/
-    (param_str = $1).should_not be_nil
-    (query = $2).should_not be_nil
+    expect(param_str = $1).not_to be_nil
+    expect(query = $2).not_to be_nil
     yield [param_str, query] if block_given?
   end
   
@@ -55,7 +55,7 @@ module SolrQuerySpecHelper
     regexp_str = regexp_str.gsub("(", '\(').gsub(')', '\)').gsub("$QUERY", nested_re).gsub("$ALL", "\\*\\:\\*")
     regexp = Regexp.new('^ *' + regexp_str + ' *$')
 
-    top_query.should match( regexp )
+    expect(top_query).to match( regexp )
     
     yield *regexp.match(top_query).captures if block_given?    
   end
@@ -71,14 +71,14 @@ describe "NestingParser" do
       end
       it "should include LocalParams" do
         local_param_match(@query) do |params, query|
-          params.should include("pf=$pf_title")
-          params.should include('qf=\'field field2^5\'')          
+          expect(params).to include("pf=$pf_title")
+          expect(params).to include('qf=\'field field2^5\'')          
         end                
       end
       
       it "should include the query" do
         local_param_match(@query) do |params, query|
-          query.should == "one two three"
+          expect(query).to eq("one two three")
         end
       end
     end
@@ -87,16 +87,16 @@ describe "NestingParser" do
       it "should insist on dismax for nested query" do
         query = parse("one two three").to_query(:defType => "field", :qf=>"$qf")
         local_param_match(query) do |params, query|
-          params.should match(/^\!dismax /)
-          params.should_not match(/field/)
+          expect(params).to match(/^\!dismax /)
+          expect(params).not_to match(/field/)
         end
       end
 
       it "should insist on edismax for nested query" do
         query = parse("one two three", 'edismax').to_query(:defType => "field", :qf=>"$qf")
         local_param_match(query) do |params, query|
-          params.should match(/^\!edismax qf=\$qf/)
-          params.should_not match(/field/)
+          expect(params).to match(/^\!edismax qf=\$qf/)
+          expect(params).not_to match(/field/)
         end
       end
     end
@@ -109,7 +109,7 @@ describe "NestingParser" do
       end
       it "should include query" do
         local_param_match(@full_query) do |params, query|
-          query.should == @inner_query.gsub('"', '\\\\"')
+          expect(query).to eq(@inner_query.gsub('"', '\\\\"'))
         end
       end
     end
@@ -120,7 +120,7 @@ describe "NestingParser" do
       end
       it "should flatten to one dismax query" do
         local_param_match(@query) do |params, query|
-          query.should == "one +two +three"
+          expect(query).to eq("one +two +three")
         end
       end
       
@@ -130,7 +130,7 @@ describe "NestingParser" do
         end
         it "should preserve +/- operators" do
           local_param_match(@query) do |params, query|
-            query.should == "one -two +three"
+            expect(query).to eq("one -two +three")
           end
         end
       end
@@ -141,7 +141,7 @@ describe "NestingParser" do
         end
         it "should flatten into dismax" do
           local_param_match(@query) do |params, query|
-            query.should == "blue +green -violet +big -small +medium"
+            expect(query).to eq("blue +green -violet +big -small +medium")
           end
         end
       end     
@@ -149,8 +149,8 @@ describe "NestingParser" do
       it "for simple OR list, forcing mm=1" do
         query = parse("one OR two OR three").to_query(:qf => "$qf", :mm=>"50%")        
         local_param_match(query) do |params, query|
-          params.should include("mm=1")
-          query.should == "one two three"
+          expect(params).to include("mm=1")
+          expect(query).to eq("one two three")
         end                
       end
     end
@@ -165,13 +165,13 @@ describe "NestingParser" do
         query_template_matcher(query, "( *$QUERY +OR +$QUERY *)" ) do |first_half, second_half|
                 
           local_param_match(first_half) do |params, query|
-            params.should include("qf=$qf")
-            query.should == "one two three"
+            expect(params).to include("qf=$qf")
+            expect(query).to eq("one two three")
           end
           
           local_param_match(second_half) do |params, query|
-            params.should include("qf=$qf")
-            query.should == "red -green +blue"
+            expect(params).to include("qf=$qf")
+            expect(query).to eq("red -green +blue")
           end
         end
       end
@@ -181,8 +181,8 @@ describe "NestingParser" do
         query = parse("a OR b AND x OR y").to_query( params )
         
         query_template_matcher(query, "( *$QUERY +AND +$QUERY *)" ) do |first, second|                
-          first.should == parse("a OR b").to_query(params)
-          second.should == parse("x OR y").to_query(params)
+          expect(first).to eq(parse("a OR b").to_query(params))
+          expect(second).to eq(parse("x OR y").to_query(params))
         end
       end
       
@@ -191,8 +191,8 @@ describe "NestingParser" do
         query = parse("(one +two three) AND (four five -six)").to_query( params )
                 
         query_template_matcher(query, "( *$QUERY +AND +$QUERY *)" ) do |first, second|
-          first.should == parse("one +two three").to_query(params)
-          second.should == parse("four five -six").to_query(params)          
+          expect(first).to eq(parse("one +two three").to_query(params))
+          expect(second).to eq(parse("four five -six").to_query(params))          
         end
                 
       end
@@ -202,18 +202,18 @@ describe "NestingParser" do
         
         query_template_matcher(query, "( *$QUERY +AND +( *$QUERY +OR +($ALL AND NOT $QUERY *) *) +AND NOT $QUERY *)") do |red_q, dawn_q, night_q, moscow_q|
         
-          local_param_match(red_q) { |params, query| query.should == "red" }            
+          local_param_match(red_q) { |params, query| expect(query).to eq("red") }            
         
-          local_param_match(dawn_q) { |params, query| query.should == "dawn"}
+          local_param_match(dawn_q) { |params, query| expect(query).to eq("dawn")}
           
           local_param_match(night_q) do |params, query|
-            params.should include("mm=1")
-            query.should == "night afternoon"
+            expect(params).to include("mm=1")
+            expect(query).to eq("night afternoon")
           end
           
           local_param_match(moscow_q) do |params, query|
-            params.should include("mm=1")
-            query.should == "moscow beach"
+            expect(params).to include("mm=1")
+            expect(query).to eq("moscow beach")
           end
         
         end
@@ -228,7 +228,7 @@ describe "NestingParser" do
         query = parse("NOT frog").to_query
           
         query_template_matcher(query, "NOT $QUERY") do |q|
-          q.should == parse("frog").to_query
+          expect(q).to eq(parse("frog").to_query)
         end                    
       end
       it "binds tightly" do
@@ -237,11 +237,11 @@ describe "NestingParser" do
         query_template_matcher(query, "$QUERY AND NOT $QUERY") do |q1, q2|
           
           local_param_match(q1) do |params, query|
-            query.should == "one three"
+            expect(query).to eq("one three")
           end
           
           local_param_match(q2) do |params, query|
-            query.should == "two"
+            expect(query).to eq("two")
           end
         end
         
@@ -250,9 +250,9 @@ describe "NestingParser" do
         query = parse("one OR two NOT (three OR four AND five)").to_query
         #"_query_:'{!dismax mm=1}one two' AND NOT ( _query_:'{!dismax mm=1}three four' AND _query_:'{!dismax }five' )"
         query_template_matcher(query, "$QUERY +AND NOT +( *$QUERY +AND +$QUERY *)") do |external_or, internal_or, internal_term|
-          external_or.should == parse("one OR two").to_query
-          internal_or.should == parse("three OR four").to_query 
-          internal_term.should == parse("five").to_query 
+          expect(external_or).to eq(parse("one OR two").to_query)
+          expect(internal_or).to eq(parse("three OR four").to_query) 
+          expect(internal_term).to eq(parse("five").to_query) 
         end        
       end
       
@@ -269,8 +269,8 @@ describe "NestingParser" do
         
         query_template_matcher(query, " *NOT $QUERY") do |query|
           local_param_match(query) do |params, query|
-            params.should include("mm=1")
-            query.should == 'one two \\"a phrase\\"'
+            expect(params).to include("mm=1")
+            expect(query).to eq('one two \\"a phrase\\"')
           end
         end
         
@@ -281,8 +281,8 @@ describe "NestingParser" do
         
         query_template_matcher(query, "NOT $QUERY") do |query|
           local_param_match(query) do |params, query|
-            params.should =~ /mm=1 |$/
-            query.should == 'one two three'
+            expect(params).to match(/mm=1 |$/)
+            expect(query).to eq('one two three')
           end
         end
       end
@@ -292,8 +292,8 @@ describe "NestingParser" do
         
         query_template_matcher(query, "NOT $QUERY") do |query|
           local_param_match(query) do |params, query|
-            params.should include("mm=100%")
-            query.should == "one two three"
+            expect(params).to include("mm=100%")
+            expect(query).to eq("one two three")
           end
         end
 
@@ -316,28 +316,28 @@ describe "NestingParser" do
       describe "simple search" do
         it "should work with local params" do
           hash = parse("one +two -three").to_single_query_params(@solr_local_params)
-          hash[:defType].should == "dismax"
+          expect(hash[:defType]).to eq("dismax")
           bare_local_param_match(hash[:q]) do |params, query|
-            query.should == "one +two -three"
-            params.should include("pf=$title_pf")
-            params.should include("qf=$title_qf")
+            expect(query).to eq("one +two -three")
+            expect(params).to include("pf=$title_pf")
+            expect(params).to include("qf=$title_qf")
           end
         end
         
         it "should work without local params" do
           hash = parse("one +two -three").to_single_query_params({})
-          hash[:defType].should == "dismax"
-          hash[:q].should == "one +two -three"          
+          expect(hash[:defType]).to eq("dismax")
+          expect(hash[:q]).to eq("one +two -three")          
         end
       end
       describe "simple pure negative" do
         it "should be nested NOT" do
           hash = parse("-one -two").to_single_query_params({})
-          hash[:defType].should == "dismax"
+          expect(hash[:defType]).to eq("dismax")
           query_template_matcher(hash[:q], "NOT $QUERY") do |query|
             local_param_match(query) do |params, query|
-              query.should == "one two"
-              params.should include("mm=1")
+              expect(query).to eq("one two")
+              expect(params).to include("mm=1")
             end            
           end
         end
@@ -345,16 +345,16 @@ describe "NestingParser" do
       describe "complex query" do
         it "should parse" do
           hash = parse("one AND (two OR three)").to_single_query_params({})
-          hash[:defType].should == "lucene"
+          expect(hash[:defType]).to eq("lucene")
           query_template_matcher(hash[:q], "( *$QUERY +AND +$QUERY *)") do |first, second|
             local_param_match(first) do |params, query|
-              params.should include("dismax")
-              query.should == "one"
+              expect(params).to include("dismax")
+              expect(query).to eq("one")
             end
             local_param_match(second) do |params, query|
-              params.should include("mm=1")
-              params.should include("dismax")
-              query.should == "two three"
+              expect(params).to include("mm=1")
+              expect(params).to include("dismax")
+              expect(query).to eq("two three")
             end
           end
         end

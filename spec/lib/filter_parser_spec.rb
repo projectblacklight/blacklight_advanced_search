@@ -18,9 +18,9 @@ describe "BlacklightAdvancedSearch::FilterParser" do
 
       fq_params = generate_solr_fq
 
-      fq_params.find {|a| a =~ /format\:\((\"Book\"|\"Thesis\") +OR +(\"Thesis\"|\"Book\")/}.should_not be_nil
+      expect(fq_params.find {|a| a =~ /format\:\((\"Book\"|\"Thesis\") +OR +(\"Thesis\"|\"Book\")/}).not_to be_nil
 
-      fq_params.find {|a| a =~ /location\:\((\"Library\"|\"Online\") +OR +(\"Library\"|\"Online\")/}.should_not be_nil
+      expect(fq_params.find {|a| a =~ /location\:\((\"Library\"|\"Online\") +OR +(\"Library\"|\"Online\")/}).not_to be_nil
       
 
     end    
