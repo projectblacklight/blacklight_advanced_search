@@ -22,7 +22,7 @@ Gem::Specification.new do |s|
 
   s.add_development_dependency "blacklight_marc"
   s.add_development_dependency "rails"
-  s.add_development_dependency "rspec-rails", "~> 2.99"
+  s.add_development_dependency "rspec-rails", "~> 3.0"
   s.add_development_dependency "capybara"
   s.add_development_dependency 'jettywrapper', ">= 1.4.2"
   s.add_development_dependency 'engine_cart', "~> 0.6"
