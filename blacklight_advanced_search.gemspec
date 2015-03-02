@@ -20,7 +20,6 @@ Gem::Specification.new do |s|
   s.add_dependency "blacklight", ">= 5.2", "< 6.0"
   s.add_dependency "parslet"
 
-  s.add_development_dependency "blacklight_marc"
   s.add_development_dependency "rails"
   s.add_development_dependency "rspec-rails", "~> 3.0"
   s.add_development_dependency "capybara"
