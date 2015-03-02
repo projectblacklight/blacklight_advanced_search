@@ -12,14 +12,13 @@ module BlacklightAdvancedSearch::RenderConstraintsOverride
   end
 
   #Over-ride of Blacklight method, provide advanced constraints if needed,
-  # otherwise call super. Existence of an @advanced_query instance variable
-  # is our trigger that we're in advanced mode.
+  # otherwise call super.
   def render_constraints_query(my_params = params)
-    if (@advanced_query.nil? || @advanced_query.keyword_queries.empty? )
+    if (advanced_query.nil? || advanced_query.keyword_queries.empty? )
       return super(my_params)
     else
       content = []
-      @advanced_query.keyword_queries.each_pair do |field, query|
+      advanced_query.keyword_queries.each_pair do |field, query|
         label = search_field_def_for_key(field)[:label]
         content << render_constraint_element(
           label, query,
@@ -27,8 +26,8 @@ module BlacklightAdvancedSearch::RenderConstraintsOverride
             catalog_index_path(remove_advanced_keyword_query(field,my_params))
         )
       end
-      if (@advanced_query.keyword_op == "OR" &&
-          @advanced_query.keyword_queries.length > 1)
+      if (advanced_query.keyword_op == "OR" &&
+          advanced_query.keyword_queries.length > 1)
         content.unshift content_tag(:span, "Any of:", class:'operator')
         content_tag :span, class: "inclusive_or appliedFilter well" do
           safe_join(content.flatten, "\n")
@@ -40,13 +39,12 @@ module BlacklightAdvancedSearch::RenderConstraintsOverride
   end
 
   #Over-ride of Blacklight method, provide advanced constraints if needed,
-  # otherwise call super. Existence of an @advanced_query instance variable
-  # is our trigger that we're in advanced mode.
+  # otherwise call super.
   def render_constraints_filters(my_params = params)
     content = super(my_params)
 
-    if (@advanced_query)
-      @advanced_query.filters.each_pair do |field, value_list|
+    if (advanced_query)
+      advanced_query.filters.each_pair do |field, value_list|
         label = facet_field_label(field)
         content << render_constraint_element(label,
           safe_join(value_list, " <strong class='text-muted constraint-connector'>OR</strong> ".html_safe),

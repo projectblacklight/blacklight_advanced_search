@@ -12,16 +12,14 @@ describe "NestingParser" do
   # It gets kind of a mess of dependencies, sorry. 
   class ParseBasicQTestClass
     cattr_accessor :blacklight_config
-    cattr_accessor :blacklight_solr
 
-    include Blacklight::SolrHelper
+    include Blacklight::SearchHelper
     
     include BlacklightAdvancedSearch::ParseBasicQ
 
 
-    def initialize blacklight_config, blacklight_solr
+    def initialize blacklight_config
       self.blacklight_config = blacklight_config
-      self.blacklight_solr = blacklight_solr
     end
 
     def params
@@ -48,7 +46,7 @@ describe "NestingParser" do
           field.advanced_parse = false
         end
       end
-      @obj = ParseBasicQTestClass.new @blacklight_config, Blacklight.solr 
+      @obj = ParseBasicQTestClass.new @blacklight_config 
     end
 
     it "catches a simple example" do

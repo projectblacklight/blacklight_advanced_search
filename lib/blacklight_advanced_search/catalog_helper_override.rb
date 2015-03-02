@@ -24,7 +24,7 @@ module BlacklightAdvancedSearch::CatalogHelperOverride
   # Special display for facet limits that include adv search inclusive
   # or limits.
   def facet_partial_name(display_facet = nil)
-    return "blacklight_advanced_search/facet_limit" if @advanced_query && @advanced_query.filters.keys.include?( display_facet.name )
+    return "blacklight_advanced_search/facet_limit" if advanced_query && advanced_query.filters.keys.include?( display_facet.name )
     super 
   end
 

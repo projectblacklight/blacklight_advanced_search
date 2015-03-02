@@ -14,7 +14,6 @@ require 'engine_cart/rake_task'
 EngineCart.fingerprint_proc = EngineCart.rails_fingerprint_proc
 
 require 'jettywrapper'
-require 'blacklight'
 
 task :default => :ci
 
