@@ -15,7 +15,7 @@ class TestAppGenerator < Rails::Generators::Base
   end
 
   def run_blacklight_advanced_search
-    generate 'blacklight_advanced_search', '--force'
+    generate 'blacklight_advanced_search:install', '--force'
   end
 
   def run_test_support_generator
