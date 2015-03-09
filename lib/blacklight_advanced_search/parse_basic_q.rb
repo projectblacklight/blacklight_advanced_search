@@ -15,7 +15,7 @@ module BlacklightAdvancedSearch::ParseBasicQ
   include Blacklight::SearchFields
   
   included do
-    self.solr_search_params_logic += [:add_advanced_parse_q_to_solr]
+    self.search_params_logic += [:add_advanced_parse_q_to_solr]
   end
 
   # Different versions of Parslet raise different exception classes,
@@ -27,9 +27,9 @@ module BlacklightAdvancedSearch::ParseBasicQ
   end
   
   
-  # This method can be included in solr_search_params_logic to have us
+  # This method can be included in search_params_logic to have us
   # parse an ordinary entered :q for AND/OR/NOT and produce appropriate
-  # Solr query. Note that it is NOT included in solr_search_params_logic
+  # Solr query. Note that it is NOT included in search_params_logic
   # by default when this module is included, because it is optional behavior.
   # BlacklightAdvancedSearch init code will add it to CatalogController
   # if it's configured to do so. You can of course add it yourself

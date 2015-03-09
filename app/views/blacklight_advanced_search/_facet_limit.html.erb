@@ -2,7 +2,7 @@
   <div class="inclusive_or well">
     <h4>Any of:</h4>
     <ul class="list-unstyled facet-values">
-    <% @advanced_query.filters[solr_field].each do |value| %>
+    <% advanced_query.filters[solr_field].each do |value| %>
         <li>
             <span class="selected"><%= h(value) %></span> 
             <%= link_to(remove_advanced_facet_param(solr_field, value, params), :class => "remove") do %>
