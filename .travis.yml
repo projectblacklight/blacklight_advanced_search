@@ -2,10 +2,10 @@ notifications:
   email: false
 
 rvm:
+  - 2.2
   - 2.1
-  - 2.0
-  - 1.9.3
-  - jruby-19mode
+  # - 1.9.3
+  # - jruby-19mode
 
 notifications:
   irc: "irc.freenode.org#blacklight"
