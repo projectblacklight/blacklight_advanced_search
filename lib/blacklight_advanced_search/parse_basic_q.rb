@@ -11,6 +11,9 @@ require 'parsing_nesting/tree'
 # in your CatalogController
 module BlacklightAdvancedSearch::ParseBasicQ
   extend ActiveSupport::Concern
+  extend Deprecation
+
+  self.deprecation_horizon = 'blacklight_advanced_search 6.0'
 
   include Blacklight::SearchFields
   
@@ -65,5 +68,6 @@ module BlacklightAdvancedSearch::ParseBasicQ
       end
     end
   end
+  deprecation_deprecate add_advanced_parse_q_to_solr: "use AdvancedSearchBuilder.add_advanced_parse_q_to_solr"
 
 end

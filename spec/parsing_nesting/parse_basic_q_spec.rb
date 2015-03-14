@@ -32,7 +32,7 @@ describe "NestingParser" do
   end
 
   describe "basic functionality" do
-    before do 
+    before do
       @blacklight_config = Blacklight::Configuration.new do |config|
         config.advanced_search = {
 
@@ -50,6 +50,7 @@ describe "NestingParser" do
     end
 
     it "catches a simple example" do
+      expect(Deprecation).to receive(:warn)
       solr_params = {}
       @obj.add_advanced_parse_q_to_solr(solr_params, :q => "one two AND three OR four") 
 
@@ -60,6 +61,7 @@ describe "NestingParser" do
     end
 
     it "passes through an unparseable example" do
+      expect(Deprecation).to receive(:warn)
       solr_params = {}
       unparseable_q = "foo bar\'s AND"
       @obj.add_advanced_parse_q_to_solr(solr_params, :q => unparseable_q)
@@ -68,6 +70,7 @@ describe "NestingParser" do
     end
 
     it "ignores field with advanced_parse=false" do
+      expect(Deprecation).to receive(:warn)
       solr_params = {}
       original_q = "one two AND three OR four"
       @obj.add_advanced_parse_q_to_solr(solr_params, 
