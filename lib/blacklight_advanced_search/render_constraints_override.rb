@@ -23,7 +23,7 @@ module BlacklightAdvancedSearch::RenderConstraintsOverride
         content << render_constraint_element(
           label, query,
           :remove =>
-            search_action_path(remove_advanced_keyword_query(field, my_params))
+            search_action_path(remove_advanced_keyword_query(field, my_params).except(:controller, :action))
         )
       end
       if (advanced_query.keyword_op == "OR" &&
@@ -48,7 +48,7 @@ module BlacklightAdvancedSearch::RenderConstraintsOverride
         label = facet_field_label(field)
         content << render_constraint_element(label,
           safe_join(value_list, " <strong class='text-muted constraint-connector'>OR</strong> ".html_safe),
-          :remove => search_action_path( remove_advanced_filter_group(field, my_params) )
+          :remove => search_action_path( remove_advanced_filter_group(field, my_params).except(:controller, :action) )
           )
       end
     end
