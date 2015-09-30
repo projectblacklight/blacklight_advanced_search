@@ -1,5 +1,7 @@
 This is an advanced search plugin for Blacklight ( http://www.projectblacklight.org ).  
 
+[![Gem Version](https://badge.fury.io/rb/blacklight_advanced_search.svg)](http://badge.fury.io/rb/blacklight_advanced_search)  [![Build Status](https://travis-ci.org/projectblacklight/blacklight_advanced_search.svg)](https://travis-ci.org/projectblacklight/blacklight_advanced_search)
+
 ## Blacklight version compatibility
 
 This is a plugin for [Blacklight](http://github.com/projectblacklight/blacklight)
