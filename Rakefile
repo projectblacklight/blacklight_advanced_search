@@ -26,7 +26,7 @@ end
   task :fixtures => ['engine_cart:generate'] do
     within_test_app do
       ENV['RAILS_ENV'] ||= 'test'
-      system "rake blacklight:solr:seed"
+      system "rake blacklight:index:seed"
       abort "Error running fixtures" unless $?.success?
     end
   end
