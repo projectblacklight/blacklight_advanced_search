@@ -76,5 +76,25 @@ module BlacklightAdvancedSearch
         end
       end
     end
+
+    # A Solr param filter that is NOT included by default in the chain,
+    # but is appended by AdvancedController#index, to do a search
+    # for facets _ignoring_ the current query, we want the facets
+    # as if the current query weren't there. 
+    #
+    # Also adds any solr params set in blacklight_config.advanced_search[:form_solr_parameters]
+    def facets_for_advanced_search_form(solr_p)
+      # ensure empty query is all records, to fetch available facets on entire corpus
+      solr_p["q"]            = '{!lucene}*:*'
+
+      # We only care about facets, we don't need any rows. 
+      solr_p["rows"]         = "0"
+
+      # Anything set in config as a literal
+      if blacklight_config.advanced_search[:form_solr_parameters]
+        solr_p.merge!( blacklight_config.advanced_search[:form_solr_parameters] ) 
+      end
+
+    end
   end
 end
