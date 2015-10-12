@@ -7,7 +7,7 @@ describe "Blacklight Advanced Search Form" do
 
   describe "advanced search form" do
     before do
-      visit '/advanced'
+      visit '/advanced?hypothetical_existing_param=true&q=ignore+this+existing+query'
     end
 
     it "should have field and facet blocks" do
