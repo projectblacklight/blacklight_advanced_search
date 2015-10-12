@@ -39,7 +39,7 @@ then run 'bundle install'.  Then run:
 * The 'generate' command will install 'require' statements for the plugin's assets into your application's application.js/application.css asset pipeline files
 * And it can optionally install a localized search form with a link to advanced search. If you've already localized your search form you'll want to do this manually instead. 
 
-You may want to  `include BlacklightAdvancedSearch::ParseBasicQ` in your CatalogController to enable AND/OR/NOT parsing even in ordinary search, this is not on by default.  
+You may want turn to enable AND/OR/NOT parsing even in ordinary search, this is not on by default.  See "Expression parsing in ordinary search" below. 
 
 ## Accessing
  
@@ -66,7 +66,11 @@ If your application uses a single Solr qt request handler for all its search fie
 
 Turn this feature on by adding to your CatalogController definition:
 
-    include BlacklightAdvancedSearch::ParseBasicQ
+    self.search_params_logic << :add_advanced_parse_q_to_solr
+
+And/or, if you've switched over to configuration in SearchBuilder, then to your ./app/models/search_builder.rb:
+
+    self.default_processor_chain << :add_advanced_parse_q_to_solr
 
 This will intercept queries entered in ordinary Blacklight search interface, and parse them for AND/OR/NOT (and parens), producing appropriate Solr query. This allows single-field boolean expressions to be entered in ordinary search, providing a consistent experience with advanced search. 
 
