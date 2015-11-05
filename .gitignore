@@ -4,6 +4,7 @@ coverage/
 log/*
 *.log
 /spec/internal
+.internal_test_app
 /jetty
 Gemfile.lock
 pkg/*
