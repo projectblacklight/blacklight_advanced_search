@@ -13,16 +13,6 @@ module BlacklightAdvancedSearch::Controller
     blacklight_config.advanced_search[:query_parser] ||= 'dismax'
     blacklight_config.advanced_search[:form_solr_parameters] ||= {}
 
-    # Silence deprecations that occur when this code is executed before blacklight
-    # has generated a SearchBuilder.
-    Deprecation.silence Blacklight::Configuration do
-      unless blacklight_config.search_builder_class.include? BlacklightAdvancedSearch::AdvancedSearchBuilder
-        blacklight_config.search_builder_class.send(:include,
-                BlacklightAdvancedSearch::AdvancedSearchBuilder
-            )
-      end
-    end
-
     # Display advanced search constraints properly
     helper BlacklightAdvancedSearch::RenderConstraintsOverride
     helper BlacklightAdvancedSearch::CatalogHelperOverride
