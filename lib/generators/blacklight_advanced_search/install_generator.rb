@@ -7,8 +7,16 @@ module BlacklightAdvancedSearch
     def inject_asset_requires
       generate "blacklight_advanced_search:assets"
     end
-    
-    
+
+    def inject_search_builder
+      inject_into_class "app/models/search_builder.rb", "SearchBuilder" do
+        <<-EOF
+          include BlacklightAdvancedSearch::AdvancedSearchBuilder
+          self.default_processor_chain << :add_advanced_parse_q_to_solr
+        EOF
+      end
+    end
+
     def install_localized_search_form
       if options[:force] or yes?("Install local search form with advanced link? (y/N)", :green)
         # We're going to copy the search from from actual currently loaded

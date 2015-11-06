@@ -64,11 +64,7 @@ If your application uses a single Solr qt request handler for all its search fie
 
 ### Expression parsing in ordinary search
 
-Turn this feature on by adding to your CatalogController definition:
-
-    self.search_params_logic << :add_advanced_parse_q_to_solr
-
-And/or, if you've switched over to configuration in SearchBuilder, then to your ./app/models/search_builder.rb:
+Turn this feature on by adding to your SearchBuilder definition:
 
     self.default_processor_chain << :add_advanced_parse_q_to_solr
 

@@ -1,7 +1,7 @@
 require 'blacklight_advanced_search/parsing_nesting_parser'
 
 # This module gets included into CatalogController, or another SearchHelper
-# includer, to add behavior into search_params_logic.
+# includer, to add advanced search behavior
 module BlacklightAdvancedSearch::Controller
   extend ActiveSupport::Concern
 
@@ -12,11 +12,6 @@ module BlacklightAdvancedSearch::Controller
     blacklight_config.advanced_search[:url_key] ||= 'advanced'
     blacklight_config.advanced_search[:query_parser] ||= 'dismax'
     blacklight_config.advanced_search[:form_solr_parameters] ||= {}
-
-    if respond_to? :search_params_logic
-      # Parse app URL params used for adv searches
-      self.search_params_logic += [:add_advanced_search_to_solr]
-    end
 
     # Silence deprecations that occur when this code is executed before blacklight
     # has generated a SearchBuilder.
