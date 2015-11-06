@@ -9,11 +9,9 @@ module BlacklightAdvancedSearch
     end
 
     def inject_search_builder
-      inject_into_class "app/models/search_builder.rb", "SearchBuilder" do
-        <<-EOF
-          include BlacklightAdvancedSearch::AdvancedSearchBuilder
-          self.default_processor_chain << :add_advanced_parse_q_to_solr
-        EOF
+      inject_into_file 'app/models/search_builder.rb', after: /include Blacklight::Solr::SearchBuilderBehavior.*$/ do
+        "\n  include BlacklightAdvancedSearch::AdvancedSearchBuilder" \
+        "\n  self.default_processor_chain += [:add_advanced_parse_q_to_solr, :add_advanced_search_to_solr]"
       end
     end
 
