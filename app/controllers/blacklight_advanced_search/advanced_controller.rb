@@ -9,6 +9,12 @@ class BlacklightAdvancedSearch::AdvancedController < CatalogController
   end
 
   protected
+
+  # Override to use the engine routes
+  def search_action_url options = {}
+    blacklight_advanced_search_engine.url_for(options.merge(action: 'index'))
+  end
+
   def get_advanced_search_facets
     # We want to find the facets available for the current search, but:
     # * IGNORING current query (add in facets_for_advanced_search_form filter)
