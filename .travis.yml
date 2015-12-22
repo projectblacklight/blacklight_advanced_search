@@ -6,6 +6,9 @@ rvm:
   - 2.1
   # - 1.9.3
   # - jruby-19mode
+before_install:
+  - rvm @global do gem uninstall bundler -a -x
+  - rvm @global do gem install bundler -v 1.10.6
 
 notifications:
   irc: "irc.freenode.org#blacklight"
