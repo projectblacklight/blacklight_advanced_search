@@ -9,8 +9,8 @@ module BlacklightAdvancedSearch
       (blacklight_params[:search_field] == self.blacklight_config.advanced_search[:url_key]) || blacklight_params[:f_inclusive]
     end
 
-    # this method should get added into the search_params_logic
-    # list, in a position AFTER normal query handling (:add_query_to_solr),
+    # this method should get added into the processor chain
+    # in a position AFTER normal query handling (:add_query_to_solr),
     # so it'll overwrite that if and only if it's an advanced search.
     # adds a 'q' and 'fq's based on advanced search form input. 
     def add_advanced_search_to_solr(solr_parameters)
@@ -42,7 +42,7 @@ module BlacklightAdvancedSearch
     end
     
     
-    # This method can be included in search_params_logic to have us
+    # This method can be included in the SearchBuilder to have us
     # parse an ordinary entered :q for AND/OR/NOT and produce appropriate
     # Solr query.
     #
