@@ -15,6 +15,31 @@ module BlacklightAdvancedSearch
       end
     end
 
+    def install_catalog_controller_mixin
+      inject_into_class "app/controllers/catalog_controller.rb", "CatalogController" do
+        "  include BlacklightAdvancedSearch::Controller\n"
+      end
+    end
+
+    def configuration
+      inject_into_file 'app/controllers/catalog_controller.rb', after: "configure_blacklight do |config|" do
+        "\n    # default advanced config values" \
+        "\n    config.advanced_search ||= Blacklight::OpenStructWithHashAccess.new" \
+        "\n    # config.advanced_search[:qt] ||= 'advanced'" \
+        "\n    config.advanced_search[:url_key] ||= 'advanced'" \
+        "\n    config.advanced_search[:query_parser] ||= 'dismax'" \
+        "\n    config.advanced_search[:form_solr_parameters] ||= {}\n"
+      end
+    end
+
+    def install_search_history_controller
+      copy_file "search_history_controller.rb", "app/controllers/search_history_controller.rb"
+    end
+
+    def install_saved_searches_controller
+      copy_file "saved_searches_controller.rb", "app/controllers/saved_searches_controller.rb"
+    end
+
     def inject_routes
       inject_into_file 'config/routes.rb', after: /mount Blacklight::Engine.*$/ do
         "\n  mount BlacklightAdvancedSearch::Engine => '/'\n"
