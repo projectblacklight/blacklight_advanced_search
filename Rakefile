@@ -5,15 +5,12 @@ require 'rdoc/task'
 require 'bundler/setup'
 Bundler::GemHelper.install_tasks
 
-ZIP_URL = "https://github.com/projectblacklight/blacklight-jetty/archive/v4.10.3.zip"
 APP_ROOT = File.dirname(__FILE__)
 
 require 'rspec/core/rake_task'
 require 'engine_cart/rake_task'
 
 EngineCart.fingerprint_proc = EngineCart.rails_fingerprint_proc
-
-require 'jettywrapper'
 
 task :default => :ci
 
@@ -32,20 +29,13 @@ end
   end
 
 desc "Execute Continuous Integration build"
-task :ci => ['jetty:clean', 'engine_cart:generate'] do
+task :ci => ['engine_cart:generate'] do
+  require 'solr_wrapper'
 
-  require 'jettywrapper'
-  jetty_params = {
-    :jetty_home => File.expand_path(File.dirname(__FILE__) + '/jetty'),
-    :quiet => false,
-    :jetty_port => 8888,
-    :solr_home => File.expand_path(File.dirname(__FILE__) + '/jetty/solr'),
-    :startup_wait => 30
-  }
-
-  error = Jettywrapper.wrap(jetty_params) do
-    Rake::Task['fixtures'].invoke
-    Rake::Task['spec'].invoke
+  SolrWrapper.wrap(port: '8983') do |solr|
+    solr.with_collection(name: 'blacklight-core', dir: File.join(File.expand_path(File.dirname(__FILE__)), "solr", "conf")) do
+      Rake::Task['fixtures'].invoke
+      Rake::Task['spec'].invoke
+    end
   end
-  raise "test failures: #{error}" if error
 end
