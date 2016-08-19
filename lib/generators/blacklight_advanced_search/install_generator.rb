@@ -52,7 +52,12 @@ module BlacklightAdvancedSearch
         # Blacklight into local app as custom local override -- but add our link at the end too. 
         source_file = File.read(File.join(Blacklight.root, "app/views/catalog/_search_form.html.erb"))
 
-        new_file_contents = source_file + "\n\n<%= link_to 'More options', blacklight_advanced_search_engine.advanced_search_path(params.except(:controller, :action)), class: 'advanced_search'%>"
+        new_file_contents = source_file + <<-EOF.strip_heredoc
+        \n\n
+        <div class="navbar-form">
+          <%= link_to 'More options', blacklight_advanced_search_engine.advanced_search_path(search_state.to_h), class: 'advanced_search btn btn-default'%>
+        </div>
+        EOF
 
         create_file("app/views/catalog/_search_form.html.erb", new_file_contents)      
       end

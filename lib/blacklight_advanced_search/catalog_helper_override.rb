@@ -3,14 +3,14 @@ module BlacklightAdvancedSearch::CatalogHelperOverride
   
   
   def remove_advanced_keyword_query(field, my_params = params)
-    my_params = my_params.dup
+    my_params = Blacklight::SearchState.new(my_params, blacklight_config).to_h
     my_params.delete(field)
     return my_params
   end
 
   def remove_advanced_filter_group(field, my_params = params)
     if (my_params[:f_inclusive])
-      my_params = my_params.dup
+      my_params = Blacklight::SearchState.new(my_params, blacklight_config).to_h
       my_params[:f_inclusive] = my_params[:f_inclusive].dup
       my_params[:f_inclusive].delete(field)
 
@@ -29,7 +29,7 @@ module BlacklightAdvancedSearch::CatalogHelperOverride
   end
 
   def remove_advanced_facet_param(field, value, my_params = params)
-    my_params = my_params.dup
+    my_params = Blacklight::SearchState.new(my_params, blacklight_config).to_h
     if (my_params[:f_inclusive] && 
         my_params[:f_inclusive][field] &&
         my_params[:f_inclusive][field].include?(value))

@@ -2,11 +2,10 @@ require 'parsing_nesting/tree'
 module BlacklightAdvancedSearch::ParsingNestingParser
   
   def process_query(params,config)
-    queries = []
-    keyword_queries.each do |field,query| 
-      queries << ParsingNesting::Tree.parse(query, config.advanced_search[:query_parser]).to_query( local_param_hash(field, config) )
+    queries = keyword_queries.map do |field,query| 
+      ParsingNesting::Tree.parse(query, config.advanced_search[:query_parser]).to_query( local_param_hash(field, config) )
     end
-    queries.join( ' ' + keyword_op + ' ')
+    queries.join(" #{keyword_op} ")
   end
   
   def local_param_hash(key, config)
