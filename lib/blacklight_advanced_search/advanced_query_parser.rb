@@ -10,7 +10,7 @@ module BlacklightAdvancedSearch
     attr_reader :config, :params
 
     def initialize(params,config)
-      @params = HashWithIndifferentAccess.new(params)
+      @params = Blacklight::SearchState.new(params, config).to_h
       @config = config
     end
 
