@@ -1,19 +1,10 @@
-require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
-#require 'rubygems'
-#require 'parslet'
-#require 'spec'
-#require 'spec/autorun'
-
-#load '../../nesting_parser/grammar.rb'
-#load '../../nesting_parser/tree.rb'
-
 describe "NestingParser" do
   describe "Consuming" do
     before do
       @parser = ParsingNesting::Grammar.new
     end
     # Whole bunch of things we just want to make sure they are consumed
-    # without error, not checking the generated tree yet. 
+    # without error, not checking the generated tree yet.
     ["foo",
      "foo bar",
      " foo bar ",
@@ -41,9 +32,8 @@ describe "NestingParser" do
      "(foo bar one AND two) AND (three four ten OR twelve)"
     ].each do |query|
       it "should consume<<#{query}>>" do
-        expect {@parser.parse(query)}.not_to raise_error
+        expect { @parser.parse(query) }.not_to raise_error
       end
     end
   end
 end
-

@@ -2,13 +2,13 @@
 require File.join(File.dirname(__FILE__), "lib/blacklight_advanced_search/version")
 
 Gem::Specification.new do |s|
-  s.name = "blacklight_advanced_search"
-  s.version = BlacklightAdvancedSearch::VERSION
+  s.name     = "blacklight_advanced_search"
+  s.version  = BlacklightAdvancedSearch::VERSION
   s.platform = Gem::Platform::RUBY
-  s.authors = ["Jonathan Rochkind", "Chris Beer"]
-  s.email = ["blacklight-development@googlegroups.com"]
-  s.homepage    = "http://projectblacklight.org/"
-  s.summary = "Blacklight Advanced Search plugin"
+  s.authors  = ["Jonathan Rochkind", "Chris Beer"]
+  s.email    = ["blacklight-development@googlegroups.com"]
+  s.homepage = "http://projectblacklight.org/"
+  s.summary  = "Blacklight Advanced Search plugin"
 
   s.rubyforge_project = "blacklight"
 
@@ -25,4 +25,6 @@ Gem::Specification.new do |s|
   s.add_development_dependency "capybara"
   s.add_development_dependency 'solr_wrapper', "~> 0.14"
   s.add_development_dependency 'engine_cart', "~> 0.10"
+  s.add_development_dependency 'rubocop'
+  s.add_development_dependency 'rubocop-rspec'
 end

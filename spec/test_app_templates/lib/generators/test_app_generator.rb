@@ -3,13 +3,13 @@ require 'rails/generators'
 class TestAppGenerator < Rails::Generators::Base
   source_root File.expand_path("../../../../spec/test_app_templates", __FILE__)
 
-  def remove_index 
+  def remove_index
     remove_file "public/index.html"
     remove_file 'app/assets/images/rails.png'
   end
 
   def run_blacklight_generator
-    say_status("warning", "GENERATING BL", :yellow)       
+    say_status("warning", "GENERATING BL", :yellow)
 
     generate 'blacklight:install'
   end
@@ -19,7 +19,7 @@ class TestAppGenerator < Rails::Generators::Base
   end
 
   def run_test_support_generator
-    say_status("warning", "GENERATING test_support", :yellow)       
+    say_status("warning", "GENERATING test_support", :yellow)
 
     generate 'blacklight:test_support'
   end

@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 describe "Blacklight Advanced Search Form" do
   before(:all) do
     AdvancedController.copy_blacklight_config_from(CatalogController)

@@ -12,7 +12,7 @@ module BlacklightAdvancedSearch::Controller
     helper_method :is_advanced_search?, :advanced_query
   end
 
-  def is_advanced_search? req_params = params
+  def is_advanced_search?(req_params = params)
     (req_params[:search_field] == blacklight_config.advanced_search[:url_key]) ||
     req_params[:f_inclusive]
   end

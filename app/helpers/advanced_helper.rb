@@ -1,12 +1,11 @@
 # Helper methods for the advanced search form
 module AdvancedHelper
-
   # Fill in default from existing search, if present
   # -- if you are using same search fields for basic
   # search and advanced, will even fill in properly if existing
   # search used basic search on same field present in advanced.
   def label_tag_default_for(key)
-    if (! params[key].blank?)
+    if !params[key].blank?
       return params[key]
     elsif params["search_field"] == key
       return params["q"]
@@ -26,7 +25,7 @@ module AdvancedHelper
       t('blacklight_advanced_search.any') => 'OR'
     }.sort
 
-    return select_tag(:op, options_for_select(options,params[:op]), :class => 'input-small')
+    select_tag(:op, options_for_select(options, params[:op]), :class => 'input-small')
   end
 
   # Current params without fields that will be over-written by adv. search,
@@ -34,12 +33,12 @@ module AdvancedHelper
   def advanced_search_context
     my_params = params.except :page, :commit, :f_inclusive, :q, :search_field, :op, :action, :index, :sort, :controller, :utf8
 
-    my_params.except! *search_fields_for_advanced_search.map { |key, field_def| field_def[:key] }
+    my_params.except! *search_fields_for_advanced_search.map { |_key, field_def| field_def[:key] }
   end
 
   def search_fields_for_advanced_search
     @search_fields_for_advanced_search ||= begin
-      blacklight_config.search_fields.select { |k,v| v.include_in_advanced_search or v.include_in_advanced_search.nil? }
+      blacklight_config.search_fields.select { |_k, v| v.include_in_advanced_search || v.include_in_advanced_search.nil? }
     end
   end
 
@@ -47,5 +46,4 @@ module AdvancedHelper
   def advanced_search_facet_partial_name(display_facet)
     facet_configuration_for_field(display_facet.name).try(:partial) || "catalog/facet_limit"
   end
-
 end

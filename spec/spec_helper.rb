@@ -3,11 +3,9 @@ ENV["RAILS_ENV"] = "test"
 require 'engine_cart'
 EngineCart.load_application!
 
-
 require 'capybara/rspec'
 require 'rspec/rails'
 require 'capybara/rails'
-
 
 RSpec.configure do |config|
   # Maintain this rspec2 behavior even in rspec3, until we
@@ -26,4 +24,3 @@ RSpec.configure do |config|
   # --------------------------------------------------------------------------------
   config.infer_spec_type_from_file_location!
 end
-
