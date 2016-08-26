@@ -1,5 +1,4 @@
 class AdvancedController < BlacklightAdvancedSearch::AdvancedController
-
   blacklight_config.configure do |config|
     # name of Solr request handler, leave unset to use the same one your Blacklight
     # is ordinarily using (recommended if possible)
@@ -54,5 +53,4 @@ class AdvancedController < BlacklightAdvancedSearch::AdvancedController
       }
     end
   end
-
 end

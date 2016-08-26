@@ -32,7 +32,7 @@ describe "NestingParser" do
      "(foo bar one AND two) AND (three four ten OR twelve)"
     ].each do |query|
       it "should consume<<#{query}>>" do
-        expect {@parser.parse(query)}.not_to raise_error
+        expect { @parser.parse(query) }.not_to raise_error
       end
     end
   end

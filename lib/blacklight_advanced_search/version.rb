@@ -7,4 +7,3 @@ module BlacklightAdvancedSearch
     VERSION = self.version
   end
 end
-

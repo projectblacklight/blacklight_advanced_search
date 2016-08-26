@@ -12,33 +12,33 @@ module ParseTreeSpecHelper
   # make sure they are and return the element
   def parse_one_element(s)
     l = parse(s)
-    expect(l).to be_kind_of( List )
+    expect(l).to be_kind_of(List)
     expect(l.list.length).to eq(1)
-    return l.list.first
+    l.list.first
   end
 
   def should_be_and_list(graph)
-    expect(graph).to be_kind_of( AndList )
+    expect(graph).to be_kind_of(AndList)
     yield graph.list if block_given?
   end
 
   def should_be_list(graph)
-    expect(graph).to be_kind_of( List)
+    expect(graph).to be_kind_of(List)
     yield graph.list if block_given?
   end
 
   def should_be_or_list(graph)
-    expect(graph).to be_kind_of( OrList )
+    expect(graph).to be_kind_of(OrList)
     yield graph.list if block_given?
   end
 
   def should_be_term(graph, value)
-    expect(graph).to be_kind_of( Term )
+    expect(graph).to be_kind_of(Term)
     expect(graph.value).to eq(value)
   end
 
   def should_be_phrase(graph, value)
-    expect(graph).to be_kind_of( Phrase )
+    expect(graph).to be_kind_of(Phrase)
     expect(graph.value).to eq(value)
   end
 
@@ -46,10 +46,12 @@ module ParseTreeSpecHelper
     expect(graph).to be_kind_of(MandatoryClause)
     yield graph.operand if block_given?
   end
+
   def should_be_excluded(graph)
     expect(graph).to be_kind_of(ExcludedClause)
     yield graph.operand if block_given?
   end
+
   def should_be_not_expression(graph)
     expect(graph).to be_kind_of(NotExpression)
     yield graph.operand if block_given?
@@ -57,11 +59,11 @@ module ParseTreeSpecHelper
 end
 
 describe "NestingParser" do
- describe "Building an Object parse tree" do
+  describe "Building an Object parse tree" do
     include ParseTreeSpecHelper
 
     it "should build for term list" do
-      should_be_list parse("one two three")  do |list|
+      should_be_list parse("one two three") do |list|
         expect(list.length).to eq(3)
         should_be_term list[0], "one"
         should_be_term list[1], "two"
@@ -162,7 +164,6 @@ describe "NestingParser" do
       end
     end
 
-
     it "should bind OR more tightly than AND" do
       should_be_and_list parse_one_element("grey AND big OR small AND tail") do |list|
         expect(list.length).to eq(3)
@@ -170,9 +171,9 @@ describe "NestingParser" do
         should_be_term list[0], "grey"
 
         should_be_or_list list[1] do |or_list|
-            expect(or_list.length).to eq(2)
-            should_be_term or_list[0], "big"
-            should_be_term or_list[1], "small"
+          expect(or_list.length).to eq(2)
+          should_be_term or_list[0], "big"
+          should_be_term or_list[1], "small"
         end
 
         should_be_term list[2], "tail"
@@ -201,7 +202,6 @@ describe "NestingParser" do
       should_be_list parse("mark +twain AND huck OR fun OR ((jim AND river) AND (red -dogs))") do |list|
         should_be_term list[0], "mark"
         should_be_and_list list[1] do |and_list|
-
           should_be_mandatory and_list[0] do |operand|
             should_be_term operand, "twain"
           end
