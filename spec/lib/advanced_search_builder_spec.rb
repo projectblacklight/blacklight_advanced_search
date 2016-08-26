@@ -1,9 +1,5 @@
-require 'spec_helper'
-
 describe BlacklightAdvancedSearch::AdvancedSearchBuilder do
-
   describe "#add_advanced_parse_q_to_solr" do
-
     let(:blacklight_config) do
       Blacklight::Configuration.new do |config|
         config.advanced_search = { }
@@ -33,10 +29,10 @@ describe BlacklightAdvancedSearch::AdvancedSearchBuilder do
         let(:params) { double("params", params: {:q => "one two AND three OR four"} ) }
         before { allow(obj).to receive(:scope).and_return(params) }
         it "catches the query" do
-          obj.add_advanced_parse_q_to_solr(solr_params) 
+          obj.add_advanced_parse_q_to_solr(solr_params)
           expect(solr_params[:defType]).to eq("lucene")
           # We're not testing succesful parsing here, just that it's doing
-          # something that looks like we expect with subqueries. 
+          # something that looks like we expect with subqueries.
           expect(solr_params[:q]).to start_with("_query_:")
         end
       end
@@ -59,9 +55,6 @@ describe BlacklightAdvancedSearch::AdvancedSearchBuilder do
           expect(solr_params).not_to have_key(:q)
         end
       end
-
     end
-
   end
-
 end

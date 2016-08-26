@@ -1,19 +1,10 @@
-require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
-#require 'rubygems'
-#require 'parslet'
-#require 'spec'
-#require 'spec/autorun'
-
-#load '../../nesting_parser/grammar.rb'
-#load '../../nesting_parser/tree.rb'
-
 describe "NestingParser" do
   describe "Consuming" do
     before do
       @parser = ParsingNesting::Grammar.new
     end
     # Whole bunch of things we just want to make sure they are consumed
-    # without error, not checking the generated tree yet. 
+    # without error, not checking the generated tree yet.
     ["foo",
      "foo bar",
      " foo bar ",
@@ -46,4 +37,3 @@ describe "NestingParser" do
     end
   end
 end
-

@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 describe 'Blacklight Test Application' do
   it "should have a Blacklight module" do
     expect(Blacklight).to be_a_kind_of(Module)

@@ -1,8 +1,6 @@
-require 'spec_helper'
-
 describe "BlacklightAdvancedSearch#deep_merge!" do
   before do
-    @ahash = {"a" => "a", "b" => "b", 
+    @ahash = {"a" => "a", "b" => "b",
             "array1" => [1,2], "array2" => [3,4],
             "hash1"  => {"a" => "a", "array" => [1], "b" => "b"},
             "hash2"  => {"a2" => "a2", "array2" => [12], "b2" => "b2"}
@@ -18,7 +16,6 @@ describe "BlacklightAdvancedSearch#deep_merge!" do
       "c" => "NEW C"
     })
   end
-
 
   it "leaves un-collided content alone" do
     expect(@ahash["b"]).to eq("b")
@@ -41,5 +38,4 @@ describe "BlacklightAdvancedSearch#deep_merge!" do
       "b" => "NEW B"
     })
   end
-    
 end
