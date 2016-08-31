@@ -1,21 +1,4 @@
 module BlacklightAdvancedSearch::CatalogHelperOverride
-  def remove_advanced_keyword_query(field, my_params = params)
-    my_params = Blacklight::SearchState.new(my_params, blacklight_config).to_h
-    my_params.delete(field)
-    my_params
-  end
-
-  def remove_advanced_filter_group(field, my_params = params)
-    if (my_params[:f_inclusive])
-      my_params = Blacklight::SearchState.new(my_params, blacklight_config).to_h
-      my_params[:f_inclusive] = my_params[:f_inclusive].dup
-      my_params[:f_inclusive].delete(field)
-
-      my_params.delete :f_inclusive if my_params[:f_inclusive].empty?
-    end
-    my_params
-  end
-
   # Special display for facet limits that include adv search inclusive
   # or limits.
   def facet_partial_name(display_facet = nil)
