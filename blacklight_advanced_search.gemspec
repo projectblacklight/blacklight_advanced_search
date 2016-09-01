@@ -9,6 +9,7 @@ Gem::Specification.new do |s|
   s.email    = ["blacklight-development@googlegroups.com"]
   s.homepage = "http://projectblacklight.org/"
   s.summary  = "Blacklight Advanced Search plugin"
+  s.license  = "Apache 2.0"
 
   s.rubyforge_project = "blacklight"
 
