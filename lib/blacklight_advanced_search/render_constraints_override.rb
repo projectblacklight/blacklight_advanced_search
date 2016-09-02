@@ -46,7 +46,7 @@ module BlacklightAdvancedSearch::RenderConstraintsOverride
       advanced_query.filters.each_pair do |field, value_list|
         label = facet_field_label(field)
         content << render_constraint_element(label,
-          safe_join(value_list, " <strong class='text-muted constraint-connector'>OR</strong> ".html_safe),
+          safe_join(Array(value_list), " <strong class='text-muted constraint-connector'>OR</strong> ".html_safe),
           :remove => search_action_path(remove_advanced_filter_group(field, my_params).except(:controller, :action))
                                             )
       end
@@ -115,5 +115,22 @@ module BlacklightAdvancedSearch::RenderConstraintsOverride
     end
 
     content
+  end
+
+  def remove_advanced_keyword_query(field, my_params = params)
+    my_params = Blacklight::SearchState.new(my_params, blacklight_config).to_h
+    my_params.delete(field)
+    my_params
+  end
+
+  def remove_advanced_filter_group(field, my_params = params)
+    if (my_params[:f_inclusive])
+      my_params = Blacklight::SearchState.new(my_params, blacklight_config).to_h
+      my_params[:f_inclusive] = my_params[:f_inclusive].dup
+      my_params[:f_inclusive].delete(field)
+
+      my_params.delete :f_inclusive if my_params[:f_inclusive].empty?
+    end
+    my_params
   end
 end
