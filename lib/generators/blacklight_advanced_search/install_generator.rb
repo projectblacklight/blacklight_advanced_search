@@ -47,20 +47,19 @@ module BlacklightAdvancedSearch
     end
 
     def install_localized_search_form
-      if options[:force] || yes?("Install local search form with advanced link? (y/N)", :green)
-        # We're going to copy the search from from actual currently loaded
-        # Blacklight into local app as custom local override -- but add our link at the end too.
-        source_file = File.read(File.join(Blacklight.root, "app/views/catalog/_search_form.html.erb"))
+      return unless options[:force] || yes?("Install local search form with advanced link? (y/N)", :green)
+      # We're going to copy the search from from actual currently loaded
+      # Blacklight into local app as custom local override -- but add our link at the end too.
+      source_file = File.read(File.join(Blacklight.root, "app/views/catalog/_search_form.html.erb"))
 
-        new_file_contents = source_file + <<-EOF.strip_heredoc
-        \n\n
-        <div class="navbar-form">
-          <%= link_to 'More options', blacklight_advanced_search_engine.advanced_search_path(search_state.to_h), class: 'advanced_search btn btn-default'%>
-        </div>
-        EOF
+      new_file_contents = source_file + <<-EOF.strip_heredoc
+      \n\n
+      <div class="navbar-form">
+        <%= link_to 'More options', blacklight_advanced_search_engine.advanced_search_path(search_state.to_h), class: 'advanced_search btn btn-default'%>
+      </div>
+      EOF
 
-        create_file("app/views/catalog/_search_form.html.erb", new_file_contents)
-      end
+      create_file("app/views/catalog/_search_form.html.erb", new_file_contents)
     end
   end
 end
