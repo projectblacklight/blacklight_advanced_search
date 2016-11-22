@@ -5,7 +5,11 @@ module BlacklightAdvancedSearch
     include Blacklight::SearchFields
 
     def is_advanced_search?
-      (blacklight_params[:search_field] == self.blacklight_config.advanced_search[:url_key]) || blacklight_params[:f_inclusive]
+      is_advanced_query? || blacklight_params[:f_inclusive]
+    end
+
+    def is_advanced_query?
+      blacklight_params[:search_field] == self.blacklight_config.advanced_search[:url_key]
     end
 
     # this method should get added into the processor chain
@@ -21,6 +25,7 @@ module BlacklightAdvancedSearch
         # Set this as a controller instance variable, not sure if some views/helpers depend on it. Better to leave it as a local variable
         # if not, more investigation later.
         advanced_query = BlacklightAdvancedSearch::QueryParser.new(blacklight_params, self.blacklight_config)
+        advanced_query.to_solr.delete(:q) unless is_advanced_query?
         BlacklightAdvancedSearch.deep_merge!(solr_parameters, advanced_query.to_solr)
         unless advanced_query.keyword_queries.empty?
           # force :qt if set, fine if it's nil, we'll use whatever CatalogController
@@ -28,7 +33,6 @@ module BlacklightAdvancedSearch
           solr_parameters[:qt] = self.blacklight_config.advanced_search[:qt]
           solr_parameters[:defType] = "lucene"
         end
-
       end
     end
 
