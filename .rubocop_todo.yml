@@ -349,3 +349,9 @@ Style/TrailingUnderscoreVariable:
 Style/VariableName:
   Exclude:
     - 'lib/parsing_nesting/tree.rb'
+
+Style/RedundantReturn:
+  Enabled: false
+
+Style/GuardClause:
+  Enabled: false
