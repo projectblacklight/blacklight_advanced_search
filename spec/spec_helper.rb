@@ -3,6 +3,7 @@ ENV["RAILS_ENV"] = "test"
 require 'engine_cart'
 EngineCart.load_application!
 
+require 'rsolr'
 require 'capybara/rspec'
 require 'rspec/rails'
 require 'capybara/rails'
