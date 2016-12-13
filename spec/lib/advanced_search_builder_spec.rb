@@ -44,6 +44,15 @@ describe BlacklightAdvancedSearch::AdvancedSearchBuilder do
           obj.add_advanced_parse_q_to_solr(solr_params)
           expect(solr_params[:q]).to eq(unparseable_q)
         end
+
+        describe 'when parslet fails' do
+          let(:failing_q) { ")(" }
+          let(:params) { { :q => failing_q } }
+          it 'does not return the query that could not be parsed' do
+            obj.add_advanced_parse_q_to_solr(solr_params)
+            expect(solr_params[:q]).to be_nil
+          end
+        end
       end
 
       context "when advanced_parse is false" do
