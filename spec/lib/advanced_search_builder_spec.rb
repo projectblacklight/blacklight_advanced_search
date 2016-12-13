@@ -10,24 +10,24 @@ describe BlacklightAdvancedSearch::AdvancedSearchBuilder do
       end
     end
 
-    let!(:obj) do
+    let(:obj) do
       class BACTestClass
-        cattr_accessor :blacklight_config
+        cattr_accessor :blacklight_config, :blacklight_params
         include Blacklight::SearchHelper
         include BlacklightAdvancedSearch::AdvancedSearchBuilder
-        def initialize(blacklight_config)
+        def initialize(blacklight_config, blacklight_params)
           self.blacklight_config = blacklight_config
+          self.blacklight_params = blacklight_params
         end
       end
-      BACTestClass.new blacklight_config
+      BACTestClass.new blacklight_config, params
     end
 
     context "with basic functionality" do
       let(:solr_params) { {} }
 
       describe "a simple example" do
-        let(:params) { double("params", params: { :q => "one two AND three OR four" }) }
-        before { allow(obj).to receive(:scope).and_return(params) }
+        let(:params) { { :q => "one two AND three OR four" } }
         it "catches the query" do
           obj.add_advanced_parse_q_to_solr(solr_params)
           expect(solr_params[:defType]).to eq("lucene")
@@ -39,8 +39,7 @@ describe BlacklightAdvancedSearch::AdvancedSearchBuilder do
 
       describe "an unparseable example" do
         let(:unparseable_q) { "foo bar\'s AND" }
-        let(:params) { double("params", params: { :q => unparseable_q }) }
-        before { allow(obj).to receive(:scope).and_return(params) }
+        let(:params) { { :q => unparseable_q } }
         it "passes through" do
           obj.add_advanced_parse_q_to_solr(solr_params)
           expect(solr_params[:q]).to eq(unparseable_q)
@@ -48,8 +47,7 @@ describe BlacklightAdvancedSearch::AdvancedSearchBuilder do
       end
 
       context "when advanced_parse is false" do
-        let(:params) { double("params", params: { :search_field => "special_field", :q => "one two AND three OR four" }) }
-        before { allow(obj).to receive(:scope).and_return(params) }
+        let(:params) { { :search_field => "special_field", :q => "one two AND three OR four" } }
         it "ignores fields" do
           obj.add_advanced_parse_q_to_solr(solr_params)
           expect(solr_params).not_to have_key(:q)
