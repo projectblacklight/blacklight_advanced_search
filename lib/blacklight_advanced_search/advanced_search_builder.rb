@@ -65,7 +65,7 @@ module BlacklightAdvancedSearch
 
           BlacklightAdvancedSearch.deep_merge!(solr_parameters, solr_direct_params)
           BlacklightAdvancedSearch.deep_merge!(solr_parameters, adv_search_params)
-        rescue PARSLET_FAILED_EXCEPTIONS => e
+        rescue *PARSLET_FAILED_EXCEPTIONS => e
           # do nothing, don't merge our input in, keep basic search
           # optional TODO, display error message in flash here, but hard to
           # display a good one.
