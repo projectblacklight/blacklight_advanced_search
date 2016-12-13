@@ -13,3 +13,9 @@ Rails:
 
 Metrics/LineLength:
   Max: 185
+
+Metrics/BlockLength:
+  Exclude:
+    - 'Rakefile'
+    - 'spec/**/*'
+    - 'lib/generators/**/*'
