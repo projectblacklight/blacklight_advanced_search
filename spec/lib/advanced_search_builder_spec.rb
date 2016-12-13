@@ -53,6 +53,14 @@ describe BlacklightAdvancedSearch::AdvancedSearchBuilder do
             expect(solr_params[:q]).to be_nil
           end
         end
+
+        describe 'when `q` is a hash' do
+          let(:params) { { q: { id: ['a'] } } }
+          it 'does not return the query that could not be parsed' do
+            obj.add_advanced_parse_q_to_solr(solr_params)
+            expect(solr_params[:q]).to be_nil
+          end
+        end
       end
 
       context "when advanced_parse is false" do
