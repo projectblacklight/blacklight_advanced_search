@@ -42,6 +42,12 @@ module AdvancedHelper
     end
   end
 
+  def facet_field_names_for_advanced_search
+    @facet_fields_for_advanced_search ||= begin
+      blacklight_config.facet_fields.select { |_k, v| v.include_in_advanced_search || v.include_in_advanced_search.nil? }.values.map(&:field)
+    end
+  end
+
   # Use configured facet partial name for facet or fallback on 'catalog/facet_limit'
   def advanced_search_facet_partial_name(display_facet)
     facet_configuration_for_field(display_facet.name).try(:partial) || "catalog/facet_limit"
