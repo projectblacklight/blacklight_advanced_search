@@ -33,11 +33,25 @@ module BlacklightAdvancedSearch
     end
 
     def install_search_history_controller
-      copy_file "search_history_controller.rb", "app/controllers/search_history_controller.rb"
+      path = 'app/controllers/search_history_controller.rb'
+      if File.exist? path
+        inject_into_file path, after: /include Blacklight::SearchHistory.*$/ do
+          "\n  helper BlacklightAdvancedSearch::RenderConstraintsOverride"
+        end
+      else
+        copy_file 'search_history_controller.rb', path
+      end
     end
 
     def install_saved_searches_controller
-      copy_file "saved_searches_controller.rb", "app/controllers/saved_searches_controller.rb"
+      path = 'app/controllers/saved_searches_controller.rb'
+      if File.exist? path
+        inject_into_file path, after: /include Blacklight::SavedSearches.*$/ do
+          "\n  helper BlacklightAdvancedSearch::RenderConstraintsOverride"
+        end
+      else
+        copy_file 'saved_searches_controller.rb', path
+      end
     end
 
     def inject_routes
