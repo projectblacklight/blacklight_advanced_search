@@ -32,12 +32,19 @@ module BlacklightAdvancedSearch
       end
     end
 
+    # Adds advanced search behavior to search history controller
     def install_search_history_controller
-      copy_file "search_history_controller.rb", "app/controllers/search_history_controller.rb"
-    end
+      path = 'app/controllers/search_history_controller.rb'
 
-    def install_saved_searches_controller
-      copy_file "saved_searches_controller.rb", "app/controllers/saved_searches_controller.rb"
+      # If local copy of search history controller exists, add override
+      if File.exist? path
+        inject_into_file path, after: /include Blacklight::SearchHistory.*$/ do
+          "\n  helper BlacklightAdvancedSearch::RenderConstraintsOverride"
+        end
+      # Otherwise copies search history controller to application
+      else
+        copy_file 'search_history_controller.rb', path
+      end
     end
 
     def inject_routes

@@ -43,7 +43,6 @@ Layout/AlignParameters:
 # Cop supports --auto-correct.
 Layout/EmptyLineAfterMagicComment:
   Exclude:
-    - 'lib/generators/blacklight_advanced_search/templates/saved_searches_controller.rb'
     - 'lib/generators/blacklight_advanced_search/templates/search_history_controller.rb'
 
 # Offense count: 1
