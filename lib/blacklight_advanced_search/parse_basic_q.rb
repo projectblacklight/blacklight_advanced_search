@@ -23,7 +23,7 @@ module BlacklightAdvancedSearch::ParseBasicQ
 
   # Different versions of Parslet raise different exception classes,
   # need to figure out which one exists to rescue
-  @@parslet_failed_exceptions = if defined? Parslet::UnconsumedInput
+  PARSLET_FAILED_EXCEPTIONS = if defined? Parslet::UnconsumedInput
     [Parslet::UnconsumedInput]
   else
     [Parslet::ParseFailed]
@@ -60,7 +60,7 @@ module BlacklightAdvancedSearch::ParseBasicQ
 
         BlacklightAdvancedSearch.deep_merge!(solr_parameters, solr_direct_params)
         BlacklightAdvancedSearch.deep_merge!(solr_parameters, adv_search_params)        
-      rescue *@@parslet_failed_exceptions => e
+      rescue *PARSLET_FAILED_EXCEPTIONS => e
         # do nothing, don't merge our input in, keep basic search
         # optional TODO, display error message in flash here, but hard to 
         # display a good one. 
