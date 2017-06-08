@@ -35,7 +35,7 @@ module BlacklightAdvancedSearch
 
     # Different versions of Parslet raise different exception classes,
     # need to figure out which one exists to rescue
-    @@parslet_failed_exceptions = if defined? Parslet::UnconsumedInput
+    PARSLET_FAILED_EXCEPTIONS = if defined? Parslet::UnconsumedInput
       [Parslet::UnconsumedInput]
     else
       [Parslet::ParseFailed]
