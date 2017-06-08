@@ -11,40 +11,35 @@ module BlacklightAdvancedSearch
 
   require 'blacklight_advanced_search/version'
   require 'blacklight_advanced_search/engine'
-  
-  # Utility method used in our solr search logic. 
-  # Merges new_hash into source_hash, but will recursively
-  # merge nested arrays and hashes too; also will NOT merge nil
-  # or blank values from new_hash into source_hash, nil or blank values
-  # in new_hash will not overwrite values in source_hash. 
+
+  # Utility method used in our solr search logic.
+  # Like Rails Hash#deep_merge, merges 2 hashes recursively, including nested Arrays and Hashes.
+  # Unlike Rails Hash#deep_merge:
+  # - will NOT merge nil values over existing ones
+  # - will NOT merge (non-FalseClass) blank values
+  # - WILL deduplicate values from arrays after merging them
+  #
+  # @param [Hash|HashWithIndifferentAccess] source_hash
+  # @param [Hash|HashWithIndifferentAccess] new_hash
+  # @return [Hash] the deeply merged hash
+  # @see Rails #deep_merge http://apidock.com/rails/v4.2.1/Hash/deep_merge
+  # @example new_hash = BlacklightAdvancedSearch.deep_merge(h1, h2)
+  def self.deep_merge(source_hash, new_hash)
+    source_hash.deep_merge(new_hash, &method(:merge_conflict_resolution))
+  end
+
+  # this one side-effects the first param
+  # @see #deep_merge
+  # @deprecated use `new_hash = BlacklightAdvancedSearch.deep_merge(h1, h2)` instead
   def self.deep_merge!(source_hash, new_hash)
-    # We used to use built-in source_hash.merge() with a block arg
-    # to customize merge behavior, but that was breaking in some
-    # versions of BL/Rails where source_hash was a kind of HashWithIndifferentAccess,
-    # and hwia is unreliable in some versions of Rails. Oh well. 
-    # https://github.com/projectblacklight/blacklight/issues/827
+    source_hash.deep_merge!(new_hash, &method(:merge_conflict_resolution))
+  end
 
-    new_hash.each_pair do |key, new_value|
-      old = source_hash.fetch(key, nil)
-
-      source_hash[key] =     
-        if new_value.respond_to?(:blank) && new.blank?
-          old        
-        elsif (old.kind_of?(Hash) and new_value.kind_of?(Hash))          
-          deep_merge!(old, new_value)
-          old
-        elsif (old.kind_of?(Array) and new_value.kind_of?(Array))
-          old.concat(new_value).uniq
-        elsif new_value.nil?
-          # Allowing nil values to over-write on merge messes things up.
-          # don't set a nil value if you really want to force blank, set
-          # empty string. 
-          old
-        else
-          new_value
-        end
-    end
-    source_hash
-  end  
-  
+  # the arguments are set by what the Rails Hash.deep_merge supplies the block
+  def self.merge_conflict_resolution(_key, old, new_value)
+    return old if new_value.nil?
+    return old if new_value.respond_to?(:blank?) && new_value.blank? && !new_value.is_a?(FalseClass)
+    return old | new_value if old.is_a?(Array) && new_value.is_a?(Array)
+    new_value
+  end
 end
