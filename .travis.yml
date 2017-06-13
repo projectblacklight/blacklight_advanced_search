@@ -2,8 +2,13 @@ notifications:
   email: false
 
 rvm:
-  - 2.3.1
-  - 2.2.5
+  - 2.4.1
+  - 2.3.3
+
+matrix:
+  include:
+    - rvm: 2.3.3
+      env: "RAILS_VERSION=5.0.3"
 
 notifications:
   irc: "irc.freenode.org#blacklight"
