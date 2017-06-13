@@ -32,7 +32,7 @@ module BlacklightAdvancedSearch
     # Current params without fields that will be over-written by adv. search,
     # or other fields we don't want.
     def advanced_search_context
-      my_params = params.except :page, :commit, :f_inclusive, :q, :search_field, :op, :action, :index, :sort, :controller, :utf8
+      my_params = search_state.params_for_search.except :page, :f_inclusive, :q, :search_field, :op, :index, :sort
 
       my_params.except!(*search_fields_for_advanced_search.map { |_key, field_def| field_def[:key] })
     end
