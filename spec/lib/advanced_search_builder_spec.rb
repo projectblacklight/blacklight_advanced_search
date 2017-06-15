@@ -23,6 +23,18 @@ describe BlacklightAdvancedSearch::AdvancedSearchBuilder do
       BACTestClass.new blacklight_config, params
     end
 
+    let(:params) { {} }
+
+    describe '#is_advanced_search?' do
+      context 'without the advanced search plugin configured' do
+        let(:blacklight_config) { Blacklight::Configuration.new }
+
+        it 'is false' do
+          expect(obj.is_advanced_search?).to be_falsey
+        end
+      end
+    end
+
     context "with basic functionality" do
       let(:solr_params) { {} }
 
