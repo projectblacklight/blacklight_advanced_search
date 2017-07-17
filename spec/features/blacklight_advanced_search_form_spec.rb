@@ -54,4 +54,22 @@ describe "Blacklight Advanced Search Form" do
     visit '/advanced'
     expect(page).to have_selector('input#title')
   end
+
+  describe "prepopulated advanced search form" do
+    before do
+      visit '/advanced?all_fields=&author=&commit=Search&op=AND&search_field=advanced&title=cheese'
+    end
+
+    it "should not create hidden inputs for search fields" do
+      expect(page).not_to have_selector('.advanced input[type="hidden"][name="title"]', visible: false)
+      expect(page).to have_selector('.advanced input[type="text"][name="title"]')
+    end
+
+    it "should not have multiple parameters for a search field" do
+      fill_in "title", :with => "bread"
+      click_on "advanced-search-submit"
+      expect(page.current_url).to match(/bread/)
+      expect(page.current_url).not_to match(/cheese/)
+    end
+  end
 end
