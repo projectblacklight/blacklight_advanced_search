@@ -50,7 +50,7 @@ module BlacklightAdvancedSearch
     def add_advanced_parse_q_to_solr(solr_parameters)
       return if blacklight_params[:q].blank? || !blacklight_params[:q].respond_to?(:to_str)
 
-      field_def = search_field_def_for_key(blacklight_params[:search_field]) ||
+      field_def = blacklight_config.search_fields[blacklight_params[:search_field]] ||
         default_search_field
 
       # If the individual field has advanced_parse_q suppressed, punt
