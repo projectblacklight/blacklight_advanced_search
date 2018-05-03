@@ -20,7 +20,7 @@ module BlacklightAdvancedSearch::RenderConstraintsOverride
     else
       content = []
       advanced_query.keyword_queries.each_pair do |field, query|
-        label = search_field_def_for_key(field)[:label]
+        label = blacklight_config.search_fields[field][:label]
         content << render_constraint_element(
           label, query,
           :remove =>
@@ -99,7 +99,8 @@ module BlacklightAdvancedSearch::RenderConstraintsOverride
       # Need to do something to make the inclusive-or search clear
 
       display_as = advanced_query.keyword_queries.collect do |field, query|
-        h(search_field_def_for_key(field)[:label] + ": " + query)
+        label = blacklight_config.search_fields[field][:label]
+        h(label + ": " + query)
       end.join(" ; ")
 
       content << render_search_to_s_element("Any of",
@@ -108,7 +109,7 @@ module BlacklightAdvancedSearch::RenderConstraintsOverride
                                            )
     elsif !advanced_query.keyword_queries.empty?
       advanced_query.keyword_queries.each_pair do |field, query|
-        label = search_field_def_for_key(field)[:label]
+        label = blacklight_config.search_fields[field][:label]
 
         content << render_search_to_s_element(label, query)
       end
