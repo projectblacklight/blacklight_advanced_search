@@ -39,7 +39,7 @@ describe "Blacklight Advanced Search Form" do
         expect(page).to have_selector('.blacklight-language_ssim')
 
         within('.blacklight-language_ssim') do
-          expect(page).to have_content "Language Facet"
+          expect(page).to have_content "Language"
         end
       end
     end
