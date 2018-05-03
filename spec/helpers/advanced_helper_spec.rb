@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe AdvancedHelper do
   describe '#advanced_search_facet_partial_name' do
     let(:field) { double(name: "field_name") }

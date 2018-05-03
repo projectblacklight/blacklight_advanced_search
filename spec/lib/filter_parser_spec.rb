@@ -1,5 +1,7 @@
-def setFilters(f)
-  @filters = f
+# frozen_string_literal: true
+
+def setFilters(fls)
+  @filters = fls
 end
 
 ## These should be reworked, but attr_reader actually breaks it.
@@ -8,6 +10,7 @@ def filters
   @filters
 end
 
+# rubocop:enable Style/TrivialAccessors
 describe "BlacklightAdvancedSearch::FilterParser" do
   include BlacklightAdvancedSearch::FilterParser
 

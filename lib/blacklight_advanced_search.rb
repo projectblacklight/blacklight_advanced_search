@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module BlacklightAdvancedSearch
   autoload :AdvancedSearchBuilder, 'blacklight_advanced_search/advanced_search_builder'
   autoload :Controller, 'blacklight_advanced_search/controller'

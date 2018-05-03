@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'bundler/setup'
 Bundler::GemHelper.install_tasks
 
@@ -26,8 +28,8 @@ desc "Execute Continuous Integration build"
 task :ci => ['rubocop', 'engine_cart:generate'] do
   require 'solr_wrapper'
 
-  SolrWrapper.wrap(port: '8983') do |solr|
-    solr.with_collection(name: 'blacklight-core', dir: File.join(File.expand_path(File.dirname(__FILE__)), "solr", "conf")) do
+  SolrWrapper.wrap(version: '7.1.0', port: '8983') do |solr|
+    solr.with_collection(name: 'blacklight-core', dir: File.join(__dir__, "solr", "conf")) do
       Rake::Task['fixtures'].invoke
       Rake::Task['spec'].invoke
     end

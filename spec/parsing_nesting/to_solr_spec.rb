@@ -1,9 +1,11 @@
+# frozen_string_literal: true
+
 module SolrQuerySpecHelper
-  def parse(s, arg = nil)
+  def parse(str, arg = nil)
     if arg
-      ParsingNesting::Tree.parse(s, arg)
+      ParsingNesting::Tree.parse(str, arg)
     else
-      ParsingNesting::Tree.parse(s)
+      ParsingNesting::Tree.parse(str)
     end
   end
 

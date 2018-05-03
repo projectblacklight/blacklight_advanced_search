@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe "Blacklight Advanced Search Form" do
   before(:all) do
     AdvancedController.copy_blacklight_config_from(CatalogController)
@@ -34,10 +36,10 @@ describe "Blacklight Advanced Search Form" do
 
     describe "facet column" do
       it "should list facets" do
-        expect(page).to have_selector('.blacklight-language_facet')
+        expect(page).to have_selector('.blacklight-language_ssim')
 
-        within('.blacklight-language_facet') do
-          expect(page).to have_content "Language Facet"
+        within('.blacklight-language_ssim') do
+          expect(page).to have_content "Language"
         end
       end
     end

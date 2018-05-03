@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Returns a lambda that you can use with a before_filter in your
 # CatalogController to catch and redirect query params using the old
 # style, used prior to blacklight_advanced_search 5.0.
@@ -11,7 +13,7 @@ module BlacklightAdvancedSearch
     def self.before(controller)
       params = controller.send(:params)
 
-      if params[:f_inclusive] && params[:f_inclusive].respond_to?(:each_pair)
+      if params[:f_inclusive]&.respond_to?(:each_pair)
         legacy_converted = false
 
         params[:f_inclusive].each_pair do |field, value|
@@ -21,9 +23,7 @@ module BlacklightAdvancedSearch
           params[:f_inclusive][field] = value.keys
         end
 
-        if legacy_converted
-          controller.send(:redirect_to, params, :status => :moved_permanently)
-        end
+        controller.send(:redirect_to, params, :status => :moved_permanently) if legacy_converted
       end
     end
   end

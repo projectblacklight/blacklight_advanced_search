@@ -96,7 +96,7 @@ Lint/AssignmentInCondition:
 # Cop supports --auto-correct.
 # Configuration parameters: EnforcedStyleAlignWith, SupportedStylesAlignWith, AutoCorrect.
 # SupportedStylesAlignWith: keyword, variable, start_of_line
-Lint/EndAlignment:
+Layout/EndAlignment:
   Exclude:
     - 'lib/blacklight_advanced_search/advanced_search_builder.rb'
     - 'lib/blacklight_advanced_search/redirect_legacy_params_filter.rb'
@@ -223,7 +223,7 @@ Rails/Present:
     - 'lib/blacklight_advanced_search/advanced_query_parser.rb'
 
 # Offense count: 1
-Style/AccessorMethodName:
+Naming/AccessorMethodName:
   Exclude:
     - 'app/controllers/blacklight_advanced_search/advanced_controller.rb'
 
@@ -247,7 +247,7 @@ Style/Documentation:
 # Offense count: 1
 # Configuration parameters: ExpectMatchingDefinition, Regex, IgnoreExecutableScripts, AllowedAcronyms.
 # AllowedAcronyms: CLI, DSL, ACL, API, ASCII, CPU, CSS, DNS, EOF, GUID, HTML, HTTP, HTTPS, ID, IP, JSON, LHS, QPS, RAM, RHS, RPC, SLA, SMTP, SQL, SSH, TCP, TLS, TTL, UDP, UI, UID, UUID, URI, URL, UTF8, VM, XML, XMPP, XSRF, XSS
-Style/FileName:
+Naming/FileName:
   Exclude:
     - 'Gemfile'
 
@@ -284,7 +284,7 @@ Style/HashSyntax:
 # Offense count: 1
 # Configuration parameters: EnforcedStyle, SupportedStyles.
 # SupportedStyles: snake_case, camelCase
-Style/MethodName:
+Naming/MethodName:
   Exclude:
     - 'spec/lib/filter_parser_spec.rb'
 
@@ -314,7 +314,7 @@ Style/PerlBackrefs:
 # NamePrefix: is_, has_, have_
 # NamePrefixBlacklist: is_, has_, have_
 # NameWhitelist: is_a?
-Style/PredicateName:
+Naming/PredicateName:
   Exclude:
     - 'spec/**/*'
     - 'lib/blacklight_advanced_search/advanced_search_builder.rb'
@@ -393,6 +393,6 @@ Style/TrailingUnderscoreVariable:
 # Offense count: 2
 # Configuration parameters: EnforcedStyle, SupportedStyles.
 # SupportedStyles: snake_case, camelCase
-Style/VariableName:
+Naming/VariableName:
   Exclude:
     - 'lib/parsing_nesting/tree.rb'

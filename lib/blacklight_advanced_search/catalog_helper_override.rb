@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module BlacklightAdvancedSearch::CatalogHelperOverride
   # Special display for facet limits that include adv search inclusive
   # or limits.
