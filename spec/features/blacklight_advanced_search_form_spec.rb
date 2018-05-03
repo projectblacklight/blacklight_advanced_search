@@ -36,7 +36,7 @@ describe "Blacklight Advanced Search Form" do
 
     describe "facet column" do
       it "should list facets" do
-        expect(page).to have_selector('.blacklight-language_facet')
+        expect(page).to have_selector('.blacklight-language_ssim')
 
         within('.blacklight-language_ssim') do
           expect(page).to have_content "Language Facet"
