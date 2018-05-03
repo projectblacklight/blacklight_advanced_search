@@ -4,6 +4,10 @@ source 'http://rubygems.org'
 
 gemspec
 
+gem "blacklight",
+    git: "https://github.com/projectblacklight/blacklight",
+    ref: "v7.0.0.rc1"
+
 # BEGIN ENGINE_CART BLOCK
 # engine_cart: 0.10.0
 # engine_cart stanza: 0.10.0
