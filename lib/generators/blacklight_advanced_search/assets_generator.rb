@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Copy BlacklightAdvancedSearch assets to public folder in current app.
 # If you want to do this on application startup, you can
 # add this next line to your one of your environment files --
