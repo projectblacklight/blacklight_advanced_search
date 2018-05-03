@@ -2,11 +2,14 @@
 
 source 'http://rubygems.org'
 
-gemspec
-
 gem "blacklight",
     git: "https://github.com/projectblacklight/blacklight",
     ref: "v7.0.0.rc1"
+gem "jquery-rails"
+gem "bootstrap", "~> 4.0"
+gem "sass-rails", "~> 5.0"
+
+gemspec
 
 # BEGIN ENGINE_CART BLOCK
 # engine_cart: 0.10.0

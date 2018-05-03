@@ -15,7 +15,6 @@ describe BlacklightAdvancedSearch::AdvancedSearchBuilder do
     let(:obj) do
       class BACTestClass
         cattr_accessor :blacklight_config, :blacklight_params
-        include Blacklight::SearchHelper
         include BlacklightAdvancedSearch::AdvancedSearchBuilder
         def initialize(blacklight_config, blacklight_params)
           self.blacklight_config = blacklight_config
