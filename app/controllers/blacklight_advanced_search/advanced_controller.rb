@@ -3,6 +3,7 @@
 # Need to sub-class CatalogController so we get all other plugins behavior
 # for our own "inside a search context" lookup of facets.
 class BlacklightAdvancedSearch::AdvancedController < CatalogController
+  include Blacklight::Catalog
   def index
     @response = get_advanced_search_facets unless request.method == :post
   end

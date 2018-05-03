@@ -2,13 +2,6 @@
 
 source 'http://rubygems.org'
 
-gem "blacklight",
-    git: "https://github.com/projectblacklight/blacklight",
-    ref: "v7.0.0.rc1"
-gem "jquery-rails"
-gem "bootstrap", "~> 4.0"
-gem "sass-rails", "~> 5.0"
-
 gemspec
 
 # BEGIN ENGINE_CART BLOCK
@@ -41,8 +34,10 @@ else
     gem 'sass-rails', '>= 5.0'
     gem 'coffee-rails', '~> 4.1.0'
     gem 'json', '~> 1.8'
+    gem "jquery-rails"
   when /^4.[01]/
     gem 'sass-rails', '< 5.0'
+    gem "jquery-rails"
   end
 end
 # END ENGINE_CART BLOCK
