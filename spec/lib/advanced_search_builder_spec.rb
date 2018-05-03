@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe BlacklightAdvancedSearch::AdvancedSearchBuilder do
   describe "#add_advanced_parse_q_to_solr" do
     let(:blacklight_config) do
@@ -30,7 +32,7 @@ describe BlacklightAdvancedSearch::AdvancedSearchBuilder do
         let(:blacklight_config) { Blacklight::Configuration.new }
 
         it 'is false' do
-          expect(obj.is_advanced_search?).to be_falsey
+          expect(obj).not_to be_is_advanced_search
         end
       end
     end

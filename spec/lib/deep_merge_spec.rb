@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe 'BlacklightAdvancedSearch#deep_merge' do
   let(:hash_X) do
     {
@@ -66,7 +68,7 @@ describe 'BlacklightAdvancedSearch#deep_merge' do
       expect(BlacklightAdvancedSearch.deep_merge({}, a: '')).to eq(a: '')
     end
 
-    context 'Arrays' do
+    context 'with Arrays' do
       it 'merges an array' do
         expect(ahash['array1']).to eq([1, 2, 3, 4])
       end

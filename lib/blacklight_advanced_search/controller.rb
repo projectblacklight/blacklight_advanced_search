@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'blacklight_advanced_search/parsing_nesting_parser'
 
 # This module gets included into CatalogController, or another SearchHelper

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails/generators'
 
 class BlacklightAdvancedSearchGenerator < Rails::Generators::Base

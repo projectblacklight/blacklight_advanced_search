@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # This class should NOT be generated into local app. If you generated
 # into local app in a previous version, remove that, config is done
 # in CatalogController now.

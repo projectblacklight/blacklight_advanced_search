@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'parsing_nesting/grammar'
 module ParsingNesting::Tree
   # Get parslet output for string (parslet output is json-y objects), and
@@ -132,9 +134,9 @@ module ParsingNesting::Tree
   class List < Node
     attr_accessor :list
     attr_reader :query_parser
-    def initialize(aList, query_parser)
+    def initialize(a_list, query_parser)
       @query_parser = query_parser
-      self.list = aList
+      self.list = a_list
     end
 
     def can_embed?
@@ -150,9 +152,7 @@ module ParsingNesting::Tree
 
       (embeddable, gen_full_query) = list.partition { |i| i.respond_to?(:can_embed?) && i.can_embed? }
 
-      unless embeddable.empty?
-        queries << build_nested_query(embeddable, solr_params, force_deftype: query_parser)
-      end
+      queries << build_nested_query(embeddable, solr_params, force_deftype: query_parser) unless embeddable.empty?
 
       gen_full_query.each do |node|
         queries << node.to_query(solr_params)
@@ -353,8 +353,8 @@ module ParsingNesting::Tree
 
   class MandatoryClause < Node
     attr_accessor :operand
-    def initialize(v)
-      self.operand = v
+    def initialize(value)
+      self.operand = value
     end
 
     def can_embed?
@@ -377,8 +377,8 @@ module ParsingNesting::Tree
   class ExcludedClause < Node
     attr_accessor :operand
 
-    def initialize(v)
-      self.operand = v
+    def initialize(value)
+      self.operand = value
     end
 
     def can_embed?

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module BlacklightAdvancedSearch
   # implementation for AdvancedHelper
   module AdvancedHelperBehavior

@@ -1,17 +1,19 @@
+# frozen_string_literal: true
+
 require 'parsing_nesting/grammar'
 require 'parsing_nesting/tree'
 
 module ParseTreeSpecHelper
   include ParsingNesting::Tree
 
-  def parse(s)
-    ParsingNesting::Tree.parse(s)
+  def parse(str)
+    ParsingNesting::Tree.parse(str)
   end
 
   # for things expected to be a one-element list,
   # make sure they are and return the element
-  def parse_one_element(s)
-    l = parse(s)
+  def parse_one_element(str)
+    l = parse(str)
     expect(l).to be_kind_of(List)
     expect(l.list.length).to eq(1)
     l.list.first

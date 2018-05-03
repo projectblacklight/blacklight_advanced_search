@@ -1,4 +1,5 @@
-# -*- coding: utf-8 -*-
+# frozen_string_literal: true
+
 require File.join(File.dirname(__FILE__), "lib/blacklight_advanced_search/version")
 
 Gem::Specification.new do |s|
@@ -18,15 +19,15 @@ Gem::Specification.new do |s|
   s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
   s.require_paths = ["lib"]
 
-  s.add_dependency 'blacklight' , '>= 6.0.1'
+  s.add_dependency 'blacklight', '>= 6.0.1'
   s.add_dependency "parslet"
 
-  s.add_development_dependency "rails"
-  s.add_development_dependency "rspec-rails", "~> 3.0"
   s.add_development_dependency "capybara"
-  s.add_development_dependency 'solr_wrapper', "~> 0.14"
   s.add_development_dependency 'engine_cart', "~> 0.10"
+  s.add_development_dependency "rails"
+  s.add_development_dependency 'rsolr'
+  s.add_development_dependency "rspec-rails", "~> 3.0"
   s.add_development_dependency 'rubocop'
   s.add_development_dependency 'rubocop-rspec'
-  s.add_development_dependency 'rsolr'
+  s.add_development_dependency 'solr_wrapper', "~> 0.14"
 end

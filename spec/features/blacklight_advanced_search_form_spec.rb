@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe "Blacklight Advanced Search Form" do
   before(:all) do
     AdvancedController.copy_blacklight_config_from(CatalogController)

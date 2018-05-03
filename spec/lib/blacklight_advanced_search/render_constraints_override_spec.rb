@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe BlacklightAdvancedSearch::RenderConstraintsOverride, type: :helper do
   let(:blacklight_config) do
     Blacklight::Configuration.new do |config|
