@@ -1,0 +1,6 @@
+gem "blacklight",
+    git: "https://github.com/projectblacklight/blacklight",
+    ref: "v7.0.0.rc1"
+gem "bootstrap", "~> 4.0"
+gem "popper_js"
+gem "twitter-typeahead-rails", "0.11.1.pre.corejavascript"

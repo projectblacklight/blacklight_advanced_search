@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 source 'http://rubygems.org'
 
 gemspec
@@ -32,8 +34,10 @@ else
     gem 'sass-rails', '>= 5.0'
     gem 'coffee-rails', '~> 4.1.0'
     gem 'json', '~> 1.8'
+    gem "jquery-rails"
   when /^4.[01]/
     gem 'sass-rails', '< 5.0'
+    gem "jquery-rails"
   end
 end
 # END ENGINE_CART BLOCK

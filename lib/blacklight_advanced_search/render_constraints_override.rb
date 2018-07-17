@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Meant to be applied on top of Blacklight view helpers, to over-ride
 # certain methods from RenderConstraintsHelper (newish in BL),
 # to effect constraints rendering and search history rendering,
@@ -18,7 +20,7 @@ module BlacklightAdvancedSearch::RenderConstraintsOverride
     else
       content = []
       advanced_query.keyword_queries.each_pair do |field, query|
-        label = search_field_def_for_key(field)[:label]
+        label = blacklight_config.search_fields[field][:label]
         content << render_constraint_element(
           label, query,
           :remove =>
@@ -42,14 +44,12 @@ module BlacklightAdvancedSearch::RenderConstraintsOverride
   def render_constraints_filters(my_params = params)
     content = super(my_params)
 
-    if advanced_query
-      advanced_query.filters.each_pair do |field, value_list|
-        label = facet_field_label(field)
-        content << render_constraint_element(label,
-          safe_join(Array(value_list), " <strong class='text-muted constraint-connector'>OR</strong> ".html_safe),
-          :remove => search_action_path(remove_advanced_filter_group(field, my_params).except(:controller, :action))
-                                            )
-      end
+    advanced_query&.filters&.each_pair do |field, value_list|
+      label = facet_field_label(field)
+      content << render_constraint_element(label,
+        safe_join(Array(value_list), " <strong class='text-muted constraint-connector'>OR</strong> ".html_safe),
+        :remove => search_action_path(remove_advanced_filter_group(field, my_params).except(:controller, :action))
+                                          )
     end
 
     content
@@ -99,7 +99,8 @@ module BlacklightAdvancedSearch::RenderConstraintsOverride
       # Need to do something to make the inclusive-or search clear
 
       display_as = advanced_query.keyword_queries.collect do |field, query|
-        h(search_field_def_for_key(field)[:label] + ": " + query)
+        label = blacklight_config.search_fields[field][:label]
+        h(label + ": " + query)
       end.join(" ; ")
 
       content << render_search_to_s_element("Any of",
@@ -108,7 +109,7 @@ module BlacklightAdvancedSearch::RenderConstraintsOverride
                                            )
     elsif !advanced_query.keyword_queries.empty?
       advanced_query.keyword_queries.each_pair do |field, query|
-        label = search_field_def_for_key(field)[:label]
+        label = blacklight_config.search_fields[field][:label]
 
         content << render_search_to_s_element(label, query)
       end

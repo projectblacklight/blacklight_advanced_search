@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module BlacklightAdvancedSearch
   # Can extract query elements from rails #params query params, and then parse
   # them and convert them into a solr query with #to_solr
@@ -38,9 +40,7 @@ module BlacklightAdvancedSearch
         return @keyword_queries unless @params[:search_field] == ::AdvancedController.blacklight_config.advanced_search[:url_key]
 
         config.search_fields.each do |key, _field_def|
-          unless @params[key.to_sym].blank?
-            @keyword_queries[key] = @params[key.to_sym]
-          end
+          @keyword_queries[key] = @params[key.to_sym] unless @params[key.to_sym].blank?
         end
       end
       @keyword_queries
@@ -51,7 +51,7 @@ module BlacklightAdvancedSearch
     def filters
       unless @filters
         @filters = {}
-        return @filters unless @params[:f_inclusive] && @params[:f_inclusive].respond_to?(:each_pair)
+        return @filters unless @params[:f_inclusive]&.respond_to?(:each_pair)
         @params[:f_inclusive].each_pair do |field, value_array|
           @filters[field] ||= value_array.dup
         end

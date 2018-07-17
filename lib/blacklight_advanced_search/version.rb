@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module BlacklightAdvancedSearch
   unless BlacklightAdvancedSearch.const_defined? :VERSION
     def self.version

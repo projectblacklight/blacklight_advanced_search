@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe "NestingParser" do
   describe "Consuming" do
     before do

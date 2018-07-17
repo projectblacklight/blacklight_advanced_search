@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module BlacklightAdvancedSearch::FilterParser
   # Returns an array of solr :fq params. taking advanced search inclusive
   # facet value lists out of params.

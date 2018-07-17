@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'parslet'
 require 'parsing_nesting/tree'
 module BlacklightAdvancedSearch
@@ -50,7 +52,7 @@ module BlacklightAdvancedSearch
     def add_advanced_parse_q_to_solr(solr_parameters)
       return if blacklight_params[:q].blank? || !blacklight_params[:q].respond_to?(:to_str)
 
-      field_def = search_field_def_for_key(blacklight_params[:search_field]) ||
+      field_def = blacklight_config.search_fields[blacklight_params[:search_field]] ||
         default_search_field
 
       # If the individual field has advanced_parse_q suppressed, punt
@@ -88,9 +90,7 @@ module BlacklightAdvancedSearch
       solr_p["rows"]         = "0"
 
       # Anything set in config as a literal
-      if blacklight_config.advanced_search[:form_solr_parameters]
-        solr_p.merge!(blacklight_config.advanced_search[:form_solr_parameters])
-      end
+      solr_p.merge!(blacklight_config.advanced_search[:form_solr_parameters]) if blacklight_config.advanced_search[:form_solr_parameters]
     end
   end
 end
