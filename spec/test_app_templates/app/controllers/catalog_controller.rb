@@ -15,19 +15,19 @@ class CatalogController < ApplicationController
       :rows => 10
     }
 
-    config.add_facet_field 'language_facet'
+    config.add_facet_field 'language_ssim'
 
     config.add_search_field('title') do |field|
-      field.solr_local_parameters = { :qf => "title_t", :pf => "title_t" }
+      field.solr_local_parameters = { :qf => "title_tsim", :pf => "title_tsim" }
     end
 
     config.add_search_field('author') do |field|
-      field.solr_local_parameters = { :qf => "author_t", :pf => "author_t" }
+      field.solr_local_parameters = { :qf => "author_tsim", :pf => "author_tsim" }
     end
 
     config.add_search_field('dummy_field') do |field|
       field.include_in_advanced_search = false
-      field.solr_local_parameters = { :qf => "author_t", :pf => "author_t" }
+      field.solr_local_parameters = { :qf => "author_tsim", :pf => "author_tsim" }
     end
   end
 end
