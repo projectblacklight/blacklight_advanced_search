@@ -18,7 +18,7 @@ Gem::Specification.new do |s|
   s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
   s.require_paths = ["lib"]
 
-  s.add_dependency 'blacklight', '~> 7.0'
+  s.add_dependency 'blacklight', '> 7.0.0.a', '< 8.a'
   s.add_dependency "parslet"
 
   s.add_development_dependency "rails"
