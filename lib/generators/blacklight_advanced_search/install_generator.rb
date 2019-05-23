@@ -54,7 +54,7 @@ module BlacklightAdvancedSearch
 
       new_file_contents = source_file + <<-EOF.strip_heredoc
       \n\n
-      <div class="navbar-form">
+      <div>
         <%= link_to 'More options', blacklight_advanced_search_engine.advanced_search_path(search_state.to_h), class: 'advanced_search btn btn-secondary'%>
       </div>
       EOF
