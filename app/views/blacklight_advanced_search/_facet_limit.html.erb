@@ -1,12 +1,12 @@
 <div class="advanced_facet_limit">
-  <div class="inclusive_or well">
-    <h4>Any of:</h4>
+  <div class="inclusive_or card card-body bg-light mb-3">
+    <h5>Any of:</h5>
     <ul class="list-unstyled facet-values">
-    <% advanced_query.filters[solr_field].each do |value| %>
+    <% advanced_query.filters[facet_field.key].each do |value| %>
         <li>
-            <span class="selected"><%= h(value) %></span> 
-            <%= link_to(remove_advanced_facet_param(solr_field, value, params), :class => "remove") do %>
-                <span class="glyphicon glyphicon-remove"></span><span class="sr-only">[remove]</span>
+            <span class="selected"><%= h(value) %></span>
+            <%= link_to(remove_advanced_facet_param(facet_field.key, value, params), :class => "remove") do %>
+                <span class="remove-icon"></span>✖<span class="sr-only">[remove]</span>
             <% end %>
         </li>
     <% end %>
