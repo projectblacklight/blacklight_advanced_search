@@ -2,8 +2,8 @@ notifications:
   email: false
 
 rvm:
-  - 2.5.3
-  - 2.4.1
+  - 2.6.3
+  - 2.5.5
 
 notifications:
   irc: "irc.freenode.org#blacklight"
@@ -13,4 +13,4 @@ env:
   global:
     - NOKOGIRI_USE_SYSTEM_LIBRARIES=true
 
-jdk: oraclejdk8
+jdk: openjdk11
