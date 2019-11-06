@@ -1,9 +1,14 @@
 notifications:
   email: false
 
-rvm:
-  - 2.6.3
-  - 2.5.5
+matrix:
+  include:
+    - rvm: 2.6.5
+      env: "RAILS_VERSION=6.0.0 ENGINE_CART_RAILS_OPTIONS=\"--skip-webpack-install\""
+    - rvm: 2.6.5
+      env: "RAILS_VERSION=5.2.3"
+    - rvm: 2.5.7
+      env: "RAILS_VERSION=5.1.7"
 
 notifications:
   irc: "irc.freenode.org#blacklight"
