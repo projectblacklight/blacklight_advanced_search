@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'bundler/setup'
 Bundler::GemHelper.install_tasks
 
@@ -5,8 +7,6 @@ require 'rdoc/task'
 require 'rubocop/rake_task'
 require 'rspec/core/rake_task'
 require 'engine_cart/rake_task'
-
-EngineCart.fingerprint_proc = EngineCart.rails_fingerprint_proc
 
 task :default => :ci
 

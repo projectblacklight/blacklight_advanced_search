@@ -1,20 +1,20 @@
 <%# alternate version of facets on form that renders using multi-select.
     Has to copy and paste more code from blacklight than default, making
-    it somewhat more fragile. 
+    it somewhat more fragile.
 
     Logic taken from facets_helper_behavior.rb, #render_facet_partials and
-    #render_facet_limit. 
+    #render_facet_limit.
 %>
 
 <% facets_from_request(facet_field_names).each do |display_facet| %>
-    <% if should_render_facet?(display_facet) %>
+    <% if display_facet.items.present? %>
         <div class="form-group advanced-search-facet">
             <%= label_tag display_facet.name.parameterize, :class => "col-sm-3 control-label" do %>
                 <%= facet_field_label(display_facet.name) %>
-            <% end %>            
+            <% end %>
 
             <div class="col-sm-9">
-                <%= content_tag(:select, :multiple => true,                     
+                <%= content_tag(:select, :multiple => true,
                     :name   => "f_inclusive[#{display_facet.name}][]",
                     :id     => display_facet.name.parameterize,
                     :class  => "form-control advanced-search-facet-select") do %>
@@ -25,6 +25,6 @@
                     <% end %>
                 <% end %>
             </div>
-        </div>        
+        </div>
     <% end %>
 <% end %>

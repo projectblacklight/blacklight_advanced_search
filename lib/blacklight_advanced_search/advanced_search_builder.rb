@@ -50,7 +50,7 @@ module BlacklightAdvancedSearch
     def add_advanced_parse_q_to_solr(solr_parameters)
       return if blacklight_params[:q].blank? || !blacklight_params[:q].respond_to?(:to_str)
 
-      field_def = search_field_def_for_key(blacklight_params[:search_field]) ||
+      field_def = blacklight_config.search_fields[blacklight_params[:search_field]] ||
         default_search_field
 
       # If the individual field has advanced_parse_q suppressed, punt
@@ -83,7 +83,8 @@ module BlacklightAdvancedSearch
     def facets_for_advanced_search_form(solr_p)
       # ensure empty query is all records, to fetch available facets on entire corpus
       solr_p["q"]            = '{!lucene}*:*'
-
+      # explicitly use lucene defType since we are passing a lucene query above (and appears to be required for solr 7)
+      solr_p["defType"]      = 'lucene'
       # We only care about facets, we don't need any rows.
       solr_p["rows"]         = "0"
 
