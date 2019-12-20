@@ -27,7 +27,7 @@ Bundler/OrderedGems:
 # SupportedHashRocketStyles: key, separator, table
 # SupportedColonStyles: key, separator, table
 # SupportedLastArgumentHashStyles: always_inspect, always_ignore, ignore_implicit, ignore_explicit
-Layout/AlignHash:
+Layout/HashAlignment:
   Exclude:
     - 'lib/parsing_nesting/tree.rb'
 
@@ -35,7 +35,7 @@ Layout/AlignHash:
 # Cop supports --auto-correct.
 # Configuration parameters: EnforcedStyle, SupportedStyles, IndentationWidth.
 # SupportedStyles: with_first_parameter, with_fixed_indentation
-Layout/AlignParameters:
+Layout/ParameterAlignment:
   Exclude:
     - 'lib/blacklight_advanced_search/render_constraints_override.rb'
 
@@ -210,17 +210,17 @@ RSpec/VerifiedDoubles:
     - 'spec/helpers/advanced_helper_spec.rb'
 
 # Offense count: 1
-Rails/OutputSafety:
-  Exclude:
-    - 'lib/blacklight_advanced_search/render_constraints_override.rb'
+#Rails/OutputSafety:
+#  Exclude:
+#    - 'lib/blacklight_advanced_search/render_constraints_override.rb'
 
 # Offense count: 2
 # Cop supports --auto-correct.
 # Configuration parameters: NotNilAndNotEmpty, NotBlank, UnlessBlank.
-Rails/Present:
-  Exclude:
-    - 'app/helpers/blacklight_advanced_search/advanced_helper_behavior.rb'
-    - 'lib/blacklight_advanced_search/advanced_query_parser.rb'
+#Rails/Present:
+#  Exclude:
+#    - 'app/helpers/blacklight_advanced_search/advanced_helper_behavior.rb'
+#    - 'lib/blacklight_advanced_search/advanced_query_parser.rb'
 
 # Offense count: 1
 Style/AccessorMethodName:
