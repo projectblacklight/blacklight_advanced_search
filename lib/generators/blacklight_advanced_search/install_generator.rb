@@ -1,11 +1,13 @@
+# frozen_string_literal: true
+
 require 'rails/generators'
 
 module BlacklightAdvancedSearch
   class InstallGenerator < Rails::Generators::Base
-    source_root File.expand_path('../templates', __FILE__)
+    source_root File.expand_path('templates', __dir__)
 
     def inject_asset_requires
-      generate "blacklight_advanced_search:assets"
+      generate 'blacklight_advanced_search:assets'
     end
 
     def inject_search_builder
@@ -16,13 +18,13 @@ module BlacklightAdvancedSearch
     end
 
     def install_catalog_controller_mixin
-      inject_into_class "app/controllers/catalog_controller.rb", "CatalogController" do
+      inject_into_class 'app/controllers/catalog_controller.rb', 'CatalogController' do
         "  include BlacklightAdvancedSearch::Controller\n"
       end
     end
 
     def configuration
-      inject_into_file 'app/controllers/catalog_controller.rb', after: "configure_blacklight do |config|" do
+      inject_into_file 'app/controllers/catalog_controller.rb', after: 'configure_blacklight do |config|' do
         "\n    # default advanced config values" \
         "\n    config.advanced_search ||= Blacklight::OpenStructWithHashAccess.new" \
         "\n    # config.advanced_search[:qt] ||= 'advanced'" \
@@ -33,11 +35,11 @@ module BlacklightAdvancedSearch
     end
 
     def install_search_history_controller
-      copy_file "search_history_controller.rb", "app/controllers/search_history_controller.rb"
+      copy_file 'search_history_controller.rb', 'app/controllers/search_history_controller.rb'
     end
 
     def install_saved_searches_controller
-      copy_file "saved_searches_controller.rb", "app/controllers/saved_searches_controller.rb"
+      copy_file 'saved_searches_controller.rb', 'app/controllers/saved_searches_controller.rb'
     end
 
     def inject_routes
@@ -47,10 +49,11 @@ module BlacklightAdvancedSearch
     end
 
     def install_localized_search_form
-      return unless options[:force] || yes?("Install local search form with advanced link? (y/N)", :green)
+      return unless options[:force] || yes?('Install local search form with advanced link? (y/N)', :green)
+
       # We're going to copy the search from from actual currently loaded
       # Blacklight into local app as custom local override -- but add our link at the end too.
-      source_file = File.read(File.join(Blacklight.root, "app/views/catalog/_search_form.html.erb"))
+      source_file = File.read(File.join(Blacklight.root, 'app/views/catalog/_search_form.html.erb'))
 
       new_file_contents = source_file + <<-EOF.strip_heredoc
       \n\n
@@ -59,7 +62,7 @@ module BlacklightAdvancedSearch
       </div>
       EOF
 
-      create_file("app/views/catalog/_search_form.html.erb", new_file_contents)
+      create_file('app/views/catalog/_search_form.html.erb', new_file_contents)
     end
   end
 end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Need to sub-class CatalogController so we get all other plugins behavior
 # for our own "inside a search context" lookup of facets.
 class BlacklightAdvancedSearch::AdvancedController < CatalogController
@@ -16,7 +18,7 @@ class BlacklightAdvancedSearch::AdvancedController < CatalogController
     # We want to find the facets available for the current search, but:
     # * IGNORING current query (add in facets_for_advanced_search_form filter)
     # * IGNORING current advanced search facets (remove add_advanced_search_to_solr filter)
-    response, _ = search_service.search_results do |search_builder|
+    response, = search_service.search_results do |search_builder|
       search_builder.except(:add_advanced_search_to_solr).append(:facets_for_advanced_search_form)
     end
 

@@ -1,16 +1,19 @@
+# frozen_string_literal: true
+
 module BlacklightAdvancedSearch::CatalogHelperOverride
   # Special display for facet limits that include adv search inclusive
   # or limits.
   def facet_partial_name(display_facet = nil)
-    return "blacklight_advanced_search/facet_limit" if advanced_query && advanced_query.filters.keys.include?(display_facet.name)
+    return 'blacklight_advanced_search/facet_limit' if advanced_query && advanced_query.filters.keys.include?(display_facet.name)
+
     super
   end
 
   def remove_advanced_facet_param(field, value, my_params = params)
     my_params = Blacklight::SearchState.new(my_params, blacklight_config).to_h
-    if (my_params[:f_inclusive] &&
-        my_params[:f_inclusive][field] &&
-        my_params[:f_inclusive][field].include?(value))
+    if my_params[:f_inclusive] &&
+       my_params[:f_inclusive][field] &&
+       my_params[:f_inclusive][field].include?(value)
 
       my_params[:f_inclusive] = my_params[:f_inclusive].dup
       my_params[:f_inclusive][field] = my_params[:f_inclusive][field].dup
@@ -22,7 +25,7 @@ module BlacklightAdvancedSearch::CatalogHelperOverride
     end
 
     my_params.delete_if do |key, _value|
-      [:page, :id, :counter, :commit].include?(key)
+      %i[page id counter commit].include?(key)
     end
 
     my_params

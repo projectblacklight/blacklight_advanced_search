@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'parsing_nesting/tree'
 module BlacklightAdvancedSearch::ParsingNestingParser
   def process_query(_params, config)

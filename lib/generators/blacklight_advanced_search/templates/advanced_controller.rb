@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AdvancedController < BlacklightAdvancedSearch::AdvancedController
   blacklight_config.configure do |config|
     # name of Solr request handler, leave unset to use the same one your Blacklight
@@ -20,36 +22,36 @@ class AdvancedController < BlacklightAdvancedSearch::AdvancedController
 
     config.add_search_field 'author' do |field|
       field.solr_local_parameters = {
-        :pf => "$pf_author",
-        :qf => "$qf_author"
+        pf: '$pf_author',
+        qf: '$qf_author'
       }
     end
 
     config.add_search_field 'title' do |field|
       field.solr_local_parameters = {
-        :pf => "$pf_title",
-        :qf => "$qf_title"
+        pf: '$pf_title',
+        qf: '$qf_title'
       }
     end
 
     config.add_search_field 'subject' do |field|
       field.solr_local_parameters = {
-        :pf => "$pf_subject",
-        :qf => "$qf_subject"
+        pf: '$pf_subject',
+        qf: '$qf_subject'
       }
     end
 
     config.add_search_field 'keyword' do |field|
       field.solr_local_parameters = {
-        :pf => "$pf_keyword",
-        :qf => "$qf_keyword"
+        pf: '$pf_keyword',
+        qf: '$qf_keyword'
       }
     end
 
     config.add_search_field 'number' do |field|
       field.solr_local_parameters = {
-        :pf => "$pf_number",
-        :qf => "$qf_number"
+        pf: '$pf_number',
+        qf: '$qf_number'
       }
     end
   end

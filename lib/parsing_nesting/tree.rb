@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'parsing_nesting/grammar'
 module ParsingNesting::Tree
   # Get parslet output for string (parslet output is json-y objects), and
@@ -38,19 +40,19 @@ module ParsingNesting::Tree
     elsif tree.is_a? Hash
       if list = tree[:list]
         List.new(list.collect { |i| to_node_tree(i, query_parser) }, query_parser)
-      elsif tree.has_key?(:and_list)
+      elsif tree.key?(:and_list)
         AndList.new(tree[:and_list].collect { |i| to_node_tree(i, query_parser) }, query_parser)
-      elsif tree.has_key?(:or_list)
+      elsif tree.key?(:or_list)
         OrList.new(tree[:or_list].collect { |i| to_node_tree(i, query_parser) }, query_parser)
       elsif not_payload = tree[:not_expression]
         NotExpression.new(to_node_tree(not_payload, query_parser))
-      elsif tree.has_key?(:mandatory)
+      elsif tree.key?(:mandatory)
         MandatoryClause.new(to_node_tree(tree[:mandatory], query_parser))
-      elsif tree.has_key?(:excluded)
+      elsif tree.key?(:excluded)
         ExcludedClause.new(to_node_tree(tree[:excluded], query_parser))
       elsif phrase = tree[:phrase]
         Phrase.new(phrase)
-      elsif tree.has_key?(:token)
+      elsif tree.key?(:token)
         Term.new(tree[:token].to_s)
       end
     end
@@ -80,23 +82,23 @@ module ParsingNesting::Tree
     # converting them to a nested NOT query that will be handled appropriately.
     # those simple negatives can't be handled right by dismax otherwise.
     def build_nested_query(embeddables, solr_params = {}, options = {})
-      options = { :always_nested => true,
-      :force_deftype => "dismax" }.merge(options)
+      options = { always_nested: true,
+                  force_deftype: 'dismax' }.merge(options)
 
       # if it's pure negative, we need to transform
       if embeddables.find_all { |n| n.is_a?(ExcludedClause) }.length == embeddables.length
-        negated = NotExpression.new(List.new(embeddables.collect { |n| n.operand }, options[:force_deftype]))
-        solr_params = solr_params.merge(:mm => "1")
-        return negated.to_query(solr_params)
+        negated = NotExpression.new(List.new(embeddables.collect(&:operand), options[:force_deftype]))
+        solr_params = solr_params.merge(mm: '1')
+        negated.to_query(solr_params)
       else
 
         inner_query = build_local_params(solr_params, options[:force_deftype]) +
-          embeddables.collect { |n| n.to_embed }.join(" ")
+                      embeddables.collect(&:to_embed).join(' ')
 
         if options[:always_nested]
-          return '_query_:"' + bs_escape(inner_query) + '"'
+          '_query_:"' + bs_escape(inner_query) + '"'
         else
-          return inner_query
+          inner_query
         end
 
       end
@@ -104,21 +106,21 @@ module ParsingNesting::Tree
 
     # Pass in nil 2nd argument if you DON'T want to embed
     # "!dismax" in your local params. Used by #to_single_query_params
-    def build_local_params(hash = {}, force_deftype = "dismax")
+    def build_local_params(hash = {}, force_deftype = 'dismax')
       # we insist on dismax for our embedded queries, or whatever
       # other defType supplied in 2nd argument.
       hash = hash.dup
       if force_deftype
         hash[:defType] = force_deftype
-        hash.delete("defType") # avoid weird colision with hard to debug results
+        hash.delete('defType') # avoid weird colision with hard to debug results
       end
 
       if !hash.empty?
-        defType = hash.delete(:defType) || hash.delete("defType")
-        "{!" + (defType ? "#{defType} " : "") + hash.collect { |k, v| "#{k}=#{v.to_s.include?(" ") ? "'" + v + "'" : v}" }.join(" ") + "}"
+        defType = hash.delete(:defType) || hash.delete('defType')
+        '{!' + (defType ? "#{defType} " : '') + hash.collect { |k, v| "#{k}=#{v.to_s.include?(' ') ? "'" + v + "'" : v}" }.join(' ') + '}'
       else
         # no local params!
-        ""
+        ''
       end
     end
 
@@ -150,15 +152,13 @@ module ParsingNesting::Tree
 
       (embeddable, gen_full_query) = list.partition { |i| i.respond_to?(:can_embed?) && i.can_embed? }
 
-      unless embeddable.empty?
-        queries << build_nested_query(embeddable, solr_params, force_deftype: query_parser)
-      end
+      queries << build_nested_query(embeddable, solr_params, force_deftype: query_parser) unless embeddable.empty?
 
       gen_full_query.each do |node|
         queries << node.to_query(solr_params)
       end
 
-      queries.join(" AND ")
+      queries.join(' AND ')
     end
 
     # Returns a Hash, assumes this will be the ONLY :q, used for
@@ -183,20 +183,20 @@ module ParsingNesting::Tree
       if list.find_all { |i| i.respond_to?(:can_embed?) && i.can_embed? }.length == list.length
         {
           # build_local_params(solr_local_params, nil) + list.collect {|n| n.to_embed}.join(" "),
-          :q => build_nested_query(list, solr_local_params, :always_nested => false, :force_deftype => nil),
-          :defType => query_parser
+          q: build_nested_query(list, solr_local_params, always_nested: false, force_deftype: nil),
+          defType: query_parser
         }
       else
         # Can't be expressed in a single dismax, do it the normal way
         {
-          :q => self.to_query(solr_local_params),
-          :defType => "lucene"
+          q: to_query(solr_local_params),
+          defType: 'lucene'
         }
       end
     end
 
     def negate
-      List.new(list.collect { |i| i.negate })
+      List.new(list.collect(&:negate))
     end
   end
 
@@ -208,7 +208,7 @@ module ParsingNesting::Tree
     # theoretically it could sometimes be embedded if transformed
     # properly.
     def can_embed?
-      !simple_pure_negative? && !list.collect { |i| i.can_embed? }.include?(false)
+      !simple_pure_negative? && !list.collect(&:can_embed?).include?(false)
     end
 
     # Only if all operands are embeddable.
@@ -225,7 +225,7 @@ module ParsingNesting::Tree
         else
           '+' + s
         end
-      end.join(" ")
+      end.join(' ')
     end
 
     # for those that aren't embeddable, or pure negative
@@ -237,17 +237,17 @@ module ParsingNesting::Tree
         # us.
         build_nested_query(list, local_params)
       else
-        "( " +
-    list.collect do |i|
-      i.to_query(local_params)
-    end.join(" AND ") +
-   " )"
+        '( ' +
+          list.collect do |i|
+            i.to_query(local_params)
+          end.join(' AND ') +
+          ' )'
       end
     end
 
     # convent logical property here, not(a AND b) === not(a) OR not(b)
     def negate
-      OrList.new(list.collect { |n| n.negate })
+      OrList.new(list.collect(&:negate))
     end
   end
 
@@ -285,25 +285,25 @@ module ParsingNesting::Tree
     # -a OR -b   ===   NOT (a AND b)
     def to_simple_pure_negative_query(local_params)
       # take em out of their ExcludedClauses
-      embeddables = list.collect { |n| n.operand }
+      embeddables = list.collect(&:operand)
       # and insist on mm 100%
-      solr_params = local_params.merge(:mm => "100%")
+      solr_params = local_params.merge(mm: '100%')
 
       # and put the NOT in front to preserve semantics.
       'NOT _query_:"' +
-          bs_escape(build_local_params(solr_params) +
-          embeddables.collect { |n| n.to_embed }.join(" ")) +
+        bs_escape(build_local_params(solr_params) +
+        embeddables.collect(&:to_embed).join(' ')) +
         '"'
     end
 
     # all our arguments are 'simple' (terms and phrases with +/-),
     # put am all in one single dismax with mm forced to 1.
     def to_one_dismax_query(local_params)
-      build_nested_query(list, local_params.merge(:mm => "1"))
+      build_nested_query(list, local_params.merge(mm: '1'))
     end
 
     def to_multi_queries(local_params)
-      "( " +
+      '( ' +
         list.collect do |i|
           if i.is_a?(NotExpression) || (i.respond_to?(:simple_pure_negative?) && i.simple_pure_negative?)
             # need special handling to work around Solr 1.4.1's lack of handling
@@ -312,13 +312,13 @@ module ParsingNesting::Tree
           else
             i.to_query(local_params)
             end
-        end.join(" OR ") +
-       " )"
+        end.join(' OR ') +
+        ' )'
     end
 
     # convenient logical property here, not(a OR b) === not(a) AND not(b)
     def negate
-      AndList.new(list.collect { |n| n.negate })
+      AndList.new(list.collect(&:negate))
     end
   end
 
@@ -338,7 +338,7 @@ module ParsingNesting::Tree
       if operand.is_a?(NotExpression)
         operand.operand.to_query(solr_params)
       else
-        "NOT " + operand.to_query(solr_params)
+        'NOT ' + operand.to_query(solr_params)
       end
     end
 

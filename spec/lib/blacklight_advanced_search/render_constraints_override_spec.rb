@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe BlacklightAdvancedSearch::RenderConstraintsOverride, type: :helper do
   let(:blacklight_config) do
     Blacklight::Configuration.new do |config|
@@ -9,7 +11,9 @@ describe BlacklightAdvancedSearch::RenderConstraintsOverride, type: :helper do
     BlacklightAdvancedSearch::QueryParser.new(params, blacklight_config)
   end
 
-  describe "#render_constraints_filters" do
+  describe '#render_constraints_filters' do
+    subject(:rendered) { helper.render_constraints_filters({}) }
+
     before do
       allow(helper).to receive(:blacklight_config).and_return(blacklight_config)
       allow(helper).to receive(:advanced_query).and_return(advanced_query)
@@ -18,12 +22,10 @@ describe BlacklightAdvancedSearch::RenderConstraintsOverride, type: :helper do
       end
     end
 
-    subject(:rendered) { helper.render_constraints_filters({}) }
-
     context 'with an array of facet params' do
       let(:params) { ActionController::Parameters.new f_inclusive: { 'type' => ['a'] } }
 
-      it "renders nothing" do
+      it 'renders nothing' do
         expect(rendered).to have_text 'Remove constraint Type: a'
       end
     end
@@ -31,7 +33,7 @@ describe BlacklightAdvancedSearch::RenderConstraintsOverride, type: :helper do
     context 'with scalar facet limit params' do
       let(:params) { ActionController::Parameters.new f_inclusive: { 'type' => 'a' } }
 
-      it "renders the scalar value" do
+      it 'renders the scalar value' do
         expect(rendered).to have_text 'Remove constraint Type: a'
       end
     end

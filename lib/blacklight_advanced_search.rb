@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module BlacklightAdvancedSearch
   autoload :AdvancedSearchBuilder, 'blacklight_advanced_search/advanced_search_builder'
   autoload :Controller, 'blacklight_advanced_search/controller'
@@ -39,6 +41,7 @@ module BlacklightAdvancedSearch
     return old if new_value.nil?
     return old if new_value.respond_to?(:blank?) && new_value.blank? && !new_value.is_a?(FalseClass)
     return old | new_value if old.is_a?(Array) && new_value.is_a?(Array)
+
     new_value
   end
 end

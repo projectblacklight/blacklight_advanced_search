@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe BlacklightAdvancedSearch::ParsingNestingParser, type: :module do
   let(:blacklight_config) do
     Blacklight::Configuration.new do |config|
@@ -5,15 +7,14 @@ describe BlacklightAdvancedSearch::ParsingNestingParser, type: :module do
     end
   end
 
-  let(:subject) { (Object.new).extend(BlacklightAdvancedSearch::ParsingNestingParser) }
+  let(:subject) { Object.new.extend(described_class) }
 
-  describe "#local_param_hash" do
-
+  describe '#local_param_hash' do
     context 'with config[key] being nil' do
-      let(:key) { "foo" }
+      let(:key) { 'foo' }
 
-      it "does not fail do no nil error" do
-        expect { subject.local_param_hash(key, blacklight_config) }.not_to  raise_error
+      it 'does not fail do no nil error' do
+        expect { subject.local_param_hash(key, blacklight_config) }.not_to raise_error
       end
     end
   end
