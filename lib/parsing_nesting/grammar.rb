@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rubygems'
 require 'parslet'
 
@@ -43,19 +45,19 @@ module ParsingNesting
 
     rule :and_list do
       ((or_list | unary_expression | paren_unit) >>
-        (spacing >> str("AND") >> spacing >> (or_list | unary_expression | paren_unit)).repeat(1)).as(:and_list)
+        (spacing >> str('AND') >> spacing >> (or_list | unary_expression | paren_unit)).repeat(1)).as(:and_list)
     end
 
     rule :or_list do
       ((unary_expression | paren_unit) >>
-      (spacing >> str("OR") >> spacing >> (unary_expression | paren_unit)).repeat(1)).as(:or_list)
+      (spacing >> str('OR') >> spacing >> (unary_expression | paren_unit)).repeat(1)).as(:or_list)
     end
 
     rule :unary_expression do
       (str('+') >> (phrase | token)).as(:mandatory) |
-      (str('-') >> (phrase | token)).as(:excluded) |
-      (str('NOT') >> spacing? >> (unary_expression | paren_unit)).as(:not_expression) |
-      (phrase | token)
+        (str('-') >> (phrase | token)).as(:excluded) |
+        (str('NOT') >> spacing? >> (unary_expression | paren_unit)).as(:not_expression) |
+        (phrase | token)
     end
 
     rule :token do

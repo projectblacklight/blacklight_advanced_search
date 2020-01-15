@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module BlacklightAdvancedSearch
   # implementation for AdvancedHelper
   module AdvancedHelperBehavior
@@ -7,11 +9,9 @@ module BlacklightAdvancedSearch
     # search used basic search on same field present in advanced.
     def label_tag_default_for(key)
       if !params[key].blank?
-        return params[key]
-      elsif params["search_field"] == key
-        return params["q"]
-      else
-        return nil
+        params[key]
+      elsif params['search_field'] == key
+        params['q']
       end
     end
 
@@ -51,7 +51,7 @@ module BlacklightAdvancedSearch
 
     # Use configured facet partial name for facet or fallback on 'catalog/facet_limit'
     def advanced_search_facet_partial_name(display_facet)
-      facet_configuration_for_field(display_facet.name).try(:partial) || "catalog/facet_limit"
+      facet_configuration_for_field(display_facet.name).try(:partial) || 'catalog/facet_limit'
     end
   end
 end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'blacklight_advanced_search/parsing_nesting_parser'
 
 # This module gets included into CatalogController, or another SearchHelper
@@ -14,7 +16,7 @@ module BlacklightAdvancedSearch::Controller
 
   def is_advanced_search?(req_params = params)
     (req_params[:search_field] == blacklight_config.advanced_search[:url_key]) ||
-    req_params[:f_inclusive]
+      req_params[:f_inclusive]
   end
 
   def advanced_query
