@@ -11,7 +11,7 @@ AllCops:
 Rails:
   Enabled: true
 
-Metrics/LineLength:
+Layout/LineLength:
   Max: 185
 
 Metrics/BlockLength:
