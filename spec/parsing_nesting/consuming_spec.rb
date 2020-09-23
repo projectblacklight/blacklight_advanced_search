@@ -29,7 +29,8 @@ describe "NestingParser" do
      "NOT (four five)",
      "(one two three) OR (four five) AND six",
      '"foo+bar (baz"',
-     "(foo bar one AND two) AND (three four ten OR twelve)"
+     "(foo bar one AND two) AND (three four ten OR twelve)",
+     "one () two"
     ].each do |query|
       it "should consume<<#{query}>>" do
         expect { @parser.parse(query) }.not_to raise_error
