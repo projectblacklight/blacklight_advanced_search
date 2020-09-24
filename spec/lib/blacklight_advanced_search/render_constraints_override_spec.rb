@@ -18,7 +18,8 @@ describe BlacklightAdvancedSearch::RenderConstraintsOverride, type: :helper do
       end
     end
 
-    subject(:rendered) { helper.render_constraints_filters({}) }
+    let (:search_state) { Blacklight::SearchState.new(params, blacklight_config)}
+    subject(:rendered) { helper.render_constraints_filters(search_state) }
 
     context 'with an array of facet params' do
       let(:params) { ActionController::Parameters.new f_inclusive: { 'type' => ['a'] } }
