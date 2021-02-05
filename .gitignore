@@ -9,3 +9,4 @@ log/*
 Gemfile.lock
 pkg/*
 tmp/*
+/spec/examples.txt
