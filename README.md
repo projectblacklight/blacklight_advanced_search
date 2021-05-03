@@ -34,7 +34,7 @@ Add to your application's Gemfile:
 
 then run 'bundle install'.  Then run:
 
-    rails generate blacklight_advanced_search
+    rails generate blacklight_advanced_search:install
 
 * The 'generate' command will install 'require' statements for the plugin's assets into your application's application.js/application.css asset pipeline files
 * And it can optionally install a localized search form with a link to advanced search. If you've already localized your search form you'll want to do this manually instead. 
