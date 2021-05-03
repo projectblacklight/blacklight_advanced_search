@@ -198,6 +198,29 @@ describe "NestingParser" do
       end
     end
 
+    it "should parse term list with empty parens () " do
+      should_be_list parse("foo () bar") do |list|
+        expect(list.length).to eq(3)
+        expect(list[1].value).to eq('()')
+      end
+    end
+
+    it "should parse term list with leading or trailing empty parens () " do
+      should_be_list parse("() foo ()") do |list|
+        expect(list.length).to eq(3)
+        expect(list[0].value).to eq('()')
+        expect(list[2].value).to eq('()')
+      end
+    end
+
+    it "should parse term list with nested parens ()" do
+      should_be_list parse("(()) foo") do |list|
+        expect(list.length).to eq(2)
+        expect(list[0].value).to eq('()')
+      end
+    end
+
+
     it "should build for a crazy complicated one" do
       should_be_list parse("mark +twain AND huck OR fun OR ((jim AND river) AND (red -dogs))") do |list|
         should_be_term list[0], "mark"
