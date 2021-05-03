@@ -45,8 +45,9 @@ module BlacklightAdvancedSearch::RenderConstraintsOverride
     if advanced_query
       advanced_query.filters.each_pair do |field, value_list|
         label = facet_field_label(field)
+        values = Array(value_list).map { |v| facet_display_value(field, v) }
         content << render_constraint_element(label,
-          safe_join(Array(value_list), " <strong class='text-muted constraint-connector'>OR</strong> ".html_safe),
+          safe_join(values, " <strong class='text-muted constraint-connector'>OR</strong> ".html_safe),
           :remove => search_action_path(remove_advanced_filter_group(field, my_params).except(:controller, :action))
                                             )
       end
