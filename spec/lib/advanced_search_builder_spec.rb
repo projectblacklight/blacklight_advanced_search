@@ -1,29 +1,43 @@
 describe BlacklightAdvancedSearch::AdvancedSearchBuilder do
+  let(:obj) do
+    class BACTestClass
+      cattr_accessor :blacklight_config, :blacklight_params
+      include BlacklightAdvancedSearch::AdvancedSearchBuilder
+      def initialize(blacklight_config, blacklight_params)
+        self.blacklight_config = blacklight_config
+        self.blacklight_params = blacklight_params
+      end
+    end
+    BACTestClass.new blacklight_config, params
+  end
+
+  let(:blacklight_config) do
+    Blacklight::Configuration.new do |config|
+      config.advanced_search = { url_key: 'advanced' }
+      config.add_search_field "all_fields"
+      config.add_search_field 'title', key: 'title'
+      config.add_search_field "special_field" do |field|
+        field.advanced_parse = false
+      end
+    end
+  end
+
+  let(:params) { {} }
+  let(:solr_params) { {} }
+
+  describe '#add_advanced_search_to_solr?' do
+    describe 'when parslet fails' do
+      let(:params) { { title: 'query ) will ( fail', search_field: 'advanced' } }
+
+      it "raises Blacklight's InvalidRequest error" do
+        expect do
+          obj.add_advanced_search_to_solr(solr_params)
+        end.to raise_error(Blacklight::Exceptions::InvalidRequest)
+      end
+    end
+  end
+
   describe "#add_advanced_parse_q_to_solr" do
-    let(:blacklight_config) do
-      Blacklight::Configuration.new do |config|
-        config.advanced_search = {}
-        config.add_search_field "all_fields"
-        config.add_search_field "special_field" do |field|
-          field.advanced_parse = false
-        end
-      end
-    end
-
-    let(:obj) do
-      class BACTestClass
-        cattr_accessor :blacklight_config, :blacklight_params
-        include BlacklightAdvancedSearch::AdvancedSearchBuilder
-        def initialize(blacklight_config, blacklight_params)
-          self.blacklight_config = blacklight_config
-          self.blacklight_params = blacklight_params
-        end
-      end
-      BACTestClass.new blacklight_config, params
-    end
-
-    let(:params) { {} }
-
     describe '#is_advanced_search?' do
       context 'without the advanced search plugin configured' do
         let(:blacklight_config) { Blacklight::Configuration.new }
@@ -35,8 +49,6 @@ describe BlacklightAdvancedSearch::AdvancedSearchBuilder do
     end
 
     context "with basic functionality" do
-      let(:solr_params) { {} }
-
       describe "a simple example" do
         let(:params) { { :q => "one two AND three OR four" } }
         it "catches the query" do
