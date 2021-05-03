@@ -26,7 +26,7 @@ module BlacklightAdvancedSearch
         t('blacklight_advanced_search.any') => 'OR'
       }.sort
 
-      select_tag(:op, options_for_select(options, params[:op]), class: 'input-small')
+      select_tag(:op, options_for_select(options, params[:op]), class: 'input-small', 'aria-label': t('blacklight_advanced_search.form.sort_label'))
     end
 
     # Current params without fields that will be over-written by adv. search,
