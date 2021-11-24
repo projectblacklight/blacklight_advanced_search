@@ -1,0 +1,12 @@
+ca:
+  blacklight_advanced_search:
+    all: tots
+    any: qualsevol
+    form:
+      title: Més opcions de cerca
+      search_context: En els resultats
+      limit_criteria_heading_html: "<strong>I</strong> tinguin aquests atributs"
+      query_criteria_heading_html: "Find items that match %{select_menu} of"
+      sort_label: "Ordenar els resultats per"
+      start_over: "Tornar a l'inici"
+      search_btn: 'Cerca'
