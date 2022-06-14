@@ -1,3 +1,3 @@
 BlacklightAdvancedSearch::Engine.routes.draw do
-  get 'advanced' => 'advanced#index', as: 'advanced_search'
+  get 'advanced' => 'catalog#advanced_search', as: 'advanced_search'
 end

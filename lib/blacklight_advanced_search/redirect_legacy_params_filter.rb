@@ -4,7 +4,7 @@
 #
 # This can be used to keep any old bookmarked URLs still working.
 #
-#     before_filter BlacklightAdvancedSearch::RedirectLegacyParamsFilter, :only => :index
+#     before_action BlacklightAdvancedSearch::RedirectLegacyParamsFilter, :only => :index
 #
 module BlacklightAdvancedSearch
   class RedirectLegacyParamsFilter
@@ -12,16 +12,18 @@ module BlacklightAdvancedSearch
       params = controller.send(:params)
       legacy_converted = false
 
-      # This was used prior to blacklight_advanced_search 8
-      controller.blacklight_config.search_fields.each do |field|
+      # This was used prior to blacklight_advanceod_search 8
+      i = 0
+      controller.blacklight_config.search_fields.each do |_key, field|
         next unless params[field.key].present?
         legacy_converted = true
 
-        params[:clause] ||= []
-        params[:clause] << {
+        params[:clause] ||= {}
+        params[:clause][i] = {
           field: field.key,
           query: params[field.key]
         }
+        i += 1
 
         params.delete(field.key)
       end

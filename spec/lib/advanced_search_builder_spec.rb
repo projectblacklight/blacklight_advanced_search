@@ -10,16 +10,19 @@ describe BlacklightAdvancedSearch::AdvancedSearchBuilder do
       end
     end
 
-    let(:obj) do
-      class BACTestClass
-        cattr_accessor :blacklight_config, :blacklight_params
+    let(:context) { CatalogController.new }
+
+    before { allow(context).to receive(:blacklight_config).and_return(blacklight_config) }
+
+    let(:search_builder_class) do
+      Class.new(Blacklight::SearchBuilder) do
         include BlacklightAdvancedSearch::AdvancedSearchBuilder
-        def initialize(blacklight_config, blacklight_params)
-          self.blacklight_config = blacklight_config
-          self.blacklight_params = blacklight_params
-        end
       end
-      BACTestClass.new blacklight_config, params
+    end
+    let(:search_builder) { search_builder_class.new(context) }
+
+    let(:obj) do
+      search_builder.with(params)
     end
 
     let(:params) { {} }
