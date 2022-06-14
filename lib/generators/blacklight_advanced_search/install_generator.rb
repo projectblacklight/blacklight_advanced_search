@@ -36,10 +36,6 @@ module BlacklightAdvancedSearch
       copy_file "search_history_controller.rb", "app/controllers/search_history_controller.rb"
     end
 
-    def install_saved_searches_controller
-      copy_file "saved_searches_controller.rb", "app/controllers/saved_searches_controller.rb"
-    end
-
     def inject_routes
       inject_into_file 'config/routes.rb', after: /mount Blacklight::Engine.*$/ do
         "\n  mount BlacklightAdvancedSearch::Engine => '/'\n"
