@@ -2,8 +2,6 @@ require 'parslet'
 require 'parsing_nesting/tree'
 module BlacklightAdvancedSearch
   module AdvancedSearchBuilder
-    include Blacklight::SearchFields
-
     def is_advanced_search?
       (blacklight_config.advanced_search&.dig(:url_key) && blacklight_params[:search_field] == blacklight_config.advanced_search[:url_key]) || blacklight_params[:f_inclusive]
     end
@@ -51,7 +49,7 @@ module BlacklightAdvancedSearch
       return if blacklight_params[:q].blank? || !blacklight_params[:q].respond_to?(:to_str)
 
       field_def = blacklight_config.search_fields[blacklight_params[:search_field]] ||
-        default_search_field
+        blacklight_config.default_search_field
 
       # If the individual field has advanced_parse_q suppressed, punt
       return if field_def[:advanced_parse] == false
