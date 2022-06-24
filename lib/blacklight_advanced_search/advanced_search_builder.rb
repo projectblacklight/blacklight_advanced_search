@@ -18,17 +18,23 @@ module BlacklightAdvancedSearch
       # the hint right now is :search_field request param is set to a magic
       # key. OR of :f_inclusive is set for advanced params, we need processing too.
       if is_advanced_search?
-        # Set this as a controller instance variable, not sure if some views/helpers depend on it. Better to leave it as a local variable
-        # if not, more investigation later.
-        advanced_query = BlacklightAdvancedSearch::QueryParser.new(blacklight_params, self.blacklight_config)
-        BlacklightAdvancedSearch.deep_merge!(solr_parameters, advanced_query.to_solr)
-        unless advanced_query.keyword_queries.empty?
-          # force :qt if set, fine if it's nil, we'll use whatever CatalogController
-          # ordinarily uses.
-          solr_parameters[:qt] = self.blacklight_config.advanced_search[:qt]
-          solr_parameters[:defType] = "lucene"
-        end
+        begin
+          # Set this as a controller instance variable, not sure if some views/helpers depend on it. Better to leave it as a local variable
+          # if not, more investigation later.
+          advanced_query = BlacklightAdvancedSearch::QueryParser.new(blacklight_params, self.blacklight_config)
+          BlacklightAdvancedSearch.deep_merge!(solr_parameters, advanced_query.to_solr)
+          unless advanced_query.keyword_queries.empty?
+            # force :qt if set, fine if it's nil, we'll use whatever CatalogController
+            # ordinarily uses.
+            solr_parameters[:qt] = self.blacklight_config.advanced_search[:qt]
+            solr_parameters[:defType] = "lucene"
+          end
+        rescue *PARSLET_FAILED_EXCEPTIONS => e
+          Rails.logger.error "Parsing advanced search parameters #{blacklight_params.inspect} failed with error: #{e}"
 
+          # Raise Blacklight's InvalidRequest error since the user supplied a query that cannot be parsed
+          raise Blacklight::Exceptions::InvalidRequest
+        end
       end
     end
 
