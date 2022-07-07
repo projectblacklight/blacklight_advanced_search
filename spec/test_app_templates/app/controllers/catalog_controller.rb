@@ -1,12 +1,10 @@
 class CatalogController < ApplicationController
   include Blacklight::Catalog
-  include BlacklightAdvancedSearch::Controller
 
   configure_blacklight do |config|
     # default advanced config values
     config.advanced_search ||= Blacklight::OpenStructWithHashAccess.new
-    # config.advanced_search[:qt] ||= 'advanced'
-    config.advanced_search[:url_key] ||= 'advanced'
+    config.advanced_search[:enabled] = true
     config.advanced_search[:query_parser] ||= 'dismax'
     config.advanced_search[:form_solr_parameters] ||= {}
 

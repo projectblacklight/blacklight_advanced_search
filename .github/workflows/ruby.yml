@@ -9,9 +9,11 @@ name: CI
 
 on:
   push:
-    branches: [ master ]
+    branches:
+      - main
+      - master
+      - 'release-*'
   pull_request:
-    branches: [ master ]
 
 jobs:
   lint:
@@ -30,7 +32,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        ruby: [2.7, 3.0]
+        ruby: [2.7, '3.0', 3.1]
     steps:
     - uses: actions/checkout@v2
     - name: Set up Ruby
@@ -40,8 +42,26 @@ jobs:
     - name: Install dependencies
       run: bundle install
     - name: Run tests
-      run: bundle exec rake
+      run: bundle exec rake ci
       env:
+        ENGINE_CART_RAILS_OPTIONS: '-a propshaft --skip-git --skip-listen --skip-spring --skip-keeps --skip-action-cable --skip-coffee --skip-test'
+  test_bootstrap5:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        ruby: ['3.0']
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Ruby
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: ${{ matrix.ruby }}
+    - name: Install dependencies
+      run: bundle install
+    - name: Run tests
+      run: bundle exec rake ci
+      env:
+        BOOTSTRAP_VERSION: '~> 5.0'
         ENGINE_CART_RAILS_OPTIONS: '--skip-git --skip-listen --skip-spring --skip-keeps --skip-action-cable --skip-coffee --skip-test'
   test_rails6_0:
     runs-on: ubuntu-latest
@@ -57,17 +77,17 @@ jobs:
     - name: Install dependencies
       run: bundle install
       env:
-        RAILS_VERSION: 6.0.3.4
+        RAILS_VERSION: 6.0.3.7
     - name: Run tests
-      run: bundle exec rake
+      run: bundle exec rake ci
       env:
-        RAILS_VERSION: 6.0.3.4
+        RAILS_VERSION: 6.0.3.7
         ENGINE_CART_RAILS_OPTIONS: '--skip-git --skip-listen --skip-spring --skip-keeps --skip-action-cable --skip-coffee --skip-test'
   test_rails5_2:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        ruby: [2.5]
+        ruby: [2.7]
     steps:
     - uses: actions/checkout@v2
     - name: Set up Ruby
@@ -77,9 +97,30 @@ jobs:
     - name: Install dependencies
       run: bundle install
       env:
-        RAILS_VERSION: 5.2.4.2
+        RAILS_VERSION: 5.2.4.6
     - name: Run tests
       run: bundle exec rake ci
       env:
-        RAILS_VERSION: 5.2.4.2
+        RAILS_VERSION: 5.2.4.6
         ENGINE_CART_RAILS_OPTIONS: '--skip-git --skip-listen --skip-spring --skip-keeps --skip-action-cable --skip-coffee --skip-test'
+
+  test_rails6_1:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        ruby: ['3.0']
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Ruby
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: ${{ matrix.ruby }}
+    - name: Install dependencies
+      run: bundle install
+      env:
+        RAILS_VERSION: 6.1.5
+    - name: Run tests
+      run: bundle exec rake ci
+      env:
+        RAILS_VERSION: 6.1.5
+        ENGINE_CART_RAILS_OPTIONS: '--skip-git --skip-keeps --skip-action-cable --skip-test'

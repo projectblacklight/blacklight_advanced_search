@@ -1,17 +1,5 @@
-require 'rubygems'
 require 'parslet'
 
-# Parslet uses Object#tap, which is in ruby 1.8.7+, but not 1.8.6.
-# But it's easy enough to implement in pure ruby, let's monkey patch
-# it in if it's not there, so we'll still work with 1.8.6
-unless Object.method_defined?(:tap)
-  class Object
-    def tap
-      yield(self)
-      self
-    end
-  end
-end
 module ParsingNesting
   class Grammar < Parslet::Parser
     root :query

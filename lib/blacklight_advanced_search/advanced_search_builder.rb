@@ -2,34 +2,35 @@ require 'parslet'
 require 'parsing_nesting/tree'
 module BlacklightAdvancedSearch
   module AdvancedSearchBuilder
-    include Blacklight::SearchFields
+    extend ActiveSupport::Concern
 
-    def is_advanced_search?
-      (blacklight_config.advanced_search&.dig(:url_key) && blacklight_params[:search_field] == blacklight_config.advanced_search[:url_key]) || blacklight_params[:f_inclusive]
+    included do
+      self.default_processor_chain += [
+        :facets_for_advanced_search_form
+      ]
     end
 
-    # this method should get added into the processor chain
-    # in a position AFTER normal query handling (:add_query_to_solr),
-    # so it'll overwrite that if and only if it's an advanced search.
-    # adds a 'q' and 'fq's based on advanced search form input.
-    def add_advanced_search_to_solr(solr_parameters)
+    def is_advanced_search?
+      search_state.clause_params.any?
+    end
+
+    # Override the upstream adv. search implementation to use our own
+    def add_adv_search_clauses(solr_parameters)
+      return unless is_advanced_search?
       # If we've got the hint that we're doing an 'advanced' search, then
       # map that to solr #q, over-riding whatever some other logic may have set, yeah.
-      # the hint right now is :search_field request param is set to a magic
-      # key. OR of :f_inclusive is set for advanced params, we need processing too.
-      if is_advanced_search?
-        # Set this as a controller instance variable, not sure if some views/helpers depend on it. Better to leave it as a local variable
-        # if not, more investigation later.
-        advanced_query = BlacklightAdvancedSearch::QueryParser.new(blacklight_params, self.blacklight_config)
-        BlacklightAdvancedSearch.deep_merge!(solr_parameters, advanced_query.to_solr)
-        unless advanced_query.keyword_queries.empty?
-          # force :qt if set, fine if it's nil, we'll use whatever CatalogController
-          # ordinarily uses.
-          solr_parameters[:qt] = self.blacklight_config.advanced_search[:qt]
-          solr_parameters[:defType] = "lucene"
-        end
-
+      advanced_query = BlacklightAdvancedSearch::QueryParser.new(search_state, blacklight_config)
+      BlacklightAdvancedSearch.deep_merge!(solr_parameters, advanced_query.to_solr)
+      unless advanced_query.keyword_queries.empty?
+        # force :qt if set, fine if it's nil, we'll use whatever CatalogController
+        # ordinarily uses.
+        solr_parameters[:qt] = self.blacklight_config.advanced_search[:qt]
+        solr_parameters[:defType] = "lucene"
       end
+    end
+
+    # this method is left for backwards compatibility.
+    def add_advanced_search_to_solr(solr_parameters)
     end
 
     # Different versions of Parslet raise different exception classes,
@@ -51,7 +52,7 @@ module BlacklightAdvancedSearch
       return if blacklight_params[:q].blank? || !blacklight_params[:q].respond_to?(:to_str)
 
       field_def = blacklight_config.search_fields[blacklight_params[:search_field]] ||
-        default_search_field
+        blacklight_config.default_search_field
 
       # If the individual field has advanced_parse_q suppressed, punt
       return if field_def[:advanced_parse] == false
@@ -75,12 +76,14 @@ module BlacklightAdvancedSearch
     end
 
     # A Solr param filter that is NOT included by default in the chain,
-    # but is appended by AdvancedController#index, to do a search
+    # but is appended for advanced searches, to do a search
     # for facets _ignoring_ the current query, we want the facets
     # as if the current query weren't there.
     #
     # Also adds any solr params set in blacklight_config.advanced_search[:form_solr_parameters]
     def facets_for_advanced_search_form(solr_p)
+      return unless search_state.controller&.action_name == "advanced_search"
+
       # ensure empty query is all records, to fetch available facets on entire corpus
       solr_p["q"]            = '{!lucene}*:*'
       # explicitly use lucene defType since we are passing a lucene query above (and appears to be required for solr 7)

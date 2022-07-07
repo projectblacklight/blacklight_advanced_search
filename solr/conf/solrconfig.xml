@@ -18,6 +18,7 @@
 
   <!-- solr lib dirs -->
   <lib dir="${solr.install.dir:../../../..}/contrib/analysis-extras/lib" />
+  <lib dir="${solr.install.dir:../../../..}/modules/analysis-extras/lib" />
   <lib dir="${solr.install.dir:../../../..}/contrib/analysis-extras/lucene-libs" />
 
   <dataDir>${solr.data.dir:}</dataDir>
@@ -48,7 +49,7 @@
           alternative_title_tsim
           active_fedora_model_ssi
           title_tsim
-          author_tsimesim
+          author_tsim
           subject_tsim
           all_text_timv
         </str>
