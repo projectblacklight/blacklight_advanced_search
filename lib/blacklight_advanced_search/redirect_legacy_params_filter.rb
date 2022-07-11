@@ -40,8 +40,8 @@ module BlacklightAdvancedSearch
       end
 
       if legacy_converted
-        controller.send(:redirect_to, params, :status => :moved_permanently)
+        controller.send(:redirect_to, controller.search_state.reset(params).to_h, :status => :moved_permanently)
       end
     end
   end
-  end
+end
