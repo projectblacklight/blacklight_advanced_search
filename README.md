@@ -192,12 +192,12 @@ in likely ways.  For one example, see the wiki page on [Adding a range limit to 
 
 The code for mapping a user-entered query to a Solr query is called "nesting_parsing", and maps to a 'lucene' query parser query, with nested 'dismax' query parser queries.
 
-Some technical details can be found in the nesting_parsing README: [https://github.com/projectblacklight/blacklight_advanced_search/tree/master/lib/parsing_nesting]
+Some technical details can be found in the nesting_parsing README: [https://github.com/projectblacklight/blacklight_advanced_search/tree/main/lib/parsing_nesting]
 
 You may also find the rspecs for parsing a user-entered query and converting it to Solr illumnating:
 
-1. Converting user-entered query to Solr: [https://github.com/projectblacklight/blacklight_advanced_search/blob/master/spec/parsing_nesting/to_solr_spec.rb]
-2. Parsing user-entered query to internal syntax tree: [https://github.com/projectblacklight/blacklight_advanced_search/blob/master/spec/parsing_nesting/build_tree_spec.rb]
+1. Converting user-entered query to Solr: [https://github.com/projectblacklight/blacklight_advanced_search/blob/main/spec/parsing_nesting/to_solr_spec.rb]
+2. Parsing user-entered query to internal syntax tree: [https://github.com/projectblacklight/blacklight_advanced_search/blob/main/spec/parsing_nesting/build_tree_spec.rb]
 
 ## Running tests
 
