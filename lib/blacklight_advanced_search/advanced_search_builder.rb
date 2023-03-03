@@ -5,6 +5,7 @@ module BlacklightAdvancedSearch
     include Blacklight::SearchFields
 
     def is_advanced_search?
+      return false unless self.blacklight_config.advanced_search[:url_key].present?
       (self.blacklight_config.advanced_search && blacklight_params[:search_field] == self.blacklight_config.advanced_search[:url_key]) || blacklight_params[:f_inclusive]
     end
 
