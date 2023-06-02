@@ -1,0 +1,5 @@
+if ENV['BLACKLIGHT_VERSION'] == 'github'
+  gem 'blacklight', github: 'projectblacklight/blacklight'
+elsif ENV['BLACKLIGHT_VERSION'] && !ENV['BLACKLIGHT_VERSION'].empty?
+  gem 'blacklight', ENV['BLACKLIGHT_VERSION']
+end
