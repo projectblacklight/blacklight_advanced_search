@@ -3,3 +3,5 @@
 collection:
   dir: solr/conf/
   name: blacklight-core
+env:
+  SOLR_OPTS: '-Dsolr.config.lib.enabled=true'
