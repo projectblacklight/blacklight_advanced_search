@@ -18,6 +18,11 @@ module ParsingNesting
         paren_list
     end
 
+    rule :empty_paren do
+      (str('()'))
+    end
+
+
     # Note well: It was tricky to parse the thing we want where you can
     # have a flat list with boolean operators, but where 'OR' takes precedence.
     # eg "A AND B OR C AND C" or "A OR B AND C OR D". Tricky to parse at all,
@@ -47,7 +52,7 @@ module ParsingNesting
     end
 
     rule :token do
-      match['^ ")('].repeat(1).as(:token)
+      (match['^ ")('] | empty_paren ).repeat(1).as(:token)
     end
     rule :phrase do
       match('"') >> match['^"'].repeat(1).as(:phrase) >> match('"')
