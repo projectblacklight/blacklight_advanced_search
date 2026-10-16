@@ -29,7 +29,7 @@ jobs:
     strategy:
       matrix:
         ruby: ['3.2', '3.3', '3.4']
-        rails_version: ['~> 7.2', '~> 8.1']
+        rails_version: ['~> 7.2.4', '~> 8.1']
         blacklight_version: ['~> 8.0']
         experimental: [false]
         include:
