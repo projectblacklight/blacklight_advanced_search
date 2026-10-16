@@ -1,0 +1,16 @@
+services:
+  solr:
+    image: "solr:${SOLR_VERSION:-9.10.1}"
+    volumes:
+      - $PWD/solr/conf:/opt/solr/conf
+    ports:
+      - "${SOLR_PORT:-8983}:8983"
+    environment:
+      - SOLR_OPTS=-Dsolr.config.lib.enabled=true
+    entrypoint:
+      - docker-entrypoint.sh
+      - solr-precreate
+      - blacklight-core
+      - /opt/solr/conf
+      - "-Xms256m"
+      - "-Xmx512m"
