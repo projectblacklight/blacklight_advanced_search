@@ -3,6 +3,10 @@
 require 'bundler/setup'
 Bundler::GemHelper.install_tasks
 
+# Bundler 4 exports BUNDLE_LOCKFILE, which engine_cart doesn't clear, so the generated
+# test app would resolve its Gemfile against this gem's Gemfile.lock.
+ENV.delete('BUNDLE_LOCKFILE')
+
 require 'rdoc/task'
 require 'rubocop/rake_task'
 require 'rspec/core/rake_task'
