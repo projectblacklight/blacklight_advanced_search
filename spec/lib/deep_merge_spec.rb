@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe 'BlacklightAdvancedSearch#deep_merge' do
   let(:hash_X) do
     {
@@ -5,8 +7,8 @@ describe 'BlacklightAdvancedSearch#deep_merge' do
       'b' => 'b',
       'array1' => [1, 2],
       'array2' => [3, 4],
-      'hash1'  => { 'a' => 'a', 'array' => [1], 'b' => 'b' },
-      'hash2'  => { 'a2' => 'a2', 'array2' => [12], 'b2' => 'b2' }
+      'hash1' => { 'a' => 'a', 'array' => [1], 'b' => 'b' },
+      'hash2' => { 'a2' => 'a2', 'array2' => [12], 'b2' => 'b2' }
     }
   end
   let(:hash_Y) do
@@ -14,7 +16,7 @@ describe 'BlacklightAdvancedSearch#deep_merge' do
       'a' => 'NEW A',
       'c' => 'NEW C',
       'array1' => [3, 4],
-      'hash1'  => { 'array' => [2], 'b' => 'NEW B' }
+      'hash1' => { 'array' => [2], 'b' => 'NEW B' }
     }
   end
   let(:ahash) do
@@ -88,7 +90,7 @@ describe 'BlacklightAdvancedSearch#deep_merge' do
     end
   end
 
-  describe HashWithIndifferentAccess do
+  describe ActiveSupport::HashWithIndifferentAccess do
     it_behaves_like 'Mergable Parameters' do
       let(:hash_x) { hash_X.with_indifferent_access }
       let(:hash_y) { hash_Y.with_indifferent_access }

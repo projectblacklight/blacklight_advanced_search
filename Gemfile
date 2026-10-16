@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 source 'https://rubygems.org'
 
 gemspec
@@ -26,11 +28,11 @@ else
     end
   end
 
-  case ENV['RAILS_VERSION']
+  case ENV.fetch('RAILS_VERSION', nil)
   when /^5.2/, /^6.0/
     gem 'sass-rails', '~> 5.0'
   end
 end
 # END ENGINE_CART BLOCK
 
-eval_gemfile File.expand_path("spec/test_app_templates/Gemfile.extra", File.dirname(__FILE__))
+eval_gemfile File.expand_path('spec/test_app_templates/Gemfile.extra', File.dirname(__FILE__))
