@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gemspec
+gemspec path: File.expand_path(__dir__)
 
 # BEGIN ENGINE_CART BLOCK
 # engine_cart: 0.10.0
