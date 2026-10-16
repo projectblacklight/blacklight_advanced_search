@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'parslet'
 require 'parsing_nesting/tree'
 module BlacklightAdvancedSearch
@@ -17,21 +19,21 @@ module BlacklightAdvancedSearch
     # Override the upstream adv. search implementation to use our own
     def add_adv_search_clauses(solr_parameters)
       return unless is_advanced_search?
+
       # If we've got the hint that we're doing an 'advanced' search, then
       # map that to solr #q, over-riding whatever some other logic may have set, yeah.
       advanced_query = BlacklightAdvancedSearch::QueryParser.new(search_state, blacklight_config)
       BlacklightAdvancedSearch.deep_merge!(solr_parameters, advanced_query.to_solr)
-      unless advanced_query.keyword_queries.empty?
-        # force :qt if set, fine if it's nil, we'll use whatever CatalogController
-        # ordinarily uses.
-        solr_parameters[:qt] = self.blacklight_config.advanced_search[:qt]
-        solr_parameters[:defType] = "lucene"
-      end
+      return if advanced_query.keyword_queries.empty?
+
+      # force :qt if set, fine if it's nil, we'll use whatever CatalogController
+      # ordinarily uses.
+      solr_parameters[:qt] = blacklight_config.advanced_search[:qt]
+      solr_parameters[:defType] = 'lucene'
     end
 
     # this method is left for backwards compatibility.
-    def add_advanced_search_to_solr(solr_parameters)
-    end
+    def add_advanced_search_to_solr(solr_parameters); end
 
     # Different versions of Parslet raise different exception classes,
     # need to figure out which one exists to rescue
@@ -39,7 +41,7 @@ module BlacklightAdvancedSearch
                                   [Parslet::UnconsumedInput].freeze
                                 else
                                   [Parslet::ParseFailed].freeze
-    end
+                                end
 
     # This method can be included in the SearchBuilder to have us
     # parse an ordinary entered :q for AND/OR/NOT and produce appropriate
@@ -52,7 +54,7 @@ module BlacklightAdvancedSearch
       return if blacklight_params[:q].blank? || !blacklight_params[:q].respond_to?(:to_str)
 
       field_def = blacklight_config.search_fields[blacklight_params[:search_field]] ||
-        blacklight_config.default_search_field
+                  blacklight_config.default_search_field
 
       # If the individual field has advanced_parse_q suppressed, punt
       return if field_def[:advanced_parse] == false
@@ -67,11 +69,11 @@ module BlacklightAdvancedSearch
 
         BlacklightAdvancedSearch.deep_merge!(solr_parameters, solr_direct_params)
         BlacklightAdvancedSearch.deep_merge!(solr_parameters, adv_search_params)
-      rescue *PARSLET_FAILED_EXCEPTIONS => e
+      rescue *PARSLET_FAILED_EXCEPTIONS
         # do nothing, don't merge our input in, keep basic search
         # optional TODO, display error message in flash here, but hard to
         # display a good one.
-        return
+        nil
       end
     end
 
@@ -82,19 +84,19 @@ module BlacklightAdvancedSearch
     #
     # Also adds any solr params set in blacklight_config.advanced_search[:form_solr_parameters]
     def facets_for_advanced_search_form(solr_p)
-      return unless search_state.controller&.action_name == "advanced_search"
+      return unless search_state.controller&.action_name == 'advanced_search'
 
       # ensure empty query is all records, to fetch available facets on entire corpus
-      solr_p["q"]            = '{!lucene}*:*'
+      solr_p['q']            = '{!lucene}*:*'
       # explicitly use lucene defType since we are passing a lucene query above (and appears to be required for solr 7)
-      solr_p["defType"]      = 'lucene'
+      solr_p['defType']      = 'lucene'
       # We only care about facets, we don't need any rows.
-      solr_p["rows"]         = "0"
+      solr_p['rows']         = '0'
 
       # Anything set in config as a literal
-      if blacklight_config.advanced_search[:form_solr_parameters]
-        solr_p.merge!(blacklight_config.advanced_search[:form_solr_parameters])
-      end
+      return unless blacklight_config.advanced_search[:form_solr_parameters]
+
+      solr_p.merge!(blacklight_config.advanced_search[:form_solr_parameters])
     end
   end
 end

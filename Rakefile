@@ -54,7 +54,7 @@ rescue StandardError
   false
 end
 
-task :default => :ci
+task :default => %i[rubocop ci]
 
 desc "Run specs"
 RSpec::Core::RakeTask.new(:spec)
@@ -69,7 +69,7 @@ task :fixtures => ['engine_cart:generate'] do
 end
 
 desc "Execute Continuous Integration build"
-task :ci => ['rubocop', 'engine_cart:generate'] do
+task :ci => ['engine_cart:generate'] do
   with_solr do
     Rake::Task['fixtures'].invoke
     Rake::Task['spec'].invoke

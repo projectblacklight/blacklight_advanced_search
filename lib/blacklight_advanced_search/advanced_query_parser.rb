@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'parsing_nesting/tree'
 
 module BlacklightAdvancedSearch
@@ -15,11 +17,9 @@ module BlacklightAdvancedSearch
     end
 
     def to_solr
-      @to_solr ||= begin
-        {
-          q: process_query(config)
-        }
-      end
+      @to_solr ||= {
+        q: process_query(config)
+      }
     end
 
     # Returns "AND" or "OR", how #keyword_queries will be combined

@@ -54,4 +54,4 @@ jobs:
     - name: Install dependencies with Rails ${{ matrix.rails_version }}
       run: bundle install
     - name: Run tests
-      run: bundle exec rake
+      run: bundle exec rake ci
