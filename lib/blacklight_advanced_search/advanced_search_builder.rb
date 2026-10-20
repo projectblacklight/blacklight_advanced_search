@@ -49,9 +49,10 @@ module BlacklightAdvancedSearch
     # parse and send it straight to solr same as if advanced_parse_q
     # were not being used.
     def add_advanced_parse_q_to_solr(solr_parameters)
-      return if blacklight_params[:q].blank? || !blacklight_params[:q].respond_to?(:to_str)
+      params = search_state.params
+      return if params[:q].blank? || !params[:q].respond_to?(:to_str)
 
-      field_def = blacklight_config.search_fields[blacklight_params[:search_field]] ||
+      field_def = blacklight_config.search_fields[params[:search_field]] ||
         blacklight_config.default_search_field
 
       # If the individual field has advanced_parse_q suppressed, punt
@@ -63,7 +64,7 @@ module BlacklightAdvancedSearch
       # See if we can parse it, if we can't, we're going to give up
       # and just allow basic search, perhaps with a warning.
       begin
-        adv_search_params = ParsingNesting::Tree.parse(blacklight_params[:q], blacklight_config.advanced_search[:query_parser]).to_single_query_params(solr_local_params)
+        adv_search_params = ParsingNesting::Tree.parse(params[:q], blacklight_config.advanced_search[:query_parser]).to_single_query_params(solr_local_params)
 
         BlacklightAdvancedSearch.deep_merge!(solr_parameters, solr_direct_params)
         BlacklightAdvancedSearch.deep_merge!(solr_parameters, adv_search_params)
